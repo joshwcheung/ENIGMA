@@ -93,14 +93,13 @@ SCRIPTS/
 Change directories to move into the SCRIPTS/ folder. We will run three scripts 
 in order (run0, run1, run2) to setup and then perform the GWAS.
 
-For each step, user inputs that need modification are listed below. In some 
+For each step, user inputs that need modification are *italicized*. **Bolded**
+code may or may not need to be addressed depending on the dataset. In some 
 cases, we have bolded directions, so please pay close attention to those 
 settings. Most of the bolded sections involve separate settings depending on 
 whether or not your sample contains related members (a family design) or contain
 all unrelated subjects.
 
----
----
 ---
 
 ### **Step 1) run0_E3_GWAS_format.sh**
@@ -116,82 +115,53 @@ chmod 755 run0_E3_GWAS_format.sh
 **But first** open `run0_E3_GWAS_format.sh` and set the following parameters 
 (see descriptions):
 
-*Set the directory where all the enigma association scripts are stored
+<pre>
+#Set the directory where all the enigma association scripts are stored
+<i>run_directory</i>=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend                  
 
-```bash
-run_directory=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend                  
-```
+#Give the <b>full path</b> to R binary, can be found by typing `which R` on the 
+#command line.
+<i>Rbin</i>=/usr/local/R/bin/R
 
-\*Give the **full path** to R binary, can be found by typing `which R` on the 
-command line.
+#Give the <b>full path</b> to the surf area csv file on your system
+<i>csvFILE_1</i>=/ENIGMA/CortexGWAS/CorticalMeasuresENIGMA_SurfAvg.csv 
 
-```bash
-Rbin=/usr/local/R/bin/R                 								 
-```
+#Give the <b>full path</b> to the thickness csv file on your system
+<i>csvFILE_2</i>=/ENIGMA/CortexGWAS/CorticalMeasuresENIGMA_ThickAvg.csv
 
-\*Give the **full path** to the surf area csv file on your system
+#Give the <b>full path</b> to a directory to write out the updated and filtered csv
+#file (this folder will be created for you)
+<i>csvFOLDER</i>=/ENIGMA/CortexGWAS/E3     									 
 
-```bash
-csvFILE_1=/ENIGMA/CortexGWAS/CorticalMeasuresENIGMA_SurfAvg.csv 
-```
+#Please indicate the <b>full path</b> to the file where your covariate data is 
+#stored so that we can merge in relevant covariates to the ENIGMA phenotype files
+<i>TableFile</i>=/ENIGMA/CortexGWAS/Covariates.csv
 
-\*Give the **full path** to the thickness csv file on your system
+#What is the column name where the subject IDs are listed in your Covariates.csv
+#file (needed to match subject-by-subject with the ENIGMA files)
+<i>TableSubjectID_column</i>="SubjID"
 
-```bash
-csvFILE_2=/ENIGMA/CortexGWAS/CorticalMeasuresENIGMA_ThickAvg.csv
-```
+#How many covariates will you be using (note, at a minimum we would require 2 
+#or 3 -- age and sex and diagnosis (if dataset consists of patients and 
+#controls), and any additional site-specific variables, please contact us with 
+#questions!)
+<i>Ncov</i>=3
+    #<b>Note:</b> Remember to update this if you change the number of covariates in 
+    #the line below. For example, if you have a healthy-only dataset (i.e. no 
+    #AffectionStatus covariate) you might set this to 2.
 
-\*Give the **full path** to a directory to write out the updated and filtered csv
-file (this folder will be created for you) 
+#In your covariates file, what are the column headers for the covariates you 
+#would like to include? Make sure to separate them here with a semi-colon and no 
+#space!
+<i>covariates</i>="Age;Sex;AffectionStatus"
+    #<b>Note:</b> If you have a healthy-only cohort you do not need to include an 
+    #AffectionStatus covariate. If you add in additional covariates to control 
+    #for site for example, you can add them here (the name just has to match the 
+    #column name for that variable in the Covariates.csv file). Also, make sure 
+    #that the number of covariates in this step matches the Ncov variable defined
+    #above.
+</pre>
 
-```bash
-csvFOLDER=/ENIGMA/CortexGWAS/E3     									 
-```
-
-\*Please indicate the **full path** to the file where your covariate data is 
-stored so that we can merge in relevant covariates to the ENIGMA phenotype files
-
-```bash
-TableFile=/ENIGMA/CortexGWAS/Covariates.csv
-```
-
-*What is the column name where the subject IDs are listed in your Covariates.csv
-file (needed to match subject-by-subject with the ENIGMA files)
-
-```bash
-TableSubjectID_column="SubjID"
-```
-
-*How many covariates will you be using (note, at a minimum we would require 2 
-or 3 -- age and sex and diagnosis (if dataset consists of patients and 
-controls), and any additional site-specific variables, please contact us with 
-questions!)
-
-```bash
-Ncov=3
-```
-
-*   **Note:** Remember to update this if you change the number of covariates in 
-    the line below. For example, if you have a healthy-only dataset (i.e. no 
-    AffectionStatus covariate) you might set this to 2.
-
-*In your covariates file, what are the column headers for the covariates you 
-would like to include? Make sure to separate them here with a semi-colon and no 
-space!
-
-```bash
-covariates="Age;Sex;AffectionStatus"
-```
-
-*   **Note:** If you have a healthy-only cohort you do not need to include an 
-    AffectionStatus covariate. If you add in additional covariates to control 
-    for site for example, you can add them here (the name just has to match the 
-    column name for that variable in the Covariates.csv file). Also, make sure 
-    that the number of covariates in this step matches the Ncov variable defined
-    above.
-
----
----
 ---
 
 ### **Step 2) run1_GWAS_flexible_step1.sh**
@@ -201,7 +171,7 @@ the program how to set things up: what your covariates are, if you have patients
 and controls, how sex is coded, and what columns correspond to key covariates.
 
 You will also indicate if you have family data and depending on what you choose 
-there are specific inputs that are important to set (see bolded directions 
+there are specific inputs that are important to set (see **bolded** directions 
 below). 
 
 Also for the purposes of this analysis we have created modified versions of the 
@@ -216,95 +186,76 @@ chmod 755 run1_GWAS_flexible_step1.sh
 ./run1_GWAS_flexible_step1.sh
 ```
 
+---
+
 **But first** open `run1_GWAS_flexible_step1.sh` and set the following 
 parameters (see below):
 
-\*Give the **full path** to where all the enigma association scripts are stored
+<pre>
+#Give the <b>full path</b> to where all the enigma association scripts are stored
+<i>run_directory</i>=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend
 
-```bash
-run_directory=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend      			
-```
+#Give the <b>full path</b> to R binary	(can be found by typing `which R` on the 
+#command line)
 
-\*Give the **full path** to R binary	(can be found by typing `which R` on the 
-command line)			   
+<i>Rbin</i>=/usr/local/R/bin/R
 
-```bash
-Rbin=/usr/local/R/bin/R 									 							   
-```
+#Give the <b>full path</b> to your HM3mds2Rmds.csv file -- has 4 MDS components to 
+#use as covariates 
+#(output from the MDS Analysis Protocol)
+<i>csvFILE</i>=/ENIGMA/CortexGWAS/HM3mds2R.mds.csv
 
-\*Give the **full path** to your HM3mds2Rmds.csv file -- has 4 MDS components to 
-use as covariates 
-(output from the MDS Analysis Protocol)
+#Give the <b>full path</b> to the csv file where your phenotypes and covariates are
+#stored after running ./run0_E3_GWAS_format.sh
+<i>combinedROItableFILE</i>=/ENIGMA/CortexGWAS/E3/combinedROItable_eCORTEX4GWAS.csv
 
-```bash
-csvFILE=/ENIGMA/CortexGWAS/HM3mds2R.mds.csv   				 							   
-```
+#Please give some information about the covariate coding you used:
 
-\*Give the **full path** to the csv file where your phenotypes and covariates are
-stored after running ./run0_E3_GWAS_format.sh
-
-```bash
-combinedROItableFILE=/ENIGMA/CortexGWAS/E3/combinedROItable_eCORTEX4GWAS.csv
-```
-
-*Please give some information about the covariate coding you used:
-
-```bash
-ageColumnHeader='Age'   # The column header for your age covariate
-sexColumnHeader='Sex'   # The column header for your sex covariate
-maleIndicator=1         # Males in the sex column coded as (M? 1? 2? ... )
-patients=1              # Does your dataset contain patients? (mark 0 for no,
+<i>ageColumnHeader</i>='Age'   # The column header for your age covariate
+<i>sexColumnHeader</i>='Sex'   # The column header for your sex covariate
+<i>maleIndicator</i>=1         # Males in the sex column coded as (M? 1? 2? ... )
+<i>patients</i>=1              # Does your dataset contain patients? (mark 0 for no,
                         # 1 for yes). If your sample has patients and 
                         # controls make sure you have a column, (called
                         # 'AffectionStatus') where patients are marked with 1 
                         # and healthy controls with a 0.
-```
 
-\*Give the **full path** of the output diriectory for the ped and dat file 
+#Give the <b>full path</b> of the output diriectory for the ped and dat file 
 outputs (folder will be created for you)
+<i>peddatdir</i>=/ENIGMA/CortexGWAS/PedDat/
 
+#<b>Does you sample have related or unrelated subjects?</b>
+<i>related</i>=0  # Mark 0 for unrelated sample, 1 for related
 
-```bash
-peddatdir=/ENIGMA/CortexGWAS/PedDat/
-```
+#<b>Please only fill out the section below that pertains to your sample (i.e. 
+#unrelated or related)</b>
 
-**\*Does you sample have related or unrelated subjects?**
-
-```bash
-related=0  # Mark 0 for unrelated sample, 1 for related
-```
-
-**\*Please only fill out the section below that pertains to your sample (i.e. 
-unrelated or related)**
-
-```bash
 if [ $related -eq 0 ]
 then
 
-mach2qtl_DL=0   # UNRELATED ONLY: Only change this to 1 if you know what you are 
+<b>mach2qtl_DL</b>=0   # UNRELATED ONLY: Only change this to 1 if you know what you are 
                 # doing.
 
-run_machdir=${run_directory}/mach2qtl/  # UNRELATED ONLY: Only change this if 
+<b>run_machdir</b>=${run_directory}/mach2qtl/  # UNRELATED ONLY: Only change this if 
                                         # you know what you are doing
 
-localfamFILE="None" # UNRELATED ONLY: Keep as is.
+<b>localfamFILE</b>="None" # UNRELATED ONLY: Keep as is.
 
 else
 
-localfamFILE=/ENIGMA/CortexGWAS/local.fam   # RELATED ONLY: Path to your 
+<b>localfamFILE</b>=/ENIGMA/CortexGWAS/local.fam   # RELATED ONLY: Path to your 
                                             #local.fam file outputted #during 
                                             # the Genetic #Imputation step
 
-merlin_DL=0 # RELATED ONLY: Only change this to 1 if you know what you are 
+<b>merlin_DL</b>=0 # RELATED ONLY: Only change this to 1 if you know what you are 
             # doing.
 
-merlin_directory=${run_directory}/merlin/   # RELATED ONLY: Only change this if 
+<b>merlin_directory</b>=${run_directory}/merlin/   # RELATED ONLY: Only change this if 
                                             # you know what you are doing
 
 fi
-```
----
----
+</pre>
+
 ---
 
 ### **Step 3) run2_GWAS_flexible_step2.sh**
@@ -329,98 +280,70 @@ chmod 755 run2_GWAS_flexible_step2.sh
     *   This will create text files that can be found in your current working 
         directory
 
-\*Give the **full path** to where all the enigma association scripts are stored
+---
 
-```bash
-run_directory=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend/
-```
+<pre>
+#Give the <b>full path</b> to where all the enigma association scripts are stored
+<i>run_directory</i>=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend/
 
-*You can split up the processing into this many nodes, if running in series or 
-manually, set Nnodes=1                       
+#You can split up the processing into this many nodes, if running in series or 
+#manually, set Nnodes=1
+<i>Nnodes</i>=1
 
-```bash
-Nnodes=1 
-```
+#Give the <b>full path</b> to the imputed output from Mach (after imputation 
+#scripts)			
+<i>machFILEdir</i>=/ENIGMA/Study_Genotypes/1KGPref/Mach/              			
 
-\*Give the **full path** to the imputed output from Mach (after imputation 
-scripts)			
+#Give the <b>full path</b> to the ped and dat files created in 
+#run1_GWAS_flexible_step1.sh
+<i>peddatdir</i>=/ENIGMA/CortexGWAS/PedDat/                					
 
-```bash
-machFILEdir=/ENIGMA/Study_Genotypes/1KGPref/Mach/              			
-```
+#Give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
+<i>samplename</i>=ADNI
 
-\*Give the **full path** to the ped and dat files created in 
-run1_GWAS_flexible_step1.sh		
+#Give the <b>full path</b> for the output from mach2qtl or merlin (folder will be 
+#created for you)
+<i>GWASout</i>=/ENIGMA/CortexGWAS/GWAS_out/     							
 
-```bash
-peddatdir=/ENIGMA/CortexGWAS/PedDat/                					
-```
+#Can change to "manual" if you want to output a list of commands that you can 
+#batch process yourself, otherwise set to "run"
+<i>mode</i>="run"
 
-*Give abbreviated name of your sample, no spaces in the name (i.e. ADNI)	
+#Indicate whether your dataset contains (H for healthy-only subjects), 
+#(HD for healthy controls and affected patients), 
+#(or D for datasets with affected/diagnosis patients only)
+<i>status</i>=HD                                										
 
-```bash
-samplename=ADNI                         							
-```
+#<b>Does you sample have related or unrelated subjects?</b>
 
-\*Give the **full path** for the output from mach2qtl or merlin (folder will be 
-created for you)			
+#Mark 0 for unrelated sample, 1 for related samples
+<i>related</i>=0                                 
 
-```bash
-GWASout=/ENIGMA/CortexGWAS/GWAS_out/     							
-```
+#<b>Please only fill out the section below that pertains to your sample (i.e. 
+#unrelated or related)</b>
 
-*Can change to "manual" if you want to output a list of commands that you can 
-batch process yourself, otherwise set to "run"			
-
-```bash
-mode="run"  
-```
-
-*Indicate whether your dataset contains (H for healthy-only subjects), 
-(HD for healthy controls and affected patients), 
-(or D for datasets with affected/diagnosis patients only)	
-
-```bash
-status=HD                                										
-```
-
-**\*Does you sample have related or unrelated subjects?**
-
-*Mark 0 for unrelated sample, 1 for related samples
-
-```bash
-related=0                                 
-```
-
-**\*Please only fill out the section below that pertains to your sample (i.e. 
-unrelated or related)**
-
-```bash
 if [ $related -eq 0 ]
 then
 
 #UNRELATED ONLY: give the directory to where you installed and compiled mach2qtl
-(the parent folder of the executables/ folder)
-
-run_machdir=${run_directory}/mach2qtl/  # Only change if you know what you are 
+#(the parent folder of the executables/ folder)
+<i>run_machdir</i>=${run_directory}/mach2qtl/  # Only change if you know what you are 
                                         # doing
 
 else
 
 #RELATED ONLY: give the directory to where you installed and compiled Merlin in 
-step 1
-
-merlin_directory=${run_directory}/merlin/   # Only change if you know what you 
+#step 1
+<i>merlin_directory</i>=${run_directory}/merlin/   # Only change if you know what you 
                                             # are doing            
 
 #RELATED ONLY: give the directory to the imputed output for merlin (will be 
-created if files do not exist), see 
-http://genepi.qimr.edu.au/staff/sarahMe/mach2merlin.html
-
-merlinFILEdir=/ENIGMA/CortexGWAS/merlin/    
+#created if files do not exist), see 
+#http://genepi.qimr.edu.au/staff/sarahMe/mach2merlin.html
+<i>merlinFILEdir</i>=/ENIGMA/CortexGWAS/merlin/    
 
 fi
-```
+</pre>
 
 Each group has a secure space on the ENIGMA upload server to upload the .info.gz
 (from imputation) and gzipped association result files. Please contact 
