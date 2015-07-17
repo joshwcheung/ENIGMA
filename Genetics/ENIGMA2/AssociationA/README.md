@@ -329,25 +329,25 @@ zipped as they are produced to help preserve space.
 #!/bin/bash
 ```
 
-#give the directory to the imputed output from Mach/minimac
+*give the directory to the imputed output from Mach/minimac
 
 ```bash
 machdir=/home/1KGPref/Mach
 ```
 
-#give the dir to the ped and dat files just created
+*give the dir to the ped and dat files just created
 
 ```bash
 peddatdir=/home/1KGPref
 ```
 
-#give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
+*give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
 
 ```bash
 samplename=ADNI
 ```
 
-#make a folder for the output from mach2qtl
+*make a folder for the output from mach2qtl
 
 ```bash
 mach2qtlout=/home/1KGPref/mach2qtl_out
