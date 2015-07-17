@@ -29,7 +29,7 @@ questions to: enigma@lists.loni.ucla.edu.**
 
 **Compile a list of traits and covariates for all analyses to be conducted in 
 the study *without patients*. This list should include hippocampal volume, ICV, 
-brain volume, age, sex, age<sup>2</sup>, sex*age, sex*age<sup>2</sup>, 
+brain volume, age, sex, age<sup>2</sup>, sex\*age, sex\*age<sup>2</sup>, 
 population stratification (4 MDS components), dummy covariate for different MR 
 acquisitions (if applicable). Then write out these files as Merlin compatible 
 files and merge them with the genotype files.**
