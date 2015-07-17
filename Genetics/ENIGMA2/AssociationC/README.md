@@ -367,25 +367,25 @@ echo "#Merlin-offline association" > merlin_association.sh
 echo "#Merlin-offline association" > gzip_results.sh
 ```
 
-#give the directory to the Merlin-format converted output from Mach/minimac
+*give the directory to the Merlin-format converted output from Mach/minimac
 
 ```bash
 genodir=/home/1KGPref/Merlin
 ```
 
-#give the dir to the ped and dat files just created
+*give the dir to the ped and dat files just created
 
 ```bash
 phenodir=/home/1KGPref
 ```
 
-#give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
+*give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
 
 ```bash
 samplename=QTIM
 ```
 
-#make a folder for the output from Merlin
+*make a folder for the output from Merlin
 
 ```bash
 merlinout=/home/1KGPref/mach2qtl_out
