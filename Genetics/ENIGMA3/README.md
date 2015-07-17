@@ -122,33 +122,33 @@ chmod 755 run0_E3_GWAS_format.sh
 run_directory=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend                  
 ```
 
-*Give the **full path** to R binary, can be found by typing `which R` on the 
+\*Give the **full path** to R binary, can be found by typing `which R` on the 
 command line.
 
 ```bash
 Rbin=/usr/local/R/bin/R                 								 
 ```
 
-*Give the **full path** to the surf area csv file on your system
+\*Give the **full path** to the surf area csv file on your system
 
 ```bash
 csvFILE_1=/ENIGMA/CortexGWAS/CorticalMeasuresENIGMA_SurfAvg.csv 
 ```
 
-*Give the **full path** to the thickness csv file on your system
+\*Give the **full path** to the thickness csv file on your system
 
 ```bash
 csvFILE_2=/ENIGMA/CortexGWAS/CorticalMeasuresENIGMA_ThickAvg.csv
 ```
 
-*Give the **full path** to a directory to write out the updated and filtered csv
+\*Give the **full path** to a directory to write out the updated and filtered csv
 file (this folder will be created for you) 
 
 ```bash
 csvFOLDER=/ENIGMA/CortexGWAS/E3     									 
 ```
 
-*Please indicate the **full path** to the file where your covariate data is 
+\*Please indicate the **full path** to the file where your covariate data is 
 stored so that we can merge in relevant covariates to the ENIGMA phenotype files
 
 ```bash
@@ -219,20 +219,20 @@ chmod 755 run1_GWAS_flexible_step1.sh
 **But first** open `run1_GWAS_flexible_step1.sh` and set the following 
 parameters (see below):
 
-*Give the **full path** to where all the enigma association scripts are stored
+\*Give the **full path** to where all the enigma association scripts are stored
 
 ```bash
 run_directory=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend      			
 ```
 
-*Give the **full path** to R binary	(can be found by typing `which R` on the 
+\*Give the **full path** to R binary	(can be found by typing `which R` on the 
 command line)			   
 
 ```bash
 Rbin=/usr/local/R/bin/R 									 							   
 ```
 
-*Give the **full path** to your HM3mds2Rmds.csv file -- has 4 MDS components to 
+\*Give the **full path** to your HM3mds2Rmds.csv file -- has 4 MDS components to 
 use as covariates 
 (output from the MDS Analysis Protocol)
 
@@ -240,7 +240,7 @@ use as covariates
 csvFILE=/ENIGMA/CortexGWAS/HM3mds2R.mds.csv   				 							   
 ```
 
-*Give the **full path** to the csv file where your phenotypes and covariates are
+\*Give the **full path** to the csv file where your phenotypes and covariates are
 stored after running ./run0_E3_GWAS_format.sh
 
 ```bash
@@ -260,7 +260,7 @@ patients=1              # Does your dataset contain patients? (mark 0 for no,
                         # and healthy controls with a 0.
 ```
 
-*Give the **full path** of the output diriectory for the ped and dat file 
+\*Give the **full path** of the output diriectory for the ped and dat file 
 outputs (folder will be created for you)
 
 
@@ -329,7 +329,7 @@ chmod 755 run2_GWAS_flexible_step2.sh
     *   This will create text files that can be found in your current working 
         directory
 
-*Give the **full path** to where all the enigma association scripts are stored
+\*Give the **full path** to where all the enigma association scripts are stored
 
 ```bash
 run_directory=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend/
@@ -342,14 +342,14 @@ manually, set Nnodes=1
 Nnodes=1 
 ```
 
-*Give the **full path** to the imputed output from Mach (after imputation 
+\*Give the **full path** to the imputed output from Mach (after imputation 
 scripts)			
 
 ```bash
 machFILEdir=/ENIGMA/Study_Genotypes/1KGPref/Mach/              			
 ```
 
-*Give the **full path** to the ped and dat files created in 
+\*Give the **full path** to the ped and dat files created in 
 run1_GWAS_flexible_step1.sh		
 
 ```bash
@@ -362,7 +362,7 @@ peddatdir=/ENIGMA/CortexGWAS/PedDat/
 samplename=ADNI                         							
 ```
 
-*Give the **full path** for the output from mach2qtl or merlin (folder will be 
+\*Give the **full path** for the output from mach2qtl or merlin (folder will be 
 created for you)			
 
 ```bash
