@@ -274,8 +274,8 @@ write.table(cbind(c(rep("T",21),rep("C",numcovs)),
 information. There was a lot of text manipulation we just did, so please make 
 sure to look at the files you created to see if they have the correct number of 
 subjects, correct columns, and correct .dat files. Please refer to the examples 
-given in Methods [A](Genetics/ENIGMA2/AssociationA) and 
-[B](Genetics/ENIGMA2/AssociationB).**
+given in Methods [A](../AssociationA) and 
+[B](../AssociationB).**
 
 ---
 
