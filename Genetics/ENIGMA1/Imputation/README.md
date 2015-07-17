@@ -32,8 +32,14 @@ address any questions to: enigma@lists.loni.ucla.edu.**
 **Population substructure checking – paste the code below into a terminal window
 or shell script**
 
-Download the [HapMap3 data](Genetics/GWASBackend/HM3) to your working directory 
-which we will call /enigma/genetics/
+Download the HapMap3 data to your working directory which we will call 
+/enigma/genetics/:
+
+```bash
+wget "http://enigma.ini.usc.edu/wp-content/uploads/2012/07/HM3.bed.gz"
+wget "http://enigma.ini.usc.edu/wp-content/uploads/2012/07/HM3.bim.gz"
+wget "http://enigma.ini.usc.edu/wp-content/uploads/2012/07/HM3.fam.gz"
+```
 
 ---
 
