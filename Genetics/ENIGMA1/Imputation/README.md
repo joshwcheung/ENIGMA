@@ -122,6 +122,9 @@ awk '{print $1, $2, $3, $4, $5, $6, $7}' >> HM3mds2R.mds HM3mds.mds
 #This formats the plink output into an R compatible format.
 
 R
+```
+
+```R
 mds.cluster = read.table("HM3mds2R.mds", header=T);
 ur.num = length(mds.cluster$C1) - 985;
 colors = c(rep("red", ur.num), rep("lightblue", 112), rep("brown", 84), 
@@ -251,7 +254,7 @@ Some example MACH log output is given below
 
 ---
 
-```bashh
+```bash
 export hm3pop=hm3_r2_b36_fwd.CEU #change this so that it reflects the root file 
                                  #name of your hm3 population of interest
 export fulldir=/enigma/genetics/ #you will have to edit this to reflect the 
