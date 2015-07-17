@@ -94,8 +94,8 @@ Change directories to move into the SCRIPTS/ directory.
 We will run three scripts in order (run0, run1, run2) to setup and then perform 
 the GWAS.
 
-For each step, user inputs that need modification are highlighted in yellow. 
-Green highlights may or may not need to be addressed depending on the dataset
+For each step, user inputs that need modification are *italicized*. 
+**Bolded sections** may or may not need to be addressed depending on the dataset
 
 ---
 
@@ -114,30 +114,20 @@ chmod 755 run0_eDTI_GWAS_format.sh
 Open `run0_eDTI _GWAS_format.sh` and set the following parameters (see 
 descriptions):
 
-*Directory where all the enigma association scripts are stored
+<pre>
+#Directory where all the enigma association scripts are stored
+<i>run_directory</i>=/ENIGMA/eGWAS/SCRIPTS/enigma_backend
 
-```bash
-run_directory=/ENIGMA/eGWAS/SCRIPTS/enigma_backend
-```
+#Full path to R binary
+<i>Rbin</i>=/usr/local/R/bin/R
 
-Full path to R binary
+#Path to the FA and covariate csv file
+<i>csvFILE</i>=/ENIGMA/eGWAS/eDTI/combinedROItable.csv
 
-```bash
-Rbin=/usr/local/R/bin/R
-```
-
-Path to the FA and covariate csv file
-
-```bash
-csvFILE=/ENIGMA/eGWAS/eDTI/combinedROItable.csv
-```
-
-*Directory to write out the updated and filtered csv file (this folder will be 
-created for you)
-
-```bash
-csvFOLDER=/ENIGMA/eGWAS/eDTI/
-```
+#Directory to write out the updated and filtered csv file (this folder will be 
+#created for you)
+<i>csvFOLDER</i>=/ENIGMA/eGWAS/eDTI/
+</pre>
 
 Step 2) `run1_GWAS_flexible_step1.sh`  -- You will need to have imputed your 
 data to 1000Genomes by this step. This tells the program how to set things up: 
@@ -150,7 +140,7 @@ the program know if you have already downloaded the needed GWAS programs
 (mach2qtl or merlin) and if so where they are located so there is no need to 
 re-download and install them.
 
-After `setting user inputs` (see below), make sure you have executable 
+After *setting user inputs* (see below), make sure you have executable 
 permissions to the script and run as with any other bash script on linux:
 
 ```bash
@@ -162,88 +152,72 @@ chmod 755 run1_GWAS_flexible_step1.sh
 
 Open `run1_GWAS_flexible_step1.sh` and set the following parameters (see below):
 
-*Directory where all the enigma association scripts are stored
+<pre>
+#Directory where all the enigma association scripts are stored
+<i>run_directory</i>=/ENIGMA/eGWAS/SCRIPTS/enigma_backend/
 
-```bash
-run_directory=/ENIGMA/eGWAS/SCRIPTS/enigma_backend/
-```
+#Full path to R binary
+<i>Rbin</i>=/usr/local/R/bin/R
 
-*Full path to R binary
+#Path to your HM3mds2Rmds.csv file -- has 4 MDS components to use as covariates 
+#(output from the MDS Analysis Protocol)
+<i>csvFILE</i>=/ENIGMA/eGWAS/HM3mds2R.mds.csv
 
-```bash
-Rbin=/usr/local/R/bin/R
-```
+#Path to the csv file where your phenotypes and covariates are stored after 
+#running ./run0_eDTI_GWAS_format.sh
+#Note this file was created for you in run0
+<i>combinedROItableFILE</i>=/ENIGMA/eGWAS/eDTI/combinedROItable_eDTI4GWAS.csv
 
-*Path to your HM3mds2Rmds.csv file -- has 4 MDS components to use as covariates 
-(output from the MDS Analysis Protocol)
+#
+#Please give some information about the covariate coding you used:
+#
+<i>ageColumnHeader</i>='Age'   #The column header for your age covariate
+<i>sexColumnHeader</i>='Sex'   #The column header for your sex covariate
+<i>maleIndicator</i>=1         #Males in the sex column coded as (M? 1? 2? ... )
+<i>patients</i>=1              #Does your dataset contain patients? (mark 0 for 
+                        #no, # 1 or 'AffectionStatus' or another column 
+                        #header for yes).
+                        #If your sample has patients and controls make sure you 
+                        #have a column, (for example called 'AffectionStatus')
+                        #In 'AffectionStatus' patients are marked with 1 and 
+                        #healthy controls with a 0.
+                        #If you have patients but the column name is NOT 
+                        #'AffectionStatus', instead of 1, specify the column name.
 
-```bash
-csvFILE=/ENIGMA/eGWAS/HM3mds2R.mds.csv
-```
+#
+#Output diriectory for the ped and dat file outputs (folder will be created for 
+#you)
+#
+<i>peddatdir</i>=/ENIGMA/eGWAS/PedDat/
 
-*Path to the csv file where your phenotypes and covariates are stored after 
-running ./run0_eDTI_GWAS_format.sh
+#
+#Does you sample have related or unrelated subjects?
+#
 
-*Note this file was created for you in run0
-
-```bash
-combinedROItableFILE=/ENIGMA/eGWAS/eDTI/combinedROItable_eDTI4GWAS.csv
-```
-
-*Please give some information about the covariate coding you used:
-
-```bash
-ageColumnHeader='Age'   # The column header for your age covariate
-sexColumnHeader='Sex'   # The column header for your sex covariate
-maleIndicator=1         # Males in the sex column coded as (M? 1? 2? ... )
-patients=1              # Does your dataset contain patients? (mark 0 for no, 
-                        # 1 or 'AffectionStatus' or another column header for 
-                        # yes).
-```
-
-*If your sample has patients and controls make sure you have a column, (for 
-example called 'AffectionStatus')
-
-*In 'AffectionStatus' patients are marked with 1 and healthy controls with a 0.
-
-*If you have patients but the column name is NOT 'AffectionStatus', instead of 
-1, specify the column name.
-
-*Output diriectory for the ped and dat file outputs (folder will be created for 
-you)
-
-```bash
-peddatdir=/ENIGMA/eGWAS/PedDat/
-```
-
-*Does you sample have related or unrelated subjects?
-
-```bash
-related=0  # Mark 0 for unrelated sample, 1 for related
+<i>related</i>=0  # Mark 0 for unrelated sample, 1 for related
 
 if [ $related -eq 0 ]
 then
-
-mach2qtl_DL=0   # UNRELATED ONLY: Have you downloaded mach2qtl yet? Mark 0 for 
+<b>mach2qtl_DL</b>=0   # UNRELATED ONLY: Have you downloaded mach2qtl yet? Mark 0 for 
                 # no, 1 for yes
-run_machdir=${run_directory}/mach2qtl/  # UNRELATED ONLY: Directory where you 
+<b>run_machdir</b>=${run_directory}/mach2qtl/  # UNRELATED ONLY: Directory where you 
                                         # will download and compile mach2qtl 
                                         # installed (probably can leave as is)
-localfamFILE="None" # UNRELATED ONLY: Keep as is.
+<b>localfamFILE</b>="None" # UNRELATED ONLY: Keep as is.
 
 else
 
-localfamFILE=/ENIGMA/eGWAS/local.fam    # RELATED ONLY: Path to your local.fam 
+<b>localfamFILE</b>=/ENIGMA/eGWAS/local.fam    # RELATED ONLY: Path to your local.fam 
                                         # file outputted during the Genetic 
                                         # Imputation step
-merlin_DL=0 # RELATED ONLY: Have you downloaded and compiled merlin-offline? 
+<b>merlin_DL</b>=0 # RELATED ONLY: Have you downloaded and compiled merlin-offline? 
             # Mark 0 for no, 1 for yes
-merlin_directory=${run_directory}/merlin/   # RELATED ONLY: Create a directory 
+<b>merlin_directory</b>=${run_directory}/merlin/   # RELATED ONLY: Create a directory 
                                             # to download and compile the merlin
                                             # code (probably can leave as is)
 
 fi
-```
+</pre>
 
 Step 3) `run2_GWAS_flexible_step2.sh` -- this setup files for performing GWAS.
 
@@ -268,95 +242,61 @@ chmod 755 run2_GWAS_flexible_step2.sh
 
 ---
 
-*Directory where all the enigma association scripts are stored
+<pre>
+#Directory where all the enigma association scripts are stored
+<i>run_directory</i>=/ENIGMA/eGWAS/SCRIPTS/enigma_backend/
 
-```bash
-run_directory=/ENIGMA/eGWAS/SCRIPTS/enigma_backend/
-```
+#You can split up the processing into this many nodes, if running in series or 
+#manually, Nnodes=1
+<i>Nnodes</i>=1
 
-*You can split up the processing into this many nodes, if running in series or 
-manually, Nnodes=1
+#Give the directory to the imputed output from Mach (after imputation scripts)
+<i>machFILEdir</i>=/ENIGMA/Study_Genotypes/1KGPref/Mach/
 
-```bash
-Nnodes=1
-```
+#Give the dir to the ped and dat files created in run1_GWAS_flexible_step1.sh
+<i>peddatdir</i>=/ENIGMA/eGWAS/PedDat/
 
-*Give the directory to the imputed output from Mach (after imputation scripts)
+#Give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
+<i>samplename</i>=ADNI
 
-```bash
-machFILEdir=/ENIGMA/Study_Genotypes/1KGPref/Mach/
-```
+#Directory for the output from mach2qtl or merlin (folder will be created for 
+#you)
+<i>GWASout</i>=/ENIGMA/eGWAS/GWAS_out/
 
-*Give the dir to the ped and dat files created in run1_GWAS_flexible_step1.sh
+#Can change to "manual" if you want to output a list of commands that you can 
+#batch process yourself, otherwise set to "run"
+<i>mode</i>="run"
 
-```bash
-peddatdir=/ENIGMA/eGWAS/PedDat/
-```
+#H for healthy, HD for healthy and disease, (or D for disease-only datasets)
+<i>status</i>=H
 
-*Give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
+#
+#Does you sample have related or unrelated subjects?
+#
 
-```bash
-samplename=ADNI
-```
+#0 for unrelated sample, 1 (or anything else for related)
+<i>related</i>=0
 
-*Directory for the output from mach2qtl or merlin (folder will be created for 
-you)
-
-```bash
-GWASout=/ENIGMA/eGWAS/GWAS_out/
-```
-
-*Can change to "manual" if you want to output a list of commands that you can 
-batch process yourself, otherwise set to "run"
-
-```bash
-mode="run"
-```
-
-*H for healthy, HD for healthy and disease, (or D for disease-only datasets)
-
-```bash
-status=H
-```
-
-*Does you sample have related or unrelated subjects?
-
-*0 for unrelated sample, 1 (or anything else for related)
-
-```bash
-related=0
-```
-
-```bash
 if [ $related -eq 0 ]
 then
-```
 
-*give the directory to where you installed and compiled mach2qtl (the parent 
-folder of the executables/ folder)`
-
-```bash
-run_machdir=/ENIGMA/eGWAS/enigma_backend/mach2qtl/
+#give the directory to where you installed and compiled mach2qtl (the parent 
+#folder of the executables/ folder)`
+<i>run_machdir</i>=/ENIGMA/eGWAS/enigma_backend/mach2qtl/
 
 else
-```
 
-*RELATED ONLY: give the directory to where you installed and compiled Merlin in 
-step 1
+#RELATED ONLY: give the directory to where you installed and compiled Merlin in 
+#step 1
+<i>merlin_directory</i>=/ENIGMA/eGWAS/enigma_backend/merlin/
 
-```bash
-merlin_directory=/ENIGMA/eGWAS/enigma_backend/merlin/
-```
-
-*RELATED ONLY: give the directory to the imputed output for merlin (will be 
-created if files don't exist), see 
-http://genepi.qimr.edu.au/staff/sarahMe/mach2merlin.html
-
-```bash
-merlinFILEdir=/ENIGMA/eGWAS/merlin/
+#RELATED ONLY: give the directory to the imputed output for merlin (will be 
+#created if files don't exist), see 
+#http://genepi.qimr.edu.au/staff/sarahMe/mach2merlin.html
+<i>merlinFILEdir</i>=/ENIGMA/eGWAS/merlin/
 
 fi
-```
+</pre>
 
 Each group has a secure space on the ENIGMA upload server to upload the .info.gz
 (from imputation) and gzipped association result files. Please contact 
