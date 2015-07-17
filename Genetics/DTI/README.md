@@ -60,7 +60,7 @@ You will need four files to run the association analysis (described below).
     using in the association analysis contains only the subjects you want to 
     keep in the analysis (i.e. that have a homogenous ancestry). You can plot 
     the MDS values using the code provided in the [imputation protocols]
-    (Genetics/ENIGMA2/Imputation). You can uncomment the line in the plotting 
+    (../ENIGMA2/Imputation). You can uncomment the line in the plotting 
     code to plot the MDS values with the subject IDs overlaid and then remove 
     those subjects from your HM3mds2R.mds.csv file in Excel (or any text 
     editor).
