@@ -121,7 +121,7 @@ correct values where text is italicized.**
 Download the customized reference data to your working directory which we will 
 call /enigma/genetics/:
 
-#change to your working directory and download reference data
+*change to your working directory and download reference data
 
 ```bash
 cd /enigma/genetics/
@@ -139,7 +139,7 @@ plink format (bed/bim/fam), if this is not the case try to convert to plink
 format and contact enigma2helpdesk@gmail.com with questions.
 
 
-#replace yourrawdata with the name of the local plink file name
+*replace yourrawdata with the name of the local plink file name
 
 ```bash
 export datafileraw=yourrawdata
@@ -156,7 +156,7 @@ from the genotyped data set to avoid strand mismatch among these snps. Your
 genotype files should be filtered to remove markers which do not satisfy the 
 quality control criteria above.
 
-#change directory to a folder with you plink dataset and downloaded HM3 files
+*change directory to a folder with you plink dataset and downloaded HM3 files
 
 ```bash
 cd /enigma/genetics
@@ -374,14 +374,14 @@ Assuming that you are using the Affy 6.0 key file provided or that you have made
 the proper key file for your chipset, run the following code customising the 
 commented sections.
 
-#download key
+*download key
 
 ```bash
 wget "http://enigma.ini.usc.edu/wp-content/uploads/2012/04/\
     GRCh37_hg19_AffyID2rsnumbers.txt"
 ```
 
-#give input filename
+*give input filename
 
 ```bash
 awk '{print $2, $1, $3, $4, $5, $6}' datfile-with-affyID.bim > temp.bim
@@ -392,7 +392,7 @@ awk 'FNR==NR{a[$1]=$2;next} $1 in a {print a[$1], $2, $3, $4}'
 GRCh37_hg19_AffyID2rsnumbers.txt temp.bim > predatfile.bim
 ```
 
-#give output filename
+*give output filename
 
 ```bash
 awk '{print $2, $1, $3, $4, $5, $6}' predatfile.bim > datafile.bim
@@ -406,7 +406,7 @@ files. Copy your PLINK-format genotype files (*.bed, *.bim, *.fam, files into
 the 1KGPref/ directory) and then run the following code customising the 
 commented sections.
 
-#give filename
+*give filename
 
 ```bash
 awk '{ if (($5=="T" && $6=="A")||($5=="A" && $6=="T")||($5=="C" && $6=="G")||\
@@ -414,7 +414,7 @@ awk '{ if (($5=="T" && $6=="A")||($5=="A" && $6=="T")||($5=="C" && $6=="G")||\
     grep ambig | awk '{print $1}' > ambig.list
 ```
 
-#give filename
+*give filename
 
 ```bash
 plink --bfile datafile --exclude ambig.list --make-founders --out lastQC \
@@ -456,12 +456,12 @@ that you have downloaded from the ENIGMA site.
 
 ---
 
-##For the following commands in green use the clean “lastQC2” files if you had 
+*For the following commands in green use the clean “lastQC2” files if you had 
 to remove duplicate markers
 
-#Join the genotyped bim file with the reference allele lists
+*Join the genotyped bim file with the reference allele lists
 
-##reformat the lastQC.bim file
+*reformat the lastQC.bim file
 
 ```bash
 awk '{print $2,$1,$3,$4,$5,$6}' lastQC.bim > tempQC.bim
@@ -473,7 +473,7 @@ awk 'NR==FNR{s=$1;a[s]=$0;next} a[$1]{print $0 " "a[$1]}' \
     tempQC.bim 1kgp.alleles > merged.alleles
 ```
 
-##selects SNPS showing different alleles in the two files
+*selects SNPS showing different alleles in the two files
 
 ```bash
 awk '{ if ($2!=$8 && $2!=$9) print $1}' merged.alleles > flip.list
@@ -616,7 +616,7 @@ ChunkChromosome -d ready4mach."$i".dat.gz -n 5000 -o 500
 done
 ```
 
-#loop over parts
+*loop over parts
 
 ```bash
 for ((j=1; j<=40; j++))
