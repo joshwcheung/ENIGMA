@@ -121,14 +121,12 @@ correct values where text is italicized.**
 Download the customized reference data to your working directory which we will 
 call /enigma/genetics/:
 
-*change to your working directory and download reference data
-
-```bash
-cd /enigma/genetics/
+<pre>
+cd <i>/enigma/genetics/</i>
 wget "http://enigma.ini.usc.edu/wp-content/uploads/2012/07/HM3.bed.gz"
 wget "http://enigma.ini.usc.edu/wp-content/uploads/2012/07/HM3.bim.gz"
 wget "http://enigma.ini.usc.edu/wp-content/uploads/2012/07/HM3.fam.gz"
-```
+</pre>
 
 ---
 
@@ -138,14 +136,12 @@ Equilibrium < 1x10<sup>-6</sup>). Directions assume your data are in binary
 plink format (bed/bim/fam), if this is not the case try to convert to plink 
 format and contact enigma2helpdesk@gmail.com with questions.
 
-
-*replace yourrawdata with the name of the local plink file name
-
-```bash
-export datafileraw=yourrawdata
+<pre>
+#replace yourrawdata with the name of the local plink file name
+export datafileraw=<i>yourrawdata</i>
 plink --bfile $datafileraw --hwe 1e-6 --geno 0.05 --maf 0.01 --noweb \
     --make-bed --out ${datafileraw}_filtered
-```
+</pre>
 
 ---
 
@@ -156,11 +152,10 @@ from the genotyped data set to avoid strand mismatch among these snps. Your
 genotype files should be filtered to remove markers which do not satisfy the 
 quality control criteria above.
 
-*change directory to a folder with you plink dataset and downloaded HM3 files
-
-```bash
-cd /enigma/genetics
-```
+<pre>
+#change directory to a folder with you plink dataset and downloaded HM3 files
+cd <i>/enigma/genetics</i>
+</pre>
 
 ```bash
 gunzip HM3*.gz
@@ -372,31 +367,15 @@ rs6576700
 
 Assuming that you are using the Affy 6.0 key file provided or that you have made
 the proper key file for your chipset, run the following code customising the 
-commented sections.
+**bolded** sections.
 
-*download key
-
-```bash
-wget "http://enigma.ini.usc.edu/wp-content/uploads/2012/04/\
-    GRCh37_hg19_AffyID2rsnumbers.txt"
-```
-
-*give input filename
-
-```bash
-awk '{print $2, $1, $3, $4, $5, $6}' datfile-with-affyID.bim > temp.bim
-```
-
-```bash
+<pre>
+wget "<b>http://enigma.ini.usc.edu/wp-content/uploads/2012/04/GRCh37_hg19_AffyID2rsnumbers.txt</b>"
+awk '{print $2, $1, $3, $4, $5, $6}' <b>datfile-with-affyID.bim</b> > temp.bim
 awk 'FNR==NR{a[$1]=$2;next} $1 in a {print a[$1], $2, $3, $4}'
 GRCh37_hg19_AffyID2rsnumbers.txt temp.bim > predatfile.bim
-```
-
-*give output filename
-
-```bash
-awk '{print $2, $1, $3, $4, $5, $6}' predatfile.bim > datafile.bim
-```
+awk '{print $2, $1, $3, $4, $5, $6}' predatfile.bim > <b>datafile.bim</b>
+</pre>
 
 **Step 2: re-QC’ing the data**
 
@@ -404,22 +383,16 @@ Before starting the imputation process you need to drop any strand ambiguous
 SNPs and rescreen for low MAF, missingness and HWE in your PLINK-format genotype
 files. Copy your PLINK-format genotype files (*.bed, *.bim, *.fam, files into 
 the 1KGPref/ directory) and then run the following code customising the 
-commented sections.
+**bolded** sections.
 
-*give filename
-
-```bash
+<pre>
 awk '{ if (($5=="T" && $6=="A")||($5=="A" && $6=="T")||($5=="C" && $6=="G")||\
-    ($5=="G" && $6=="C")) print $2, "ambig" ; else print $2 ;}' datafile.bim | \
-    grep ambig | awk '{print $1}' > ambig.list
-```
+    ($5=="G" && $6=="C")) print $2, "ambig" ; else print $2 ;}' \
+    <b>datafile.bim</b> | grep ambig | awk '{print $1}' > ambig.list
 
-*give filename
-
-```bash
-plink --bfile datafile --exclude ambig.list --make-founders --out lastQC \
+plink --bfile <b>datafile</b> --exclude ambig.list --make-founders --out lastQC \
     --maf 0.01 --hwe 0.000001 --make-bed --noweb
-```
+</pre>
 
 **After modifying the SNP identifiers and running the last command, you might 
 encounter duplicate markers, you need to remove those before going on (you can 
@@ -456,33 +429,24 @@ that you have downloaded from the ENIGMA site.
 
 ---
 
-*For the following commands in green use the clean “lastQC2” files if you had 
-to remove duplicate markers
+<pre>
+# For the following commands in green use the clean “lastQC2” files if you had 
+# to remove duplicate markers
+# Join the genotyped bim file with the reference allele lists
+# reformat the lastQC.bim file
+awk '{print $2,$1,$3,$4,$5,$6}' <b>lastQC</b>.bim > tempQC.bim
 
-*Join the genotyped bim file with the reference allele lists
-
-*reformat the lastQC.bim file
-
-```bash
-awk '{print $2,$1,$3,$4,$5,$6}' lastQC.bim > tempQC.bim
-```
-
-```
-##Join the two files
+# Join the two files
 awk 'NR==FNR{s=$1;a[s]=$0;next} a[$1]{print $0 " "a[$1]}' \
     tempQC.bim 1kgp.alleles > merged.alleles
-```
 
-*selects SNPS showing different alleles in the two files
+# selects SNPS showing different alleles in the two files
+awk '{ if ($2!=$8 && $2!=$9) print $1}' merged.alleles > flip.list
+plink --bfile <b>lastQC</b> --extract 1kgp.snps --update-map 1kgp.chr \
+    --update-chr --flip flip.list --make-bed --out temp --noweb
+</pre>
 
 ```bash
-awk '{ if ($2!=$8 && $2!=$9) print $1}' merged.alleles > flip.list
-
-plink --bfile lastQC --extract 1kgp.snps --update-map 1kgp.chr --update-chr \
-    --flip flip.list --make-bed --out temp --noweb
-```
-
-```
 plink --bfile temp --update-map 1kgp.bp --geno 0.05 --mind 0.05 --make-bed \
     --out lastQCb37 --noweb
 
@@ -616,11 +580,10 @@ ChunkChromosome -d ready4mach."$i".dat.gz -n 5000 -o 500
 done
 ```
 
-*loop over parts
-
-```bash
+<pre>
+#loop over parts
 for ((j=1; j<=40; j++))
-```
+</pre>
 
 ```bash
 do
