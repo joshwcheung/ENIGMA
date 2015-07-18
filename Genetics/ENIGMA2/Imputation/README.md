@@ -337,8 +337,8 @@ AFFY999999 you will need to update the SNP identifiers to rs numbers in the .bim
 file prior to running these filters. You will first need to create or obtain a 
 key for mapping your proprietary SNP names to rs-numbers.
 
-For the Affy 6.0 chipset we have a pre-made file found [here](http://enigma.ini.
-usc.edu/wp-content/uploads/2012/04/GRCh37_hg19_AffyID2rsnumbers.txt).
+For the Affy 6.0 chipset we have a pre-made file found
+[here](http://enigma.ini.usc.edu/wp-content/uploads/2012/04/GRCh37_hg19_AffyID2rsnumbers.txt).
 
 If you have another chip platform you may need to contact your vendor to find 
 the appropriate key file for mapping proprietary SNP names to rs-numbers. Those 
@@ -381,7 +381,7 @@ awk '{print $2, $1, $3, $4, $5, $6}' predatfile.bim > <b>datafile.bim</b>
 
 Before starting the imputation process you need to drop any strand ambiguous 
 SNPs and rescreen for low MAF, missingness and HWE in your PLINK-format genotype
-files. Copy your PLINK-format genotype files (*.bed, *.bim, *.fam, files into 
+files. Copy your PLINK-format genotype files (\*.bed, \*.bim, \*.fam, files into 
 the 1KGPref/ directory) and then run the following code customising the 
 **bolded** sections.
 
@@ -537,7 +537,7 @@ tar -zxvf mach.1.0.18.Linux.tgz
 
 If the link above does not work it probably means there is a new
 version of MaCH available, you can check that by pointing your
-browser here: http://www.sph.umich.edu/csg/abecasis/MaCH/download/
+browser [here](http://www.sph.umich.edu/csg/abecasis/MaCH/download/).
 
 Make sure that the “mach1” executable that you just downloaded is added to your 
 path. So that when you type “which mach1” (without the quotes) in your command 
@@ -552,8 +552,8 @@ wget "http://www.sph.umich.edu/csg/cfuchsb/\
 ```
 
 If the link above does not work it probably means there is a new version of 
-ChunkChromosome available, you can check that by pointing your browser here: 
-http://genome.sph.umich.edu/wiki/ChunkChromosome/
+ChunkChromosome available, you can check that by pointing your browser 
+[here](http://genome.sph.umich.edu/wiki/ChunkChromosome).
 
 Once you have downloaded ChunkChromosome you need to install it using the 
 following commands. Make sure that the “ChunkChromosome” executable that you 
@@ -651,8 +651,8 @@ tar -zxvf minimac-beta-2013.7.17.tgz
 ```
 
 If the link above does not work it probably means there is a new version of 
-ChunkChromosome available, you can check that by pointing your browser here: 
-http://www.sph.umich.edu/csg/cfuchsb/
+ChunkChromosome available, you can check that by pointing your browser 
+[here](http://www.sph.umich.edu/csg/cfuchsb/).
 
 Make sure that the “minimac” executable that you just downloaded is added to 
 your path. So that when you type “which minimac” (without the quotes) in your 
