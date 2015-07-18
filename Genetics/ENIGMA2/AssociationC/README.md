@@ -361,35 +361,22 @@ server/queuing system. The aim is to run association commands in as many
 chromosome chunks in parallel as possible. The files being generated will be 
 zipped as they are produced to help preserve space.
 
-```bash
+<pre>
 #!/bin/bash
 echo "#Merlin-offline association" > merlin_association.sh
 echo "#Merlin-offline association" > gzip_results.sh
-```
 
-*give the directory to the Merlin-format converted output from Mach/minimac
+#give the directory to the Merlin-format converted output from Mach/minimac
+genodir=<i>/home/1KGPref/Merlin</i>
 
-```bash
-genodir=/home/1KGPref/Merlin
-```
+#give the dir to the ped and dat files just created
+phenodir=<i>/home/1KGPref</i>
 
-*give the dir to the ped and dat files just created
+#give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
+samplename=<i>QTIM</i>
 
-```bash
-phenodir=/home/1KGPref
-```
-
-*give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
-
-```bash
-samplename=QTIM
-```
-
-*make a folder for the output from Merlin
-
-```bash
-merlinout=/home/1KGPref/mach2qtl_out
-```
+#make a folder for the output from Merlin
+merlinout=<i>/home/1KGPref/mach2qtl_out</i>
 
 ```bash
 #Males-only, Females-only
