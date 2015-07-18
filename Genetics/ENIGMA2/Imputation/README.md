@@ -582,7 +582,7 @@ done
 
 <pre>
 #loop over parts
-for ((j=1; j<=40; j++))
+<i>for ((j=1; j<=40; j++))</i>
 </pre>
 
 ```bash
