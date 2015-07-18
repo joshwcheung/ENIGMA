@@ -506,35 +506,23 @@ server/queuing system. The aim is to run association commands in as many
 chromosome chunks in parallel as possible. The files being generated will be 
 zipped as they are produced to help preserve space.
 
-```
+<pre>
 #!/bin/bash
 
 echo "#Mach2qtl association" > mach2qtl_association.sh
-```
 
-*give the directory to the imputed output from Mach/minimac
+#give the directory to the imputed output from Mach/minimac
+machdir=<i>/home/1KGPref/Mach</i>
 
-```bash
-machdir=/home/1KGPref/Mach
-```
+give the dir to the ped and dat files just created
+peddatdir=<i>/home/1KGPref</i>
 
-*give the dir to the ped and dat files just created
+#give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
+samplename=<i>QTIM</i>
 
-```bash
-peddatdir=/home/1KGPref
-```
-
-*give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
-
-```bash
-samplename=QTIM
-```
-
-*make a folder for the output from mach2qtl
-
-```bash
-mach2qtlout=/home/1KGPref/mach2qtl_out
-```
+#make a folder for the output from mach2qtl
+mach2qtlout=<i>/home/1KGPref/mach2qtl_out</i>
+</pre>
 
 ```bash
 ### For Patients and Controls seperately
