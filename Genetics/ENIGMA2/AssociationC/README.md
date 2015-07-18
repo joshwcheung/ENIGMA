@@ -377,6 +377,7 @@ samplename=<i>QTIM</i>
 
 #make a folder for the output from Merlin
 merlinout=<i>/home/1KGPref/mach2qtl_out</i>
+</pre>
 
 ```bash
 #Males-only, Females-only
