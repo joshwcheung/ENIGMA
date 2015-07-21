@@ -201,18 +201,18 @@ for x in `seq 1 22`
     do
     echo "S1 dummy_phenotype" > population${x}.dat
     awk '{print "M", $2}' population${x}.map >> \
-        population${x}.dat  #Creates a .dat file for each population.ped 
-                            #chromosome file
+    population${x}.dat  #Creates a .dat file for each population.ped 
+                        #chromosome file
     for reg in HippoCov_ICV_nopatients HippoCov_BrainVol_nopatients \
-        HippoCov_nopatients ICVCov_nopatients BrainVolCov_nopatients
+    HippoCov_nopatients ICVCov_nopatients BrainVolCov_nopatients
         do
         pedmerge ${reg} population${x} population${x}_${reg}
         mach2qtl --datfile population${x}_${reg}.dat \
-            --pedfile population${x}_${reg}.ped \
-            --infofile enigmalmp_${x}.mlinfo --dosefile enigmalmp_${x}.mldose \
-            --probfile enigmalmp_${x}.mlprob --samplesize > \
-            ${reg}_chr${x}-mach2qtl.out #Perform the association on the 
-                                        #imputed data
+        --pedfile population${x}_${reg}.ped \
+        --infofile enigmalmp_${x}.mlinfo --dosefile enigmalmp_${x}.mldose \
+        --probfile enigmalmp_${x}.mlprob --samplesize > \
+        ${reg}_chr${x}-mach2qtl.out #Perform the association on the 
+                                    #imputed data
     done
 done
 ```
@@ -324,14 +324,14 @@ covariate files generated above, then run mach2qtl.
 for x in `seq 1 22`
     do
     for reg in HippoCov_ICV_wpatients HippoCov_BrainVol_wpatients \
-        HippoCov_wpatients
+    HippoCov_wpatients
         do
         pedmerge ${reg} population${x} population${x}_${reg}
         mach2qtl --datfile population${x}_${reg}.dat --pedfile \
-            population${x}_${reg}.ped --infofile enigmalmp_${x}.mlinfo \
-            --dosefile enigmalmp_${x}.mldose --probfile enigmalmp_${x}.mlprob \
-            --samplesize > ${reg}_chr${x}-mach2qtl.out  #Perform the association
-                                                        #on the imputed data
+        population${x}_${reg}.ped --infofile enigmalmp_${x}.mlinfo \
+        --dosefile enigmalmp_${x}.mldose --probfile enigmalmp_${x}.mlprob \
+        --samplesize > ${reg}_chr${x}-mach2qtl.out  #Perform the association
+                                                    #on the imputed data
     done
 done
 ```
@@ -358,18 +358,18 @@ please send an email to enigma@lists.loni.ucla.edu with the message.
 ```bash
 #Compress the .mlinfo files and prepare to send to LONI servers.
 tar czvf enigmalmp_allchr.mlinfo.tar.gz \
-    enigmalmp_*.mlinfo  #This will create a file called 
-                        #enigmalmp_allchr.mlinfo.tar.gz that should be uploaded 
-                        #to the server.
+enigmalmp_*.mlinfo  #This will create a file called 
+                    #enigmalmp_allchr.mlinfo.tar.gz that should be uploaded 
+                    #to the server.
 #Compress the association results files and prepare to send to LONI servers.
 for reg in HippoCov_ICV_nopatients HippoCov_BrainVol_nopatients \
-    HippoCov_nopatients ICVCov_nopatients BrainVolCov_nopatients \
-    HippoCov_ICV_wpatients HippoCov_BrainVol_wpatients HippoCov_wpatients
+HippoCov_nopatients ICVCov_nopatients BrainVolCov_nopatients \
+HippoCov_ICV_wpatients HippoCov_BrainVol_wpatients HippoCov_wpatients
     do
     tar czvf ${reg}_allchr.mach2qtl.tar.gz \
-        ${reg}_chr*-mach2qtl.out    #This will create a file of all the GWAS 
-                                    #results for each analysis that will be sent
-                                    #to LONI servers
+    ${reg}_chr*-mach2qtl.out    #This will create a file of all the GWAS 
+                                #results for each analysis that will be sent
+                                #to LONI servers
 done
 ```
 
