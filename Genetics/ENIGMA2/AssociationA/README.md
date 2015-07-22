@@ -358,14 +358,14 @@ echo "mach2qtl --datfile ${peddatdir}/subcort_NoSexCov_NP_"$cov"ICV.dat \
 --infofile ${machdir}/chunk"$j"-ready4mach."$i".imputed.info.gz \
 --dosefile ${machdir}/chunk"$j"-ready4mach."$i".imputed.dose.gz \
 --samplesize > ${mach2qtlout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_\
-    chr"$i"_"$j".out" >> mach2qtl_association.sh
+chr"$i"_"$j".out" >> mach2qtl_association.sh
 #Generate a shell script to zip association results files to be uploaded to the 
 #ENIGMA server
 echo "gzip ${mach2qtlout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_\
-    chr"$i"_"$j".out" >> gzip_results.sh
+chr"$i"_"$j".out" >> gzip_results.sh
 fi
 if [ -f ${machdir}/chunk"$j"-ready4mach."$i".female.imputed.dose.gz ] && \
-    [ ${group} == "Females" ]
+[ ${group} == "Females" ]
 then
 #Specify the commands, parameters and data files required for association
 echo "mach2qtl --datfile ${peddatdir}/subcort_NP_"$cov"ICV.dat \
@@ -373,15 +373,15 @@ echo "mach2qtl --datfile ${peddatdir}/subcort_NP_"$cov"ICV.dat \
 --infofile ${machdir}/chunk"$j"-ready4mach."$i".female.imputed.info.gz \
 --dosefile ${machdir}/chunk"$j"-ready4mach."$i".female.imputed.dose.gz \
 --samplesize > ${mach2qtlout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_\
-    chr"$i"_"$j".female.out" >> mach2qtl_association.sh
+chr"$i"_"$j".female.out" >> mach2qtl_association.sh
 #Generate a shell script to zip association results files to be uploaded to the 
 #ENIGMA server
 echo "gzip ${mach2qtlout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_\
-    chr"$i"_"$j".female.out" >> gzip_results.sh
+chr"$i"_"$j".female.out" >> gzip_results.sh
 fi
 done
 if [ -f ${machdir}/chunk"$j"-ready4mach."$i".male.imputed.dose.gz ] && \
-    [ ${group} == "Males" ]
+[ ${group} == "Males" ]
 then
 #Specify the commands, parameters and data files required for association
 echo "mach2qtl --datfile ${peddatdir}/subcort_NP_"$cov"ICV.dat \
@@ -389,11 +389,11 @@ echo "mach2qtl --datfile ${peddatdir}/subcort_NP_"$cov"ICV.dat \
 --infofile ${machdir}/chunk"$j"-ready4mach."$i".male.imputed.info.gz \
 --dosefile ${machdir}/chunk"$j"-ready4mach."$i".male.imputed.dose.gz \
 --samplesize > ${mach2qtlout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_\
-    chr"$i"_"$j".male.out" >> mach2qtl_association.sh
+chr"$i"_"$j".male.out" >> mach2qtl_association.sh
 #Generate a shell script to zip association results files to be uploaded to the 
 #ENIGMA server
 echo "gzip ${mach2qtlout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_\
-    chr"$i"_"$j".male.out" >> gzip_results.sh
+chr"$i"_"$j".male.out" >> gzip_results.sh
 fi
 done
 done
@@ -415,11 +415,11 @@ echo "mach2qtl --datfile ${peddatdir}/subcort_SexCov_NP_"$cov"ICV.dat \
 --infofile ${machdir}/chunk"$j"-ready4mach."$i".imputed.info.gz \
 --dosefile ${machdir}/chunk"$j"-ready4mach."$i".imputed.dose.gz \
 --samplesize > ${mach2qtlout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_\
-    chr"$i"_"$j".out" >> mach2qtl_association.sh
+chr"$i"_"$j".out" >> mach2qtl_association.sh
 #Generate a shell script to zip association results files to be uploaded to the 
 #ENIGMA server
 echo "gzip ${mach2qtlout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_\
-    chr"$i"_"$j".out" >> gzip_results.sh
+chr"$i"_"$j".out" >> gzip_results.sh
 fi
 done
 done
