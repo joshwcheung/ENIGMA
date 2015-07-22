@@ -392,56 +392,56 @@ if test -f ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.dat.gz
 then
 #Specify the commands, parameters and data files required for association
 echo "merlin-offline -m ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.map.\
-    gz -f ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.freq.gz \
-    --pedinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.ped.gz \
-    --datinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.dat.gz -p \
-    ${phenodir}/connecting.ped,${phenodir}/"$group"_subcortCov_NP.ped -d
+gz -f ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.freq.gz \
+--pedinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.ped.gz \
+--datinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.dat.gz -p \
+${phenodir}/connecting.ped,${phenodir}/"$group"_subcortCov_NP.ped -d
 ${phenodir}/connecting.dat,${phenodir}/subcort_NoSexCov_NP_"$cov"ICV.dat \
-    --useCovariates --tabulate --prefix ${merlinout}/${samplename}_"$group"_\
-    "$cov"_ICV_NP_subcort_chr"$i"_"$j" > ${samplename}_"$group"_"$cov"_ICV_NP_\
-    subcort_chr"$i"_"$j".out" >> merlin_association.sh
+--useCovariates --tabulate --prefix ${merlinout}/${samplename}_"$group"_\
+"$cov"_ICV_NP_subcort_chr"$i"_"$j" > ${samplename}_"$group"_"$cov"_ICV_NP_\
+subcort_chr"$i"_"$j".out" >> merlin_association.sh
 #Generate a shell script to zip association results files to be uploaded to the 
 #ENIGMA server
 echo "gzip ${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j".tbl" >> \
-    gzip_results.sh
+gzip_results.sh
 fi
 if [ -f ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.dose.gz ] && \
-    [ ${group} == "Females" ]
+[ ${group} == "Females" ]
 then
 #Specify the commands, parameters and data files required for association
 echo "minx-offline -m ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.\
-    infer.map.gz -f ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.infer.\
-    freq.gz --pedinfer ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.\
-    infer.ped.gz --datinfer ${genodir}/chunk"$j"-ready4mach."$i".female.\
-    imputed.infer.dat.gz -p ${phenodir}/connecting.ped,${phenodir}/"$group"_\
-    subcortCov_NP.ped -d ${phenodir}/connecting.dat,${phenodir}/subcort_\
-    NoSexCov_NP_"$cov"ICV.dat --useCovariates --tabulate --prefix \
-    ${merlinout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j" > \
-    ${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j".female.out" >> \
-    merlin_association.sh
+infer.map.gz -f ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.infer.\
+freq.gz --pedinfer ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.\
+infer.ped.gz --datinfer ${genodir}/chunk"$j"-ready4mach."$i".female.\
+imputed.infer.dat.gz -p ${phenodir}/connecting.ped,${phenodir}/"$group"_\
+subcortCov_NP.ped -d ${phenodir}/connecting.dat,${phenodir}/subcort_\
+NoSexCov_NP_"$cov"ICV.dat --useCovariates --tabulate --prefix \
+${merlinout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j" > \
+${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j".female.out" >> \
+merlin_association.sh
 #Generate a shell script to zip association results files to be uploaded to the 
 #ENIGMA server
 echo "gzip ${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j".female.\
-    out" >> gzip_results.sh
+out" >> gzip_results.sh
 fi
 done
 if [ -f ${genodir}/ready4mach."$i".male.imputed.dose.gz ] && \
-    [ ${group} == "Males" ]
+[ ${group} == "Males" ]
 then
 #Specify the commands, parameters and data files required for association
 echo "minx-offline -m ${genodir}/ready4mach."$i".male.imputed.infer.map.gz -f \
-    ${genodir}/ready4mach."$i".male.imputed.infer.freq.gz --pedinfer \
-    ${genodir}/ready4mach."$i".male.imputed.infer.ped.gz \
-    --datinfer ${genodir}/ready4mach."$i".male.imputed.infer.dat.gz -p \
-    ${phenodir}/connecting.ped,${phenodir}/"$group"_subcortCov_NP.ped -d \
-    ${phenodir}/connecting.dat,${phenodir}/subcort_NoSexCov_NP_"$cov"ICV.dat \
-    --useCovariates --tabulate --prefix ${merlinout}/${samplename}_"$group"_\
-    "$cov"_ICV_NP_subcort_chr"$i"_"$j" > ${samplename}_"$group"_"$cov"_ICV_NP_\
-    subcort_chr"$i"_"$j".male.out" >> merlin_association.sh
-#Generate a shell script to zip association results files to be uploaded to the \
-    ENIGMA server
+${genodir}/ready4mach."$i".male.imputed.infer.freq.gz --pedinfer \
+${genodir}/ready4mach."$i".male.imputed.infer.ped.gz \
+--datinfer ${genodir}/ready4mach."$i".male.imputed.infer.dat.gz -p \
+${phenodir}/connecting.ped,${phenodir}/"$group"_subcortCov_NP.ped -d \
+${phenodir}/connecting.dat,${phenodir}/subcort_NoSexCov_NP_"$cov"ICV.dat \
+--useCovariates --tabulate --prefix ${merlinout}/${samplename}_"$group"_\
+"$cov"_ICV_NP_subcort_chr"$i"_"$j" > ${samplename}_"$group"_"$cov"_ICV_NP_\
+subcort_chr"$i"_"$j".male.out" >> merlin_association.sh
+#Generate a shell script to zip association results files to be uploaded to the
+#ENIGMA server
 echo "gzip ${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j".male.out" \
-    >> gzip_results.sh
+>> gzip_results.sh
 fi
 done
 done
@@ -459,10 +459,10 @@ if test -f ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.dat.gz
 then
 #Specify the commands, parameters and data files required for association
 echo "merlin-offline -m ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.map.\
-    gz -f ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.freq.gz \
-    --pedinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.ped.gz \
-    --datinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.dat.gz -p \
-    ${phenodir}/connecting.ped,${phenodir}/"$group"_subcortCov_NP.ped -d
+gz -f ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.freq.gz \
+--pedinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.ped.gz \
+--datinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.dat.gz -p \
+${phenodir}/connecting.ped,${phenodir}/"$group"_subcortCov_NP.ped -d
 ${phenodir}/connecting.dat,${phenodir}/subcort_NoSexCov_NP_"$cov"ICV.dat \
 --useCovariates --tabulate --prefix ${merlinout}/${samplename}_"$group"_"$cov"_\
 ICV_NP_subcort_chr"$i"_"$j" > ${samplename}_"$group"_"$cov"_ICV_NP_subcort_\
@@ -470,45 +470,45 @@ chr"$i"_"$j".out" >> merlin_association.sh
 #Generate a shell script to zip association results files to be uploaded to the 
 #ENIGMA server
 echo "gzip ${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j".tbl" >> \
-    gzip_results.sh
+gzip_results.sh
 fi
 if [ -f ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.dose.gz ] && \
-    [ ${group} == "Females" ]
+[ ${group} == "Females" ]
 then
 #Specify the commands, parameters and data files required for association
 echo "minx-offline -m ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.\
-    infer.map.gz -f ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.infer.\
-    freq.gz --pedinfer ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.\
-    infer.ped.gz --datinfer ${genodir}/chunk"$j"-ready4mach."$i".female.\
-    imputed.infer.dat.gz -p ${phenodir}/connecting.ped,${phenodir}/"$group"_\
-    subcortCov_NP.ped -d ${phenodir}/connecting.dat,${phenodir}/subcort_\
-    NoSexCov_NP_"$cov"ICV.dat --useCovariates --tabulate --prefix \
-    ${merlinout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j" > \
-    ${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j".female.out" >> \
-    merlin_association.sh
+infer.map.gz -f ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.infer.\
+freq.gz --pedinfer ${genodir}/chunk"$j"-ready4mach."$i".female.imputed.\
+infer.ped.gz --datinfer ${genodir}/chunk"$j"-ready4mach."$i".female.\
+imputed.infer.dat.gz -p ${phenodir}/connecting.ped,${phenodir}/"$group"_\
+subcortCov_NP.ped -d ${phenodir}/connecting.dat,${phenodir}/subcort_\
+NoSexCov_NP_"$cov"ICV.dat --useCovariates --tabulate --prefix \
+${merlinout}/${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j" > \
+${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j".female.out" >> \
+merlin_association.sh
 #Generate a shell script to zip association results files to be uploaded to the 
 #ENIGMA server
 echo "gzip ${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_\
-    "$j".female.out" >> gzip_results.sh
+"$j".female.out" >> gzip_results.sh
 fi
 done
 if [ -f ${genodir}/ready4mach."$i".male.imputed.dose.gz ] && \
-    [ ${group} == "Males" ]
+[ ${group} == "Males" ]
 then
 #Specify the commands, parameters and data files required for association
 echo "minx-offline -m ${genodir}/ready4mach."$i".male.imputed.infer.map.gz -f \
-    ${genodir}/ready4mach."$i".male.imputed.infer.freq.gz --pedinfer \
-    ${genodir}/ready4mach."$i".male.imputed.infer.ped.gz --datinfer \
-    ${genodir}/ready4mach."$i".male.imputed.infer.dat.gz -p \
-    ${phenodir}/connecting.ped,${phenodir}/"$group"_subcortCov_NP.ped -d \
-    ${phenodir}/connecting.dat,${phenodir}/subcort_NoSexCov_NP_"$cov"ICV.dat \
-    --useCovariates --tabulate --prefix ${merlinout}/${samplename}_"$group"_\
-    "$cov"_ICV_NP_subcort_chr"$i"_"$j" > ${samplename}_"$group"_"$cov"_ICV_NP_\
-    subcort_chr"$i"_"$j".male.out" >> merlin_association.sh
+${genodir}/ready4mach."$i".male.imputed.infer.freq.gz --pedinfer \
+${genodir}/ready4mach."$i".male.imputed.infer.ped.gz --datinfer \
+${genodir}/ready4mach."$i".male.imputed.infer.dat.gz -p \
+${phenodir}/connecting.ped,${phenodir}/"$group"_subcortCov_NP.ped -d \
+${phenodir}/connecting.dat,${phenodir}/subcort_NoSexCov_NP_"$cov"ICV.dat \
+--useCovariates --tabulate --prefix ${merlinout}/${samplename}_"$group"_\
+"$cov"_ICV_NP_subcort_chr"$i"_"$j" > ${samplename}_"$group"_"$cov"_ICV_NP_\
+subcort_chr"$i"_"$j".male.out" >> merlin_association.sh
 #Generate a shell script to zip association results files to be uploaded to the 
 #ENIGMA server
 echo "gzip ${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j".male.out" \
-    >> gzip_results.sh
+>> gzip_results.sh
 fi
 done
 done
@@ -525,18 +525,18 @@ if test -f ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.dat.gz
 then
 #Specify the commands, parameters and data files required for association
 echo "merlin-offline -m ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.map.\
-    gz -f ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.freq.gz \
-    --pedinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.ped.gz \
-    --datinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.dat.gz -p \
-    ${phenodir}/connecting.ped,${phenodir}/"$group"_subcortCov_NP.ped -d \
-    ${phenodir}/connecting.dat,${phenodir}/subcort_SexCov_NP_"$cov"ICV.dat \
-    --useCovariates --tabulate --prefix ${merlinout}/${samplename}_"$group"_\
-    "$cov"_ICV_NP_subcort_chr"$i"_"$j" > ${samplename}_"$group"_"$cov"_ICV_NP_\
-    subcort_chr"$i"_"$j".out" >> merlin_association.sh
+gz -f ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.freq.gz \
+--pedinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.ped.gz \
+--datinfer ${genodir}/chunk"$j"-ready4mach."$i".imputed.infer.dat.gz -p \
+${phenodir}/connecting.ped,${phenodir}/"$group"_subcortCov_NP.ped -d \
+${phenodir}/connecting.dat,${phenodir}/subcort_SexCov_NP_"$cov"ICV.dat \
+--useCovariates --tabulate --prefix ${merlinout}/${samplename}_"$group"_\
+"$cov"_ICV_NP_subcort_chr"$i"_"$j" > ${samplename}_"$group"_"$cov"_ICV_NP_\
+subcort_chr"$i"_"$j".out" >> merlin_association.sh
 #Generate a shell script to zip association results files to be uploaded to the 
 #ENIGMA server
 echo "gzip ${samplename}_"$group"_"$cov"_ICV_NP_subcort_chr"$i"_"$j".tbl" >> \
-    gzip_results.sh
+gzip_results.sh
 fi
 done
 done

@@ -140,7 +140,7 @@ format and contact enigma2helpdesk@gmail.com with questions.
 #replace yourrawdata with the name of the local plink file name
 export datafileraw=<i>yourrawdata</i>
 plink --bfile $datafileraw --hwe 1e-6 --geno 0.05 --maf 0.01 --noweb \
-    --make-bed --out ${datafileraw}_filtered
+--make-bed --out ${datafileraw}_filtered
 </pre>
 
 ---
@@ -165,10 +165,10 @@ export datafile=${datafileraw}_filtered #${datafileraw}_filtered should give you
                                         #meeting QC criteria (see above)
 awk '{print $2}' HM3.bim > HM3.snplist.txt
 plink --bfile ${datafile} --extract HM3.snplist.txt --make-bed --noweb --out \
-    local
+local
 awk '{ if (($5=="T" && $6=="A")||($5=="A" && $6=="T")||($5=="C" && $6=="G")||\
-    ($5=="G" && $6=="C")) print $2, "ambig" ; else print $2 ;}' $datafile.bim \
-    | grep -v ambig > local.snplist.txt
+($5=="G" && $6=="C")) print $2, "ambig" ; else print $2 ;}' $datafile.bim \
+| grep -v ambig > local.snplist.txt
 plink --bfile HM3 --extract local.snplist.txt --make-bed --noweb --out external
 ```
 
@@ -183,18 +183,18 @@ Ignore warnings regarding different physical positions
 
 ```bash
 plink --bfile local --bmerge external.bed external.bim external.fam --make-bed \
-    --noweb --out HM3merge
+--noweb --out HM3merge
 ```
 
 ---
 
 If plink crashed with a strand error (ERROR: Stopping due to mis-matching SNPs \
-    -- check +/- strand?) run the following two lines of alternate code
+-- check +/- strand?) run the following two lines of alternate code
 
 ```bash
 plink --bfile local --flip HM3merge.missnp --make-bed --noweb --out flipped
 plink --bfile flipped --bmerge external.bed external.bim external.fam \
-    --make-bed --noweb --out HM3merge
+--make-bed --noweb --out HM3merge
 # this step will take a while (less than 1 hour)
 ```
 
@@ -204,7 +204,7 @@ Run the MDS analysis this -- step will take a while (approx. 1 day)
 
 ```bash
 plink --bfile HM3merge --cluster --mind .05 --mds-plot 4 --extract \
-    local.snplist.txt --noweb --out HM3mds
+local.snplist.txt --noweb --out HM3mds
 ```
 
 ---
@@ -215,7 +215,7 @@ after the plot has been made)
 
 ```bash
 awk 'BEGIN{OFS=","};{print $1, $2, $3, $4, $5, $6, $7}' >> HM3mds2R.mds.csv \
-    HM3mds.mds
+HM3mds.mds
 #This formats the plink output into an R compatible format.
 
 R
@@ -320,9 +320,9 @@ chromosome data:
 mkdir 1KGPref
 cd 1KGPref
 wget "http://enigma.ini.usc.edu/wp-content/uploads/2012/07/\
-    v3.20101123.ENIGMA2.EUR.20120719.vcf.tgz"
+v3.20101123.ENIGMA2.EUR.20120719.vcf.tgz"
 wget "http://enigma.ini.usc.edu/wp-content/uploads/2012/07/\
-    v3.20101123.ENIGMA2.EUR.20120719.extras.tgz"
+v3.20101123.ENIGMA2.EUR.20120719.extras.tgz"
 tar -zxvf v3.20101123.ENIGMA2.EUR.20120719.vcf.tgz
 tar -zxvf v3.20101123.ENIGMA2.EUR.20120719.extras.tgz
 ```
@@ -387,11 +387,11 @@ the 1KGPref/ directory) and then run the following code customising the
 
 <pre>
 awk '{ if (($5=="T" && $6=="A")||($5=="A" && $6=="T")||($5=="C" && $6=="G")||\
-    ($5=="G" && $6=="C")) print $2, "ambig" ; else print $2 ;}' \
-    <b>datafile.bim</b> | grep ambig | awk '{print $1}' > ambig.list
+($5=="G" && $6=="C")) print $2, "ambig" ; else print $2 ;}' \
+<b>datafile.bim</b> | grep ambig | awk '{print $1}' > ambig.list
 
 plink --bfile <b>datafile</b> --exclude ambig.list --make-founders --out lastQC \
-    --maf 0.01 --hwe 0.000001 --make-bed --noweb
+--maf 0.01 --hwe 0.000001 --make-bed --noweb
 </pre>
 
 **After modifying the SNP identifiers and running the last command, you might 
@@ -401,7 +401,7 @@ duplicated.list). If there are no duplicate SNPs you may skip this step:**
 
 ```
 plink --bfile lastQC --exclude duplicated.list --make-founders --out lastQC2 \
-    --maf 0.01 --hwe 0.000001 --make-bed --noweb
+--maf 0.01 --hwe 0.000001 --make-bed --noweb
 ```
 
 **Step 3: Shifting your data to build 37 & flipping strand**
@@ -438,17 +438,17 @@ awk '{print $2,$1,$3,$4,$5,$6}' <b>lastQC</b>.bim > tempQC.bim
 
 # Join the two files
 awk 'NR==FNR{s=$1;a[s]=$0;next} a[$1]{print $0 " "a[$1]}' \
-    tempQC.bim 1kgp.alleles > merged.alleles
+tempQC.bim 1kgp.alleles > merged.alleles
 
 # selects SNPS showing different alleles in the two files
 awk '{ if ($2!=$8 && $2!=$9) print $1}' merged.alleles > flip.list
 plink --bfile <b>lastQC</b> --extract 1kgp.snps --update-map 1kgp.chr \
-    --update-chr --flip flip.list --make-bed --out temp --noweb
+--update-chr --flip flip.list --make-bed --out temp --noweb
 </pre>
 
 ```bash
 plink --bfile temp --update-map 1kgp.bp --geno 0.05 --mind 0.05 --make-bed \
-    --out lastQCb37 --noweb
+--out lastQCb37 --noweb
 
 wc -1 lastQCb37.bim
 
@@ -480,12 +480,12 @@ echo "Starting to split the lastQC file"
 for i in {1..22}
 do
 echo "plink --bfile lastQCb37 --chr "$1" --recode --noweb --out \
-    Mach/ready4mach."$1"" >> plink_writeout.sh
+Mach/ready4mach."$1"" >> plink_writeout.sh
 done
 echo "plink --bfile lastQCb37 --chr 23 --set-hh-missing --keep male.list \
-    --recode --noweb --out Mach/ready4mach.23.male" >> plink_writeout.sh
+--recode --noweb --out Mach/ready4mach.23.male" >> plink_writeout.sh
 echo "plink --bfile lastQCb37 --chr 23 --keep female.list --recode --noweb \
-    --out Mach/ready4mach.23.female" >> plink_writeout.sh
+--out Mach/ready4mach.23.female" >> plink_writeout.sh
 chmod +x plink_writeout.sh
 ./plink_writeout.sh
 mv Mach/ready4mach.23.female.map Mach/ready4mach.23.map
@@ -548,7 +548,7 @@ The download page for ChunkChromosome is found here:
 
 ```bash
 wget "http://www.sph.umich.edu/csg/cfuchsb/\
-    generic-ChunkChromosome-2012-08-28.tar.gz"
+generic-ChunkChromosome-2012-08-28.tar.gz"
 ```
 
 If the link above does not work it probably means there is a new version of 
@@ -592,15 +592,15 @@ do
 if test -f chunk"$j"-ready4mach."$i".dat.gz
 then
 echo "mach1 -d chunk"$j"-ready4mach."$i".dat.gz -p ready4mach."$i".ped.gz \
-    --prefix chunk"$j"-ready4mach."$i" --rounds 20 --states 200 --phase > \
-    chunk"$j"-ready4mach."$i".mach.log" >> MaCH_phasing.sh
+--prefix chunk"$j"-ready4mach."$i" --rounds 20 --states 200 --phase > \
+chunk"$j"-ready4mach."$i".mach.log" >> MaCH_phasing.sh
 fi
 done
 if test -f chunk"$j"-ready4mach.23.dat.gz
 then
 echo "mach1 -d chunk"$j"-ready4mach.23.dat.gz -p ready4mach.23.female.ped.gz 
-    --prefix chunk "$j"-ready4mach.23.female --rounds 20 --states 200 \
-    --phase > chunk"$j"-ready4mach.23.female.mach.log" >>MaCH_phasing.sh
+--prefix chunk "$j"-ready4mach.23.female --rounds 20 --states 200 \
+--phase > chunk"$j"-ready4mach.23.female.mach.log" >>MaCH_phasing.sh
 fi
 done
 ```
@@ -626,9 +626,9 @@ restructure the data so that they are ready for imputation.
 cd /1KGPrefs/Mach/
 
 zless ready4mach.23.male.ped.gz | awk '{ printf "%s", $1 "->"$2 "HAPLO1 "; \
-    for(N=7; N<=NF; N+=2) printf "%s", $N; printf "\n"; printf "%s", $1 "->"$2 \
-    "HAPLO2 "; for(N=7; N<=NF; N+=2) printf "%s", $N; printf "\n";}' > \
-    ready4mach.23.male
+for(N=7; N<=NF; N+=2) printf "%s", $N; printf "\n"; printf "%s", $1 "->"$2 \
+"HAPLO2 "; for(N=7; N<=NF; N+=2) printf "%s", $N; printf "\n";}' > \
+ready4mach.23.male
 gzip ready4mach.23.male
 ```
 
@@ -672,30 +672,30 @@ do
 if test -f chunk"$j"-ready4mach."$i".dat.gz
 then
 echo "minimac --vcfReference --rounds 5 --states 200 --refHaps \
-    ../chr"$i".phase1_release_v3.20101123.snps_indels_svs.genotypes.refpanel.\
-    EUR.nosingles.vcf.gz --haps chunk"$j"-ready4mach."$i".gz --snps chunk"$j"\
-    -ready4mach."$i".dat.gz.snps --autoClip autoChunk-ready4mach."$i".dat.gz \
-    --gzip --prefix chunk"$j"-ready4mach."$i".imputed > chunk"$j"-ready4mach.\
-    "$i"-minimac.log" >> MiniMac-impute.sh
+../chr"$i".phase1_release_v3.20101123.snps_indels_svs.genotypes.refpanel.\
+EUR.nosingles.vcf.gz --haps chunk"$j"-ready4mach."$i".gz --snps chunk"$j"\
+-ready4mach."$i".dat.gz.snps --autoClip autoChunk-ready4mach."$i".dat.gz \
+--gzip --prefix chunk"$j"-ready4mach."$i".imputed > chunk"$j"-ready4mach.\
+"$i"-minimac.log" >> MiniMac-impute.sh
 fi
 done
 if test -f chunk"$j"-ready4mach.23.dat.gz
 then
 echo "minimac --vcfReference --round 5 --states 200 --refHaps \
-    ../chr23.phase1_release_v3.20101123.snps_indels_svs.genotypes.refpanel.EUR.\
-    nosingles.vcf.gz --haps chunk"$j"-ready4mach.23.female.gz --snps chunk"$j"\
-    -ready4mach.23.dat.gz.snps --autoClip autoChunk-ready4mach.23.dat.gz \
-    --gzip --prefix chunk"$j"-ready4mach.23.female.imputed > chunk"$j"\
-    -ready4mach.23.female-minimac.log" >> MiniMac-impute.sh
+../chr23.phase1_release_v3.20101123.snps_indels_svs.genotypes.refpanel.EUR.\
+nosingles.vcf.gz --haps chunk"$j"-ready4mach.23.female.gz --snps chunk"$j"\
+-ready4mach.23.dat.gz.snps --autoClip autoChunk-ready4mach.23.dat.gz \
+--gzip --prefix chunk"$j"-ready4mach.23.female.imputed > chunk"$j"\
+-ready4mach.23.female-minimac.log" >> MiniMac-impute.sh
 cat chunk"$j"-ready4mach.23.dat.gz.snps >> temp.23.dat.gz.snps
 fi
 done
 awk '!x[$0]++' temp.23.dat.gz.snps > ready4mach.23.dat.gz.snps
 echo "minimac --vcfReference --round 5 --states 200 --refHaps \
-    ../chr23.phase1_release_v3.20101123.snps_indels_svs.genotypes.refpanel.EUR.\
-    nosingles.vcf.gz --haps ready4mach.23.male.gz --snps ready4mach.23.dat.gz.\
-    snps --gzip --prefix ready4mach.23.male.imputed > \
-    ready4mach.23.male-minimac.log" >> MiniMac-impute.sh
+../chr23.phase1_release_v3.20101123.snps_indels_svs.genotypes.refpanel.EUR.\
+nosingles.vcf.gz --haps ready4mach.23.male.gz --snps ready4mach.23.dat.gz.\
+snps --gzip --prefix ready4mach.23.male.imputed > \
+ready4mach.23.male-minimac.log" >> MiniMac-impute.sh
 ```
 
 Mach will generate a series of temporary files which include the word “draft” 
@@ -722,7 +722,7 @@ for ((i=1;i<=22;i++))
 do
 awk ‘{print $3, $1, $2, $4, $5}’
 chr”$i”.phase1_release_v3.20101123.snps_indels_svs.genotypes.refpanel.ALL.vcf.\
-    gz | grep ^rs >> temp.rs
+gz | grep ^rs >> temp.rs
 done
 
 awk '{print $1, $2}' temp.rs | awk '!x[$1]++' > 1kgp.chr
