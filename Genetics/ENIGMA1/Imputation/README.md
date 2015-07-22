@@ -53,7 +53,7 @@ format and contact enigma@lists.loni.ucla.edu with questions.**
 export datafileraw=yourrawdata # replace yourrawdata with the name of the local 
                                #plink file name
 plink --bfile $datafileraw --hwe 1e-6 --geno 0.05 --maf 0.01 --make-bed \
-    --out ${datafileraw}_filtered
+--out ${datafileraw}_filtered
 ```
 
 ---
@@ -78,8 +78,8 @@ export datafile=datafile_filtered # replace datafile_filtered with the name of
 awk '{print $2}' HM3.bim > HM3.snplist.txt
 plink --bfile $datafile --extract HM3.snplist.txt --make-bed --out local
 awk '{ if (($5=="T" && $6=="A")||($5=="A" && $6=="T")||($5=="C" && $6=="G")||\
-    ($5=="G" && $6=="C")) print $2, "ambig" ; else print $2 ;}' $datafile.bim \
-    | grep -v ambig > local.snplist.txt
+($5=="G" && $6=="C")) print $2, "ambig" ; else print $2 ;}' $datafile.bim \
+| grep -v ambig > local.snplist.txt
 plink --bfile HM3 --extract local.snplist.txt --make-bed --out external
 ```
 
@@ -94,7 +94,7 @@ Ignore warnings regarding different physical positions
 
 ```bash
 plink --bfile local --bmerge external.bed external.bim external.fam --make-bed \
-    --out MDSfile # this step will take a while (less than 1 hour)
+--out MDSfile # this step will take a while (less than 1 hour)
 ```
 
 ---
@@ -105,7 +105,7 @@ If plink crashed with a strand error (ERROR: Stopping due to mis-matching SNPs
 ```bash
 plink --bfile local --flip MDSfile.missnp --make-bed --out flipped
 plink --bfile flipped --bmerge external.bed external.bim external.fam \
-    --make-bed --out MDSfile # this step will take a while (less than 1 hour)
+--make-bed --out MDSfile # this step will take a while (less than 1 hour)
 ```
 
 ---
@@ -114,7 +114,7 @@ Run the MDS analysis
 
 ```bash
 plink --bfile MDSfile --cluster --mind .05 --mds-plot 4 --extract \
-    local.snplist.txt --out HM3mds # this step will take a while (approx. 1 day)
+local.snplist.txt --out HM3mds # this step will take a while (approx. 1 day)
 ```
 
 ---
@@ -216,7 +216,7 @@ subject list outputted by randomlysplit.R
 for x in {1..22}
 do
 plink --bfile local --extract local.snplist.txt --recode --chr ${x} \
-    --make-founders --keep referenceIDs.list --out reference${x}
+--make-founders --keep referenceIDs.list --out reference${x}
 echo "S1 dummy_phenotype" > reference${x}.dat
 awk '{print "M", $2}' reference${x}.map >> reference${x}.dat
 done
@@ -274,10 +274,10 @@ export hapdir=/enigma/genetics/CEU/ #edit this to reflect the location of the
 for ((i=1;i<=22;i++))
 do
 echo "mach1 -d ${fulldir}reference"$i".dat -p ${fulldir}reference"$i".ped -s \
-    ${hapdir}snps/${hm3pop}.chr"$i".snps -h \
-    ${hapdir}hap/${hm3pop}.chr"$i".hap.gz --greedy --autoFlip -r 100 -o \
-    ${fulldir}stage1_"$i" > ${fulldir}mach.stage1.c"$i".log" > \
-    ${fulldir}compute_mach_chr"$i".sh
+${hapdir}snps/${hm3pop}.chr"$i".snps -h \
+${hapdir}hap/${hm3pop}.chr"$i".hap.gz --greedy --autoFlip -r 100 -o \
+${fulldir}stage1_"$i" > ${fulldir}mach.stage1.c"$i".log" > \
+${fulldir}compute_mach_chr"$i".sh
 sed -i '1i#!/bin/bash\n\n' ${fulldir}compute_mach_chr"$i".sh
 chmod 755 ${fulldir}compute_mach_chr"$i".sh
 done
@@ -299,7 +299,7 @@ reuse the dat file that was made in the previous step.
 for ((i=1;i<=22;i++))
 do
 plink --bfile local --extract local.snplist.txt --recode --chr "$i" \
-    --make-founders --out population"$i"
+--make-founders --out population"$i"
 done
 ```
 
@@ -321,10 +321,10 @@ export hapdir=/enigma/genetics/CEU/ #edit this to reflect the location of the
 for ((i=1;i<=22;i++))
 do
 mach1 -d reference"$i".dat -p population"$i".ped -s \
-    ${hapdir}snps/${hm3pop}.chr"$i".snps -h \
-    ${hapdir}hap/${hm3pop}.chr"$i".hap.gz --greedy --autoFlip --errorMap \
-    stage1_"$i".erate --crossoverMap stage1_"$i".rec --mle --mldetails -o \
-    enigmaImp_"$i" > mach.stage2.c"$i".log
+${hapdir}snps/${hm3pop}.chr"$i".snps -h \
+${hapdir}hap/${hm3pop}.chr"$i".hap.gz --greedy --autoFlip --errorMap \
+stage1_"$i".erate --crossoverMap stage1_"$i".rec --mle --mldetails -o \
+enigmaImp_"$i" > mach.stage2.c"$i".log
 done
 ```
 
