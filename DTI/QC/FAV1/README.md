@@ -39,8 +39,8 @@ svn checkout https://github.com/ENIGMA-git/ENIGMA/trunk/DTI/QC/enigmaDTI_QC
 ```
 
 Download the script to build the QC webpage for Step 4:
-*   [Linux](DTI/QC/FAV1/make_enigmaDTI_FA_V1_QC_webpage.sh)
-*   [Mac](DTI/QC/FAV1/make_enigmaDTI_FA_V1_QC_webpage_mac.sh)
+*   [Linux](make_enigmaDTI_FA_V1_QC_webpage.sh)
+*   [Mac](make_enigmaDTI_FA_V1_QC_webpage_mac.sh)
 
 **Step 2 – Build a text file defining the location of subject files**
 
