@@ -27,7 +27,7 @@ the commands work on your system and data.*
     [DTIFIT](http://fsl.fmrib.ox.ac.uk/fsl/fsl4.0/fdt/fdt_dtifit.html) or 
     equivalent.
 *   Run the [ENIGMA DTI processing protocol to project individual skeletons onto
-    the common template](../../DTI#enigma-dti-skeletonization)
+    the common template](/DTI#enigma-dti-skeletonization)
 
 **Step 1 – Download the utility packages**
 
@@ -37,8 +37,8 @@ svn checkout https://github.com/ENIGMA-git/ENIGMA/trunk/DTI/QC/enigmaDTI_QC
 ```
 
 Download the script to build the QC webpage for Step 4:
-*   [Linux](DTI/QC/FASkelcheck/make_enigmaDTI_FA_Skel_QC_webpage.sh)
-*   [Mac](DTI/QC/FASkelcheck/make_enigmaDTI_FA_Skel_QC_webpage_mac.sh)
+*   [Linux](make_enigmaDTI_FA_Skel_QC_webpage.sh)
+*   [Mac](make_enigmaDTI_FA_Skel_QC_webpage_mac.sh)
 
 **Step 2 – Build a text file defining the location of subject files**
 
