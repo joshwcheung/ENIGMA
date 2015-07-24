@@ -139,7 +139,7 @@ Now we can extract ROI measures from these skeletons!
 
 Remember you have already done this with FA
 
-**[SCRIPT HERE](DTI/ROIExtraction)**
+**[SCRIPT HERE](/DTI/ROIExtraction)**
 
 Here the runDirectory represents the directory where all your downloaded scripts
 and codes are located.
