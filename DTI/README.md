@@ -139,7 +139,7 @@ overlaid on b0, not FA!).
 ### ENIGMA-DTI Software tools for Preprocessing Quality Control:
 *   \*\*\*coming soon\*\*\* ENIGMA-DTI_QC_motion: Check for motion and slice 
     dropouts.
-*   [ENIGMA-DTI_QC_FA_V1](DTI/QC/FAV1): Check vector directions (Do gradients in
+*   [ENIGMA-DTI_QC_FA_V1](QC/FAV1): Check vector directions (Do gradients in
     V1 align appropriately along FA image?).
 
 Useful Tools/Tutorials/Pages:
@@ -164,7 +164,7 @@ Useful Tools/Tutorials/Pages:
 ### ENIGMA-DTI Skeletonization
 Protocols \*\*NEW UPDATES\*\*
 
-*   [ENIGMA-TBSS protocol](DTI/TBSS)
+*   [ENIGMA-TBSS protocol](TBSS)
 *   Once DTI data have been pre-processed, use the protocol above to map your 
     images onto the ENIGMA-DTI FA template and project the skeleton.
 *   Do not forget to QC your images after FA maps have been registered! 
@@ -180,9 +180,9 @@ Your images will be aligned to the ENIGMA-DTI template in ICBM space and mean FA
 in ROIs will be extracted from the skeletal projections.
 
 ### ENIGMA-DTI Software tools for ENIGMA processing Quality Control:
-*   [ENIGMA FA/Skel check](DTI/QC/FASkelcheck): Check FA Registrations and make 
+*   [ENIGMA FA/Skel check](QC/FASkelcheck): Check FA Registrations and make 
     sure skeletons are correct.
-*   [ENIGMA DTI SummaryStats protocol](DTI/QC/SummaryStats): Check the 
+*   [ENIGMA DTI SummaryStats protocol](QC/SummaryStats): Check the 
     distribution of your ROIs and look for outliers.
 
 More DTI tools:
@@ -196,7 +196,7 @@ More DTI tools:
 
 
 ### ROI extraction from FA images
-*   [ENIGMA-ROI extraction protocol](DTI/ROIExtraction)
+*   [ENIGMA-ROI extraction protocol](ROIExtraction)
 *   Use the above link to extract regions of interest from the skeletons and 
     calculate the average FA within them.
 *   \*\*\*\* An important note \*\*\*\* in the analysis is that the ROI labeled 
@@ -223,7 +223,7 @@ like the one seen above!) and normal distributions of regional values.
 If you would like to skeletonize non-FA diffusivity measures including mean 
 (MD), axial (AD/L1) and/or radial diffusivity (RD) and then extract relevant ROI
 information from them according to the ENIGMA-DTI template, please follow the 
-instructions provided [here](DTI/Diffusivity).
+instructions provided [here](Diffusivity).
 
 ---
 
@@ -291,8 +291,8 @@ echo "ID" "Mean_Squared" "Max_Squared" >> Proj_Dist.txt
  
  
 ## for each FA map
-    for FAmap in ${list}   
-    do
+for FAmap in ${list}   
+do
 	base=`echo $FAmap | awk 'BEGIN {FS="/"}; {print $NF}' | awk 'BEGIN \
     {FS="_"}; {print $1}'`
     dst_out="dst_vals_"$base""
@@ -331,7 +331,7 @@ echo "ID" "Mean_Squared" "Max_Squared" >> Proj_Dist.txt
     rm ./squared_*.nii.gz
  
 	echo "file $Tout done"
-    done
+done
 ```
 
 ### The ENGIMA DTI Support emails are sent to:
