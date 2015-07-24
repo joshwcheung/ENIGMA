@@ -171,7 +171,7 @@ do
         ${dirO1}/${subject}_${DIFF}_ROIout.csv \
         ${dirO2}/${subject}_${DIFF}_ROIout_avg.csv
  
-# can create subject list here for part 3!
+        # can create subject list here for part 3!
         echo ${subject},${dirO2}/${subject}_${DIFF}_ROIout_avg.csv >> \
         ${parentDirectory}/${DIFF}_individ/subjectList_${DIFF}.csv
     done
@@ -185,10 +185,10 @@ do
     Nroi="all" 
     rois="all"
  
-#location of R binary 
+    #location of R binary 
     Rbin=/usr/local/R-2.9.2_64bit/bin/R
  
-#Run the R code
+    #Run the R code
     ${Rbin} --no-save --slave --args ${Table} \
     ${subjectIDcol} ${subjectList} ${outTable} \
     ${Ncov} ${covariates} ${Nroi} ${rois} < \
