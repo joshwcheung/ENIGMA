@@ -62,8 +62,10 @@ Further instructions for using FSL, particularly TBSS can be found on
     
     ```bash
 	mkdir /enigmaDTI/TBSS/run_tbss/BAD_ REGISTER/
-	mv FA_didnt_pass_QC* /enigmaDTI/TBSS/run_tbss/BAD_REGISTER/
 	```
+	<pre>
+	mv <i>FA_didnt_pass_QC</i>* /enigmaDTI/TBSS/run_tbss/BAD_REGISTER/
+	</pre>
 
 	**\*\*NOTE\*\* If your field of view is different from the ENIGMA template –
 	(example, you are missing some cerebellum/temporal 	lobe from your FOV) or 
@@ -173,7 +175,11 @@ Further instructions for using FSL, particularly TBSS can be found on
 	
     ```bash
 	cd /enigmaDTI/TBSS/run_tbss/
-	for subj in subj_1 subj_2 … subj_N
+	```
+	<pre>
+	for subj in <i>subj_1 subj_2 … subj_N</i>
+	</pre>
+	```bash
 	do
 	
 	mkdir -p ./FA_individ/${subj}/stats/
@@ -193,7 +199,11 @@ Further instructions for using FSL, particularly TBSS can be found on
 
 	```bash
 	cd /enigmaDTI/TBSS/run_tbss/
-	for subj in subj_1 subj_2 … subj_N
+	```
+	<pre>
+	for subj in <i>subj_1 subj_2 … subj_N</i>
+	</pre>
+	```bash
 	do
 
 	${FSLPATH}/tbss_skeleton -i \
