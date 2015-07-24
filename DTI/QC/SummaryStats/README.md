@@ -25,7 +25,7 @@ the commands work on your system and data.*
 * [R](http://cran.r-project.org/)
 
 Download the [automated script for generating the 
-plots](DTI/QC/SummaryStats/ENIGMA_DTI_plots_ALL.R)
+plots](ENIGMA_DTI_plots_ALL.R)
 
 ---
 
