@@ -75,8 +75,7 @@ You will need four files to run the association analysis (described below).
     
 ---
 
-Create a working directory and copy all of the required files inside. Unzip the 
-association scripts and move the Scripts/ folder into your working directory.
+Create a working directory (mkdir) and move (mv) all of the required files inside. Move the enigma_backend/ folder to be inside of the ENIGMA3/ folder. Then mv the ENIGMA3 folder so that it is renamed to be SCRIPTS/. After this your working directory should look like this:
 
 Your working directory should look something like this:
 
