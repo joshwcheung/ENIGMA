@@ -67,7 +67,11 @@ You will need four files to run the association analysis (described below).
         AffectionStatus. Additional columns for dummy covariates (i.e. a 
         covariate to control for different MR acquisitions, if applicable) is 
         optional.
-    *   **Note 2:** Your Covariates.csv file should not contain an missing values
+    *   **Note 2:** If your cohort has disease-only patients (i.e. no healthy controls)
+        you need to include a covariate called "AffectionStatus", coded such that all
+        patients are = 1. You will end up with a single column of 1's, but the code
+        will handle this properly.
+    *   **Note 3:** Your Covariates.csv file should not contain an missing values
         or NA values. If any covariates are missing the whole subject will be 
         removed from the analysis. Please remove any subject with missing values
         for covariates from the Covariates.csv file before continuing with the scripts
@@ -88,9 +92,18 @@ HM3mds2R.mds.csv
 Covariates.csv
 SCRIPTS/
 ```
+Now make sure everything in your folder has executable permission:
+
+```bash
+chmod -R 777 *
+```
 
 Change directories to move into the SCRIPTS/ folder. We will run three scripts 
 in order (run0, run1, run2) to setup and then perform the GWAS.
+
+```bash
+cd SCRIPTS/
+```
 
 For each step, user inputs that need modification are *italicized*. **Bolded**
 code may or may not need to be addressed depending on the dataset. In some 
@@ -142,8 +155,8 @@ chmod 755 run0_E3_GWAS_format.sh
 
 #How many covariates will you be using (note, at a minimum we would require 2 
 #or 3 -- age and sex and diagnosis (if dataset consists of patients and 
-#controls), and any additional site-specific variables, please contact us with 
-#questions!)
+#controls (or just patients, see Note 2 above)), and any additional site-specific variables, 
+#please contact us with questions!)
 <i>Ncov</i>=3
     #<b>Note:</b> Remember to update this if you change the number of covariates in 
     #the line below. For example, if you have a healthy-only dataset (i.e. no 
@@ -215,8 +228,8 @@ parameters (see below):
 <i>maleIndicator</i>=1         # Males in the sex column coded as (M? 1? 2? ... )
 <i>patients</i>=1              # Does your dataset contain patients? (mark 0 for no,
                         # 1 for yes). If your sample has patients and 
-                        # controls make sure you have a column, (called
-                        # 'AffectionStatus') where patients are marked with 1 
+                        # controls (or just patients) make sure you have a column, 
+                        # (called 'AffectionStatus') where patients are marked with 1 
                         # and healthy controls with a 0.
 
 #Give the <b>full path</b> of the output diriectory for the ped and dat file 
