@@ -27,6 +27,7 @@ TableSubjectID_column="SubjID"
 ## How many covariates will you be using (note, at a minimum we would require 2 or 3 -- age and sex and disease if dataset consists of patients and controls, and any additional site-specific variables, please contact us with questions!)
 Ncov=3
 ## in your table file, what are the column headers for the covariates you would like to include? Make sure to separate them here with a semi-colon and no space!
+## Remember that datasets with patients and controls (and those with patients-only) need to include an AffectionStatus covariate with patients = 1 and contorls = 0
 covariates="Age;Sex;AffectionStatus"
 
 ######################################
