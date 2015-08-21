@@ -22,7 +22,7 @@ mode=${11}
 #ls -1 ${machdir}/chunk*-ready4mach.*.imputed.dose.gz > ${mach2qtlout}/fileList.txt
 #totalFiles=`ls ${machdir}/chunk*-ready4mach.*.imputed.dose.gz |wc -w`
 
-NchunksPerTask=$((totalFiles/Nnodes+1))
+NchunksPerTask=$((totalFiles/Nnodes))
 start_pt=$(($((${SGE_TASK_ID}-1))*${NchunksPerTask}+1))
 end_pt=$((${SGE_TASK_ID}*${NchunksPerTask}))
 
