@@ -312,6 +312,7 @@ if (patients!=0) {
     }
     
     FullInfoFile_healthy <- subset(FullInfoFile,AffectionStatus==0);
+    if (length(subset(FullInfoFile,AffectionStatus==0)) > 0) {
     VarNames=names(FullInfoFile_healthy)
     columnnames = colnames(FullInfoFile_healthy);
     for (l in (Nset+1):length(VarNames)){
@@ -321,7 +322,7 @@ if (patients!=0) {
         FullInfoFile_healthy=FullInfoFile_healthy[,-which(columnnames==VarNames[l])]
         }
     }
-    
+    }
     FullInfoFile_disease <- subset(FullInfoFile,AffectionStatus==1);
     VarNames=names(FullInfoFile_disease)
     columnnames = colnames(FullInfoFile_disease);
@@ -354,10 +355,16 @@ writeLines(paste('     -', cbind(colnames(FullInfoFile)[(Nset+1):nVar])),con=zz,
 # Output names have been hard-coded for formatting of follow-up scripts.
 #
 #Write out ped file
+
+if ( dim(FullInfoFile_healthy)[1] > 0 ){
 write.table(FullInfoFile_healthy,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_healthy.ped",sep=""),quote=F,col.names=F,row.names=F);
 write.table(FullInfoFile_healthy,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_healthy.tbl",sep=""),quote=F,col.names=T,row.names=F);
 write.table(colnames(FullInfoFile_healthy),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_healthy.header",sep=""),quote=F,col.names=F,row.names=F);
 write.table(cbind(c(rep("T",Nrois),rep("C",nCov_healthy)),c(colnames(FullInfoFile_healthy)[(Nids+1):nVar_healthy])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_healthy.dat",sep=""),col.names=F,row.names=F,quote=F);
+} else {
+    cat('    There are no healthy individuals in this group. \n')
+    writeLines(paste('    There are no healthy individuals in this group.'),con=zz,sep="\n")
+}
 
 #### print multiple dat files if patients
 if (patients!=0) {
