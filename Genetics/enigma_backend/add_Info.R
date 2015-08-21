@@ -46,7 +46,9 @@ matchind = match(Pheno[,which(columnnamesP==PhenoSubjectID_column)],Table[,which
 
 DesignMatrix = Pheno[which(!is.na(matchind)),]
 TableSmall = Table[matchind[!is.na(matchind)],]
-
+if(length(matchind) == length(which(is.na(matchind)))){
+	stop('There are no subjects remaining when matching your Covariates file with your ROI data. Please check that the IDs used match between files.\n')
+}
 if(length(which(is.na(matchind))) > 0){
 	cat('Your TableFile (Covariates File) has missing values.\n')
 	cat('These subjects will be removed from the analysis.\n')
