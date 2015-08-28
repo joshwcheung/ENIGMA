@@ -249,11 +249,11 @@ VarNames=names(FullInfoFile)
 columnnames = colnames(FullInfoFile);
 
 drp=0
-    
+
+#Remove covariates with sd = 0 except for AffectionStatus
 for (l in (Nset+1):length(VarNames)){
-    if (sd(as.numeric(FullInfoFile[,l]))==0) {
+    if (sd(as.numeric(FullInfoFile[,l]))==0 && VarNames[l] != "AffectionStatus") {
         print(paste('The standard deviation of column', VarNames[l], 'is zero. Therefore, the column will be removed.'))
-        print(sd(FullInfoFile[,which(columnnames==VarNames[l])]))
         columnnames = colnames(FullInfoFile);
         FullInfoFile=FullInfoFile[,-which(columnnames==VarNames[l])]
 		drp=drp+1
@@ -312,7 +312,7 @@ if (patients!=0) {
     }
     
     FullInfoFile_healthy <- subset(FullInfoFile,AffectionStatus==0);
-    if (length(subset(FullInfoFile,AffectionStatus==0)) > 0) {
+    if (nrow(subset(FullInfoFile,AffectionStatus==0)) > 0) {
     VarNames=names(FullInfoFile_healthy)
     columnnames = colnames(FullInfoFile_healthy);
     for (l in (Nset+1):length(VarNames)){
@@ -335,6 +335,15 @@ if (patients!=0) {
     }
 }
 
+#Remove AffectionStatus if sd = 0
+if ("AffectionStatus" %in% colnames(FullInfoFile) ){ 
+	if (sd(sapply(FullInfoFile["AffectionStatus"], as.numeric))==0) {
+		columnnames = colnames(FullInfoFile);
+        FullInfoFile["AffectionStatus"] = NULL
+		nCov=nCov-1
+		drp=drp+1
+	}
+}
 
 nVar_healthy=dim(FullInfoFile_healthy)[2]
 nCov_healthy=nVar_healthy-Nset
@@ -368,16 +377,18 @@ write.table(cbind(c(rep("T",Nrois),rep("C",nCov_healthy)),c(colnames(FullInfoFil
 
 #### print multiple dat files if patients
 if (patients!=0) {
-    cat('    There are ',nSub_healthy,' healthy subjects\n')
-    cat('    There are ',nCov_healthy,' covariates for all healthy subjects\n')
-    writeLines(paste('    There are ',nSub_healthy,' healthy subjects.'),con=zz,sep="\n")
-    writeLines(paste('    There are ',nCov_healthy,' covariates for all healthy subjects.'),con=zz,sep="\n")
-    writeLines(paste('     -', colnames(FullInfoFile_healthy)[(Nset+1):nVar_healthy]),con=zz,sep="\n")
-
-    write.table(cbind(c(rep("T",Nrois),rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup.dat",sep=""),col.names=F,row.names=F,quote=F);
-    write.table(FullInfoFile,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_fullGroup.ped",sep=""),quote=F,col.names=F,row.names=F);
-    write.table(FullInfoFile,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_fullGroup.tbl",sep=""),quote=F,col.names=T,row.names=F);
-    write.table(colnames(FullInfoFile),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_fullGroup.header",sep=""),quote=F,col.names=F,row.names=F);
+	if (nSub_healthy > 0) {
+		cat('    There are ',nSub_healthy,' healthy subjects\n')
+		cat('    There are ',nCov_healthy,' covariates for all healthy subjects\n')
+		writeLines(paste('    There are ',nSub_healthy,' healthy subjects.'),con=zz,sep="\n")
+		writeLines(paste('    There are ',nCov_healthy,' covariates for all healthy subjects.'),con=zz,sep="\n")
+		writeLines(paste('     -', colnames(FullInfoFile_healthy)[(Nset+1):nVar_healthy]),con=zz,sep="\n")
+		
+		write.table(cbind(c(rep("T",Nrois),rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup.dat",sep=""),col.names=F,row.names=F,quote=F);
+		write.table(FullInfoFile,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_fullGroup.ped",sep=""),quote=F,col.names=F,row.names=F);
+		write.table(FullInfoFile,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_fullGroup.tbl",sep=""),quote=F,col.names=T,row.names=F);
+		write.table(colnames(FullInfoFile),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_fullGroup.header",sep=""),quote=F,col.names=F,row.names=F);
+	}
 
     cat('    There are ',nSub_disease,' patients\n')
     cat('    There are ',nCov_disease,' covariates for all patients\n')
