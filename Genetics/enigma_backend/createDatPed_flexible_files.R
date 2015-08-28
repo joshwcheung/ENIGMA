@@ -303,14 +303,7 @@ for (i in 1:(dim(connectingFile))[1]) {
 FullInfoFile_healthy=FullInfoFile
 FullInfoFile_disease=FullInfoFile
 if (patients!=0) {
-    writeLines(paste('STUDY DESIGN: There are patients in this study.'),con=zz,sep="\n")
-    if (patients==1) {
-        AffectionStatus=FullInfoFile$AffectionStatus
-    } else {
-        columnnames = colnames(FullInfoFile)
-        AffectionStatus=FullInfoFile_healthy[,which(columnnames==patients)]
-    }
-    
+
     FullInfoFile_healthy <- subset(FullInfoFile,AffectionStatus==0);
     if (nrow(subset(FullInfoFile,AffectionStatus==0)) > 0) {
     VarNames=names(FullInfoFile_healthy)
