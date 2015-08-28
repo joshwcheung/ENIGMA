@@ -264,18 +264,18 @@ if (patients!=0) {
 for (l in (Nset+1):length(VarNames)){
     if (sd(as.numeric(FullInfoFile[,l]))==0 ) {
         if (patients==1 && VarNames[l]== "AffectionStatus") {
-		continue;
+			next
     	} else if (patients!=0 && VarNames[l] == patients ) {
-    		continue }
+    		next
+		}
     	else {
         print(paste('The standard deviation of column', VarNames[l], 'is zero. Therefore, the column will be removed.'))
-        columnnames = colnames(FullInfoFile);
+        columnnames = colnames(FullInfoFile)
         FullInfoFile=FullInfoFile[,-which(columnnames==VarNames[l])]
 		drp=drp+1
 		}
     }
 }
-
 
 ## if related individuals, create connecting file for MERLIN-offline
 if (related==1) {
@@ -349,15 +349,15 @@ if (patients!=0) {
 
 if ("AffectionStatus" %in% colnames(FullInfoFile) && patients==1 ){ 
 	if (sd(sapply(FullInfoFile["AffectionStatus"], as.numeric))==0) {
-		columnnames = colnames(FullInfoFile);
+		columnnames = colnames(FullInfoFile)
         FullInfoFile["AffectionStatus"] = NULL
 		nCov=nCov-1
 		drp=drp+1
 	}
 } else if ( patients!=0 ){ 
 	if (sd(sapply(AffectionStatus, as.numeric))==0) {
-		columnnames = colnames(FullInfoFile);
-        FullInfoFile[,-which(columnnames==patients] = NULL
+		columnnames = colnames(FullInfoFile)
+        FullInfoFile[,-which(columnnames==patients)] = NULL
 		nCov=nCov-1
 		drp=drp+1
 	}
