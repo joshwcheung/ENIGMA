@@ -250,15 +250,32 @@ columnnames = colnames(FullInfoFile);
 
 drp=0
 
-#Remove covariates with sd = 0 except for AffectionStatus
+if (patients!=0) {
+    writeLines(paste('STUDY DESIGN: There are patients in this study.'),con=zz,sep="\n")
+    if (patients==1) {
+        AffectionStatus=FullInfoFile$AffectionStatus
+    } else {
+        columnnames = colnames(FullInfoFile)
+        AffectionStatus=FullInfoFile[,which(columnnames==patients)]
+    }
+ }
+
+#Remove covariates with sd = 0 keeping the patient column if it exists
 for (l in (Nset+1):length(VarNames)){
-    if (sd(as.numeric(FullInfoFile[,l]))==0 && VarNames[l] != "AffectionStatus") {
+    if (sd(as.numeric(FullInfoFile[,l]))==0 ) {
+        if (patients==1 && VarNames[l]== "AffectionStatus") {
+		continue;
+    	} else if (patients!=0 && VarNames[l] == patients ) {
+    		continue }
+    	else {
         print(paste('The standard deviation of column', VarNames[l], 'is zero. Therefore, the column will be removed.'))
         columnnames = colnames(FullInfoFile);
         FullInfoFile=FullInfoFile[,-which(columnnames==VarNames[l])]
 		drp=drp+1
+		}
     }
 }
+
 
 ## if related individuals, create connecting file for MERLIN-offline
 if (related==1) {
@@ -303,14 +320,7 @@ for (i in 1:(dim(connectingFile))[1]) {
 FullInfoFile_healthy=FullInfoFile
 FullInfoFile_disease=FullInfoFile
 if (patients!=0) {
-    writeLines(paste('STUDY DESIGN: There are patients in this study.'),con=zz,sep="\n")
-    if (patients==1) {
-        AffectionStatus=FullInfoFile$AffectionStatus
-    } else {
-        columnnames = colnames(FullInfoFile)
-        AffectionStatus=FullInfoFile_healthy[,which(columnnames==patients)]
-    }
-    
+
     FullInfoFile_healthy <- subset(FullInfoFile,AffectionStatus==0);
     if (nrow(subset(FullInfoFile,AffectionStatus==0)) > 0) {
     VarNames=names(FullInfoFile_healthy)
@@ -336,10 +346,18 @@ if (patients!=0) {
 }
 
 #Remove AffectionStatus if sd = 0
-if ("AffectionStatus" %in% colnames(FullInfoFile) ){ 
+
+if ("AffectionStatus" %in% colnames(FullInfoFile) && patients==1 ){ 
 	if (sd(sapply(FullInfoFile["AffectionStatus"], as.numeric))==0) {
 		columnnames = colnames(FullInfoFile);
         FullInfoFile["AffectionStatus"] = NULL
+		nCov=nCov-1
+		drp=drp+1
+	}
+} else if ( patients!=0 ){ 
+	if (sd(sapply(AffectionStatus, as.numeric))==0) {
+		columnnames = colnames(FullInfoFile);
+        FullInfoFile[,-which(columnnames==patients] = NULL
 		nCov=nCov-1
 		drp=drp+1
 	}
