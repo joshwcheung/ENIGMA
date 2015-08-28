@@ -346,20 +346,6 @@ if (patients!=0) {
 }
 
 #Remove AffectionStatus if sd = 0
-for (l in (Nset+1):length(VarNames)){
-    if (sd(as.numeric(FullInfoFile[,l]))==0 && VarNames[l] ) {
-        if (patients==1 && VarNames[l]== "AffectionStatus") {
-		continue;
-    	} else if (patients!=0 && VarNames[l] == patients ) {
-    		continue }
-    	else {
-        print(paste('The standard deviation of column', VarNames[l], 'is zero. Therefore, the column will be removed.'))
-        columnnames = colnames(FullInfoFile);
-        FullInfoFile=FullInfoFile[,-which(columnnames==VarNames[l])]
-		drp=drp+1
-		}
-    }
-}
 
 if ("AffectionStatus" %in% colnames(FullInfoFile) && patients==1 ){ 
 	if (sd(sapply(FullInfoFile["AffectionStatus"], as.numeric))==0) {
