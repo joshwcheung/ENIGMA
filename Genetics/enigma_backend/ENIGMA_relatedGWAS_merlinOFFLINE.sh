@@ -175,26 +175,6 @@ case $status in
 		echo "gzip ${outName}" >> Step2_Manual_GZIP.txt
 	fi
 	
-	
-	###### run patients only
-        outName=${merlinout}/${samplename}_${eName}_patients_${chr}_${chunk}.out
-        outTBLName=${merlinout}/${samplename}_${eName}_patients_${chr}_${chunk}.tbl
-        outNamePrefix=${merlinout}/${samplename}_${eName}_patients_${chr}_${chunk}
-        datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_patients.dat
-        pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_patients.ped
-
-        if [ "$mode" == "run" ]; then
-        	echo ${outName}
-       		${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${datFileName} --useCovariates --tabulate  --prefix ${outNamePrefix} > ${outName}
-       		gzip ${outTBLName}
-        	gzip ${outName}
-	
-	else
-		echo "${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${datFileName} --useCovariates --tabulate  --prefix ${outNamePrefix} > ${outName}" >> Step1_Manual_GWAS.txt
-		echo "gzip ${outTBLName}" >> Step2_Manual_GZIP.txt
-		echo "gzip ${outName}" >> Step2_Manual_GZIP.txt
-	fi
-	
     done
     ;;
 esac
