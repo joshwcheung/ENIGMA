@@ -118,19 +118,6 @@ case $status in
 			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
 		fi
-
-        ###### run patients only
-        outName=${mach2qtlout}/${samplename}_${eName}_patients_${chr}_${chunk}.out
-        datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_patients.dat
-        pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_patients.ped
-		if [ "$mode" == "run" ]; then
-        	echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}"
-        	${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}
-        	gzip -f ${outName}
-		else
-			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
-			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
-		fi
 	done
     ;;
 
