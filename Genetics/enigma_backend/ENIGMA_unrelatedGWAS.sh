@@ -109,7 +109,7 @@ case $status in
 
         ###### run healthy and disease -- full group
         outName=${mach2qtlout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}.out
-		noSAOutName=outName=${mach2qtlout}/${samplename}_${eName}_mixedHD_noSA_${chr}_${chunk}.out
+		noSAOutName=${mach2qtlout}/${samplename}_${eName}_mixedHD_noSA_${chr}_${chunk}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup.dat
 		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_fullGroup.ped
