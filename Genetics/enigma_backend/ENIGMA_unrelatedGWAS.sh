@@ -121,6 +121,8 @@ case $status in
         	${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}
         	gzip -f ${noSAOutName}
 		else
+			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
+			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
 			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${noSAOutName}" >> Step2_Manual_GZIP.txt	
 		fi
