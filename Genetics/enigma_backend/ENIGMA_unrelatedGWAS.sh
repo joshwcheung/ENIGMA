@@ -48,16 +48,23 @@ case $status in
         chunk=$(basename  ${fileInfo} | awk -F '-' '{print $1}')
 
         outName=${mach2qtlout}/${samplename}_${eName}_healthy_${chr}_${chunk}.out
+		noSAOutName=${mach2qtlout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy.dat
+		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_healthy.ped
 		
 		if [ "$mode" == "run" ]; then
         	echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}"
         	${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}
         	gzip -f ${outName}
+			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}"
+			${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}
+			gzip -f ${noSAOutName}
 		else
 			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
+			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}" >> Step1_Manual_GWAS.txt
+			echo "gzip -f ${noSAOutName}" >> Step2_Manual_GZIP.txt
 		fi
 	done
     ;;
@@ -71,21 +78,28 @@ case $status in
         chunk=$(basename  ${fileInfo} | awk -F '-' '{print $1}')
 
         outName=${mach2qtlout}/${samplename}_${eName}_disease_${chr}_${chunk}.out
+		noSAOutName=${mach2qtlout}/${samplename}_${eName}_disease_noSA_${chr}_${chunk}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_patients.dat
+		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_patients_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_patients.ped
 		if [ "$mode" == "run" ]; then
        	 	echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}"
        	 	${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}
        	 	gzip -f ${outName}
+			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}"
+       	 	${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}
+       	 	gzip -f ${noSAOutName}
 		else
 			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
+			echo "${run_machdir}/executables/mach2qtl --datfile ${saDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}" >> Step1_Manual_GWAS.txt
+			echo "gzip -f ${noSAOutName}" >> Step2_Manual_GZIP.txt
 		fi
     done
     ;;
 
     HD)
-# we are actually going to tripple up here, and run 3x as many runs per node one for healthy only, patients only, and one for the full group
+# we are actually going to double up here, and run 2x as many runs per node one for healthy only and one for the full group
     for ((i=${start_pt}; i<=${end_pt};i++));
         do
         fileDose=$(awk -v "line=$i" 'NR == line' ${mach2qtlout}/fileList_${SGE_TASK_ID}.txt )
@@ -95,51 +109,44 @@ case $status in
 
         ###### run healthy and disease -- full group
         outName=${mach2qtlout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}.out
+		noSAOutName=${mach2qtlout}/${samplename}_${eName}_mixedHD_noSA_${chr}_${chunk}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup.dat
+		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_fullGroup.ped
 		if [ "$mode" == "run" ]; then
         	echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}"
         	${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}
         	gzip -f ${outName}
+			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}"
+        	${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}
+        	gzip -f ${noSAOutName}
 		else
 			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
-			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt	
+			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
+			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}" >> Step1_Manual_GWAS.txt
+			echo "gzip -f ${noSAOutName}" >> Step2_Manual_GZIP.txt	
 		fi
 
         ###### run healthy only
         outName=${mach2qtlout}/${samplename}_${eName}_healthy_${chr}_${chunk}.out
+		noSAOutName=${mach2qtlout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy.dat
+		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_healthy.ped
 		if [ "$mode" == "run" ]; then
         	echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}"
         	${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}
         	gzip -f ${outName}
+			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}"
+        	${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}
+        	gzip -f ${noSAOutName}
 		else
 			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
-		fi
-
-        ###### run patients only
-        outName=${mach2qtlout}/${samplename}_${eName}_patients_${chr}_${chunk}.out
-        datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_patients.dat
-        pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_patients.ped
-		if [ "$mode" == "run" ]; then
-        	echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}"
-        	${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}
-        	gzip -f ${outName}
-		else
-			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
-			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
+			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}" >> Step1_Manual_GWAS.txt
+			echo "gzip -f ${noSAOutName}" >> Step2_Manual_GZIP.txt
 		fi
 	done
     ;;
 
 esac
-
-
-
-
-
-
-
-
