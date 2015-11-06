@@ -410,6 +410,20 @@ if (patients!=0) {
 		write.table(FullInfoFile,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_fullGroup.tbl",sep=""),quote=F,col.names=T,row.names=F);
 		write.table(colnames(FullInfoFile),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_fullGroup.header",sep=""),quote=F,col.names=F,row.names=F);
 	}
+	
+	if (nSub_healthy == 0) {
+		cat('    There are ',nSub_disease,' patients\n')
+		cat('    There are ',nCov_disease,' covariates for all patients\n')
+		writeLines(paste('    There are ',nSub_disease,' patients.'),con=zz,sep="\n")
+		writeLines(paste('    There are ',nCov_disease,' covariates for all patients.'),con=zz,sep="\n")
+		writeLines(paste('     -', colnames(FullInfoFile_disease)[(Nset+1):nVar_disease]),con=zz,sep="\n")
+		
+		write.table(FullInfoFile_disease,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_patients.ped",sep=""),quote=F,col.names=F,row.names=F);
+		write.table(FullInfoFile_disease,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_patients.tbl",sep=""),quote=F,col.names=T,row.names=F);
+		write.table(colnames(FullInfoFile_disease),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_patients.header",sep=""),quote=F,col.names=F,row.names=F);
+		write.table(cbind(c(rep("T",Nrois),rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients.dat",sep=""),col.names=F,row.names=F,quote=F);
+		write.table(cbind(c(rep("T",Nrois-2),"C","T",rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients_noSA.dat",sep=""),col.names=F,row.names=F,quote=F);
+	}
 }
 #### print connecting files if related for MERLIN-offline
 if (related==1) {
