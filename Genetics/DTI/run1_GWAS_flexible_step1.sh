@@ -32,12 +32,12 @@ peddatdir=/ENIGMA/eGWAS/eDTI/PedDat/				# Output diriectory for the ped and dat 
 
 if [ $related -eq 0 ]
 then
-mach2qtl_DL=1                       				# UNRELATED ONLY: Have you downloaded mach2qtl yet? Mark 0 for no, 1 for yes
+mach2qtl_DL=0                       				# UNRELATED ONLY: Have you downloaded mach2qtl yet? Mark 0 for no, 1 for yes
 run_machdir=${run_directory}/mach2qtl/              # UNRELATED ONLY: Directory where you will download and compile mach2qtl installed (probably can leave as is)
 localfamFILE="None"                 				# UNRELATED ONLY: Keep as is.
 else
 localfamFILE=/ENIGMA/eGWAS/genotypes/local.fam      		# RELATED ONLY: Path to your local.fam file outputted during the Genetic Imputation step
-merlin_DL=1                                         # RELATED ONLY: Have you downloaded and compiled merlin-offline yet? Mark 0 for no, 1 for yes
+merlin_DL=0                                        # RELATED ONLY: Have you downloaded and compiled merlin-offline yet? Mark 0 for no, 1 for yes
 merlin_directory=${run_directory}/merlin/           # RELATED ONLY: Create a directory to download and compile the merlin code (probably can leave as is)
 fi
 
