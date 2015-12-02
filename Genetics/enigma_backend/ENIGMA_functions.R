@@ -67,7 +67,7 @@ estimateRelatedness_2gen <- function(data, FID=data$FID, IID=data$IID, PID=data$
                 #are the parents the same?
                 if (PID[i] == PID[j] && MID[i] == MID[j]) {
                     K[i,j] = 0.5; K[j,i] = 0.5; # they are at least siblings, edit further below:
-                    if (sex[i]==sex[j] && MDsdiff1 < 0.001 && MDsdiff2 < 0.001 && MDsdiff3 < 0.001 && MDsdiff4 < 0.001  ) {
+                    if (sex[i]==sex[j] && ( MDS1[i]==MDS1[j] && MDS2[i]==MDS2[j] && MDS3[i]==MDS3[j] && MDS4[i]==MDS4[j]) ) {
                         K[i,j] = 1 ; K[j,i] = 1 ; # we are assuming here that if the first 4 MDS components are the same between the 2, they are MZ twins
                         if (zyg[i]==0 && zyg[j]==0) {  mzindex=mzindex+2; zyg[i]=mzindex; zyg[j]=mzindex;
                         } else if (zyg[i]==0 && (zyg[j] %% 2 ==1) ) { zyg[i] = zyg[j];
