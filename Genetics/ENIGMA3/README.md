@@ -6,7 +6,10 @@
 
 Before we start, you need to download and install some required programs (which 
 you may already have). Please address any questions to: 
-enigma3helpdesk@gmail.com.
+enigma3helpdesk@gmail.com. You can also post your questions to our 
+[Google group](https://groups.google.com/forum/#!forum/enigma3-cortex). Please 
+check our [FAQ](#frequently-asked-questions) to see if your question has 
+already been answered.
 
 ---
 
@@ -360,3 +363,6 @@ fi
 Each group has a secure space on the ENIGMA upload server to upload the .info.gz
 (from imputation) and gzipped association result files. Please contact 
 enigma3helpdesk@gmail.com to obtain upload information for your group’s data.
+
+### **Frequently Asked Questions**
+This section will be updated with the most common questions that we receive.
