@@ -4,12 +4,21 @@
 
 **Written by Derrek Hibar and Neda Jahanshad**
 
-Before we start, you need to download and install some required programs (which 
-you may already have). Please address any questions to: 
-enigma3helpdesk@gmail.com. You can also post your questions to our 
-[Google group](https://groups.google.com/forum/#!forum/enigma3-cortex). Please 
-check our [FAQ](#frequently-asked-questions) to see if your question has 
+Please address any questions our 
+[Google group](https://groups.google.com/forum/#!forum/enigma3-cortex). Also, 
+please  check our [FAQ](#frequently-asked-questions) to see if your question has 
 already been answered.
+
+We have tutorial videos available for running our scripts 
+([run0](https://www.youtube.com/watch?v=hxixl-22Zks), 
+[run1](https://www.youtube.com/watch?v=huCegD-5TLc), 
+[run2](https://www.youtube.com/watch?v=mu-OGpeWcB4)) on our YouTube channel as 
+well.
+
+---
+
+Before we start, you need to download and install some required programs (which 
+you may already have).
 
 ---
 
@@ -82,9 +91,10 @@ You will need four files to run the association analysis (described below).
     
 ---
 
-Create a working directory (mkdir) and move (mv) all of the required files inside. Move the enigma_backend/ folder to be inside of the ENIGMA3/ folder. Then mv the ENIGMA3 folder so that it is renamed to be SCRIPTS/. After this your working directory should look like this:
-
-Your working directory should look something like this:
+Create a working directory (mkdir) and move (mv) all of the required files inside. 
+Move the enigma_backend/ folder to be inside of the ENIGMA3/ folder. Then mv the 
+ENIGMA3 folder so that it is renamed to be SCRIPTS/. After this your working directory should 
+look like this:
 
 ```bash
 enigma@-> ls
