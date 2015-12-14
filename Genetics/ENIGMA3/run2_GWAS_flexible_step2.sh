@@ -75,7 +75,13 @@ if [ $related -eq 0 ]
 then
 ls -1 ${machFILEdir}/chunk*-ready4mach.*.imputed.dose.gz > ${GWASout}/fileList_${SGE_TASK_ID}.txt
 totalFiles=`ls ${machFILEdir}/chunk*-ready4mach.*.imputed.dose.gz |wc -w`
+if [ "$eName" == "DTI" ]
+then
 ${run_directory}/ENIGMA_unrelatedGWAS.sh ${run_machdir} $machFILEdir $peddatdir $samplename $GWASout $status $Nnodes $totalFiles ${eName} $SGE_TASK_ID $mode
+elif [ "$eName" == "E3_cortex" ]
+then
+${run_directory}/ENIGMA_unrelatedGWAS_E3.sh ${run_machdir} $machFILEdir $peddatdir $samplename $GWASout $status $Nnodes $totalFiles ${eName} $SGE_TASK_ID $mode
+fi
 
 else                 ## if related, run merlin-offline
 ls -1 ${merlinFILEdir}/chunk*-ready4mach.*dat.gz > ${GWASout}/fileList_${SGE_TASK_ID}.txt
@@ -92,6 +98,13 @@ echo $totalFiles
     totalFiles=`ls ${merlinFILEdir}/chunk*-ready4mach.*.dat.gz |wc -w`
     merlinOFFLINE=1
     fi
+if [ "$eName" == "DTI" ]
+then
 echo ${run_directory}/ENIGMA_relatedGWAS_merlinOFFLINE.sh $merlin_directory $merlinFILEdir $peddatdir $samplename $GWASout $status $Nnodes $totalFiles ${eName} $merlinOFFLINE $SGE_TASK_ID $mode
 ${run_directory}/ENIGMA_relatedGWAS_merlinOFFLINE.sh $merlin_directory $merlinFILEdir $peddatdir $samplename $GWASout $status $Nnodes $totalFiles ${eName} $merlinOFFLINE $SGE_TASK_ID $mode
+elif [ "$eName" == "E3_cortex" ]
+then
+echo ${run_directory}/ENIGMA_relatedGWAS_merlinOFFLINE_E3.sh $merlin_directory $merlinFILEdir $peddatdir $samplename $GWASout $status $Nnodes $totalFiles ${eName} $merlinOFFLINE $SGE_TASK_ID $mode
+${run_directory}/ENIGMA_relatedGWAS_merlinOFFLINE_E3.sh $merlin_directory $merlinFILEdir $peddatdir $samplename $GWASout $status $Nnodes $totalFiles ${eName} $merlinOFFLINE $SGE_TASK_ID $mode
+fi
 fi

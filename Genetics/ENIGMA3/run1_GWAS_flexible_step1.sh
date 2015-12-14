@@ -130,4 +130,10 @@ fi
 cd ${run_directory}
 
 # run R script to create ped and dat files for GWAS. eName will name outputs accordingly
-${Rbin} --no-save --slave --args ${csvFILE} ${localfamFILE} ${combinedROItableFILE} ${ageColumnHeader} ${sexColumnHeader} ${maleIndicator} ${patients} ${related} ${peddatdir} ${ALL_ROIS} ${eName} <  createDatPed_flexible_files.R
+if [ "$eName" == "DTI" ]
+then
+	${Rbin} --no-save --slave --args ${csvFILE} ${localfamFILE} ${combinedROItableFILE} ${ageColumnHeader} ${sexColumnHeader} ${maleIndicator} ${patients} ${related} ${peddatdir} ${ALL_ROIS} ${eName} <  createDatPed_flexible_files.R
+elif [ "$eName" == "E3_cortex" ]
+then
+	${Rbin} --no-save --slave --args ${csvFILE} ${localfamFILE} ${combinedROItableFILE} ${ageColumnHeader} ${sexColumnHeader} ${maleIndicator} ${patients} ${related} ${peddatdir} ${ALL_ROIS} ${eName} <  createDatPed_flexible_files_E3.R
+fi
