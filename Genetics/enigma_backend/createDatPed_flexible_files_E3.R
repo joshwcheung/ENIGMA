@@ -262,7 +262,8 @@ if (patients!=0) {
 
 #Remove covariates with sd = 0 keeping the patient column if it exists
 for (l in (Nset+1):length(VarNames)){
-    if (sd(as.numeric(FullInfoFile[,l]))==0 ) {
+      columnnames = colnames(FullInfoFile);
+    if (sd(as.numeric(FullInfoFile[,which(columnnames==VarNames[l])]))==0) {
         if (patients==1 && VarNames[l]== "AffectionStatus") {
 			next
     	} else if (patients!=0 && VarNames[l] == patients ) {
@@ -323,7 +324,7 @@ if (patients!=0) {
 
     FullInfoFile_healthy <- subset(FullInfoFile,AffectionStatus==0);
     if (nrow(subset(FullInfoFile,AffectionStatus==0)) > 0) {
-    VarNames=names(FullInfoFile_healthy)
+    VarNames=colnames(FullInfoFile_healthy)
     columnnames = colnames(FullInfoFile_healthy);
     for (l in (Nset+1):length(VarNames)){
         columnnames = colnames(FullInfoFile_healthy);
@@ -334,7 +335,7 @@ if (patients!=0) {
     }
     }
     FullInfoFile_disease <- subset(FullInfoFile,AffectionStatus==1);
-    VarNames=names(FullInfoFile_disease)
+    VarNames=colnames(FullInfoFile_disease)
     columnnames = colnames(FullInfoFile_disease);
     for (l in (Nset+1):length(VarNames)){
         columnnames = colnames(FullInfoFile_disease);
