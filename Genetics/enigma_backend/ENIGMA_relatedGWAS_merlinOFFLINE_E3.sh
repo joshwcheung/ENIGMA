@@ -4,7 +4,6 @@
 # * ENIGMA_DTI 2014.
 # */
 
-version=20151218
 
 ######## SH INPUTS #############
 run_merlin=${1}
@@ -82,8 +81,8 @@ case $status in
         echo ${chr}
         echo ${chunk}
 
-        outName=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}_${version}.out
-		noSAOutName=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}_${version}.out
+        outName=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}.out
+		noSAOutName=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}.out
         outTBLName=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}.tbl
 		noSAOutTBLName=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}.tbl
         outNamePrefix=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}
@@ -149,8 +148,8 @@ case $status in
         chunk=$(basename  ${filePrefix} | awk -F '-' '{print $1}')
 
         ###### run healthy and disease -- full group
-        outName=${merlinout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}_${version}.out
-        noSAOutName=${merlinout}/${samplename}_${eName}_mixedHD_noSA_${chr}_${chunk}_${version}.out
+        outName=${merlinout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}.out
+        noSAOutName=${merlinout}/${samplename}_${eName}_mixedHD_noSA_${chr}_${chunk}.out
         outTBLName=${merlinout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}.tbl
         noSAOutTBLName=${merlinout}/${samplename}_${eName}_mixedHD_noSA_${chr}_${chunk}.tbl
         outNamePrefix=${merlinout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}
@@ -180,8 +179,8 @@ case $status in
 	fi
 
         ###### run healthy only
-        outName=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}_${version}.out
-        noSAOutName=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}_${version}.out
+        outName=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}.out
+        noSAOutName=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}.out
         outTBLName=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}.tbl
         noSAOutTBLName=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}.tbl
         outNamePrefix=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}
