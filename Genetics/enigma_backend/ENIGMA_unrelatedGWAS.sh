@@ -4,8 +4,6 @@
 # * ENIGMA_DTI 2014.
 # */
 
-version=20151218
-
 ######## SH INPUTS #############
 run_machdir=${1}  #give the directory to the imputed output from Mach/minimac
 machdir=${2}
@@ -49,7 +47,7 @@ case $status in
         chr=$(basename  ${fileInfo} | awk -F '.' '{print $2}')
         chunk=$(basename  ${fileInfo} | awk -F '-' '{print $1}')
 
-        outName=${mach2qtlout}/${samplename}_${eName}_healthy_${chr}_${chunk}_${version}.out
+        outName=${mach2qtlout}/${samplename}_${eName}_healthy_${chr}_${chunk}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_healthy.ped
 		
@@ -72,7 +70,7 @@ case $status in
         chr=$(basename  ${fileInfo} | awk -F '.' '{print $2}')
         chunk=$(basename  ${fileInfo} | awk -F '-' '{print $1}')
 
-        outName=${mach2qtlout}/${samplename}_${eName}_disease_${chr}_${chunk}_${version}.out
+        outName=${mach2qtlout}/${samplename}_${eName}_disease_${chr}_${chunk}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_patients.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_patients.ped
 		if [ "$mode" == "run" ]; then
@@ -96,7 +94,7 @@ case $status in
         chunk=$(basename  ${fileInfo} | awk -F '-' '{print $1}')
 
         ###### run healthy and disease -- full group
-        outName=${mach2qtlout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}_${version}.out
+        outName=${mach2qtlout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_fullGroup.ped
 		if [ "$mode" == "run" ]; then
@@ -109,7 +107,7 @@ case $status in
 		fi
 
         ###### run healthy only
-        outName=${mach2qtlout}/${samplename}_${eName}_healthy_${chr}_${chunk}_${version}.out
+        outName=${mach2qtlout}/${samplename}_${eName}_healthy_${chr}_${chunk}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_healthy.ped
 		if [ "$mode" == "run" ]; then
@@ -122,7 +120,7 @@ case $status in
 		fi
 
         ###### run patients only
-        outName=${mach2qtlout}/${samplename}_${eName}_patients_${chr}_${chunk}_${version}.out
+        outName=${mach2qtlout}/${samplename}_${eName}_patients_${chr}_${chunk}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_patients.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_patients.ped
 		if [ "$mode" == "run" ]; then
