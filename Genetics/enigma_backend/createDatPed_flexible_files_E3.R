@@ -170,6 +170,10 @@ if (related==0) {
 columnnames = colnames(merged_temp);
 age=as.numeric(merged_temp[,which(columnnames==ageColumnHeader)])
 age_mean=mean(age)
+age_md=median(age)
+min_age=min(age)
+max_age=max(age)
+
 ageC=(age-age_mean)
 ageCsq=ageC*ageC
 
