@@ -83,12 +83,16 @@ case $status in
         echo ${chunk}
 
         outName=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}_${version}.out
+		wTHICKOutName=${merlinout}/${samplename}_${eName}_healthy_wTHICK_${chr}_${chunk}_${version}.out
 		noSAOutName=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}_${version}.out
         outTBLName=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}.tbl
+		wTHICKOutTBLName=${merlinout}/${samplename}_${eName}_healthy_wTHICK_${chr}_${chunk}.tbl
 		noSAOutTBLName=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}.tbl
         outNamePrefix=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}
+		wTHICKOutNamePrefix=${merlinout}/${samplename}_${eName}_healthy_wTHICK_${chr}_${chunk}
 		noSAOutNamePrefix=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy.dat
+		wTHICKDatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy_wTHICK.dat
 		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_healthy.ped
 
@@ -98,6 +102,10 @@ case $status in
        		${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${datFileName} --useCovariates --tabulate  --prefix ${outNamePrefix} > ${outName}
        		gzip ${outTBLName}
         	gzip ${outName}
+			echo ${wTHICKOutName}
+       		${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${wTHICKDatFileName} --useCovariates --tabulate  --prefix ${wTHICKOutNamePrefix} > ${wTHICKOutName}
+       		gzip ${wTHICKOutTBLName}
+        	gzip ${wTHICKOutName}
 			echo ${noSAOutName}
        		${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${noSADatFileName} --useCovariates --tabulate  --prefix ${noSAOutNamePrefix} > ${noSAOutName}
        		gzip ${noSAOutTBLName}
@@ -107,6 +115,9 @@ case $status in
 		echo "${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${datFileName} --useCovariates --tabulate  --prefix ${outNamePrefix} > ${outName}" >> Step1_Manual_GWAS.txt
 		echo "gzip ${outTBLName}" >> Step2_Manual_GZIP.txt
 		echo "gzip ${outName}" >> Step2_Manual_GZIP.txt
+		echo "${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${wTHICKDatFileName} --useCovariates --tabulate  --prefix ${wTHICKOutNamePrefix} > ${wTHICKOutName}" >> Step1_Manual_GWAS.txt
+		echo "gzip ${wTHICKOutTBLName}" >> Step2_Manual_GZIP.txt
+		echo "gzip ${wTHICKOutName}" >> Step2_Manual_GZIP.txt
 		echo "${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${noSADatFileName} --useCovariates --tabulate  --prefix ${noSAOutNamePrefix} > ${noSAOutName}" >> Step1_Manual_GWAS.txt
 		echo "gzip ${noSAOutTBLName}" >> Step2_Manual_GZIP.txt
 		echo "gzip ${noSAOutName}" >> Step2_Manual_GZIP.txt
@@ -150,13 +161,17 @@ case $status in
 
         ###### run healthy and disease -- full group
         outName=${merlinout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}_${version}.out
+		wTHICKOutName=${merlinout}/${samplename}_${eName}_mixedHD_wTHICK_${chr}_${chunk}_${version}.out
         noSAOutName=${merlinout}/${samplename}_${eName}_mixedHD_noSA_${chr}_${chunk}_${version}.out
         outTBLName=${merlinout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}.tbl
+		wTHICKOutTBLName=${merlinout}/${samplename}_${eName}_mixedHD_wTHICK_${chr}_${chunk}.tbl
         noSAOutTBLName=${merlinout}/${samplename}_${eName}_mixedHD_noSA_${chr}_${chunk}.tbl
         outNamePrefix=${merlinout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}
+		wTHICKOutNamePrefix=${merlinout}/${samplename}_${eName}_mixedHD_wTHICK_${chr}_${chunk}
 		noSAOutNamePrefix=${merlinout}/${samplename}_${eName}_mixedHD_noSA_${chr}_${chunk}
 
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup.dat
+		wTHICKDatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup_wTHICK.dat
 		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_fullGroup.ped
 
@@ -165,6 +180,10 @@ case $status in
        		${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${datFileName} --useCovariates --tabulate  --prefix ${outNamePrefix} > ${outName}
        		gzip ${outTBLName}
         	gzip ${outName}
+			echo ${wTHICKOutName}
+       		${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${wTHICKDatFileName} --useCovariates --tabulate  --prefix ${wTHICKOutNamePrefix} > ${wTHICKOutName}
+       		gzip ${wTHICKOutTBLName}
+        	gzip ${wTHICKOutName}
 			echo ${noSAOutName}
        		${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${noSADatFileName} --useCovariates --tabulate  --prefix ${noSAOutNamePrefix} > ${noSAOutName}
        		gzip ${noSAOutTBLName}
@@ -174,6 +193,9 @@ case $status in
 		echo "${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${datFileName} --useCovariates --tabulate  --prefix ${outNamePrefix} > ${outName}" >> Step1_Manual_GWAS.txt
 		echo "gzip ${outTBLName}" >> Step2_Manual_GZIP.txt
 		echo "gzip ${outName}" >> Step2_Manual_GZIP.txt
+		echo "${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${wTHICKDatFileName} --useCovariates --tabulate  --prefix ${wTHICKOutNamePrefix} > ${wTHICKOutName}" >> Step1_Manual_GWAS.txt
+		echo "gzip ${wTHICKOutTBLName}" >> Step2_Manual_GZIP.txt
+		echo "gzip ${wTHICKOutName}" >> Step2_Manual_GZIP.txt
 		echo "${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${noSADatFileName} --useCovariates --tabulate  --prefix ${noSAOutNamePrefix} > ${noSAOutName}" >> Step1_Manual_GWAS.txt
 		echo "gzip ${noSAOutTBLName}" >> Step2_Manual_GZIP.txt
 		echo "gzip ${noSAOutName}" >> Step2_Manual_GZIP.txt
@@ -181,12 +203,16 @@ case $status in
 
         ###### run healthy only
         outName=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}_${version}.out
+		wTHICKOutName=${merlinout}/${samplename}_${eName}_healthy_wTHICK_${chr}_${chunk}_${version}.out
         noSAOutName=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}_${version}.out
         outTBLName=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}.tbl
+		wTHICKOutTBLName=${merlinout}/${samplename}_${eName}_healthy_wTHICK_${chr}_${chunk}.tbl
         noSAOutTBLName=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}.tbl
         outNamePrefix=${merlinout}/${samplename}_${eName}_healthy_${chr}_${chunk}
+		wTHICKOutNamePrefix=${merlinout}/${samplename}_${eName}_healthy_wTHICK_${chr}_${chunk}
         noSAOutNamePrefix=${merlinout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy.dat
+		wTHICKDatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy_wTHICK.dat
         noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_healthy.ped
 
@@ -195,6 +221,10 @@ case $status in
        		${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${datFileName} --useCovariates --tabulate  --prefix ${outNamePrefix} > ${outName}
        		gzip ${outTBLName}
         	gzip ${outName}
+			echo ${wTHICKOutName}
+       		${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${wTHICKDatFileName} --useCovariates --tabulate  --prefix ${wTHICKOutNamePrefix} > ${wTHICKOutName}
+       		gzip ${wTHICKOutTBLName}
+        	gzip ${wTHICKOutName}
 			echo ${noSAOutName}
        		${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${noSADatFileName} --useCovariates --tabulate  --prefix ${noSAOutNamePrefix} > ${noSAOutName}
        		gzip ${noSAOutTBLName}
@@ -204,6 +234,9 @@ case $status in
 		echo "${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${datFileName} --useCovariates --tabulate  --prefix ${outNamePrefix} > ${outName}" >> Step1_Manual_GWAS.txt
 		echo "gzip ${outTBLName}" >> Step2_Manual_GZIP.txt
 		echo "gzip ${outName}" >> Step2_Manual_GZIP.txt
+		echo "${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${wTHICKDatFileName} --useCovariates --tabulate  --prefix ${wTHICKOutNamePrefix} > ${wTHICKOutName}" >> Step1_Manual_GWAS.txt
+		echo "gzip ${wTHICKOutTBLName}" >> Step2_Manual_GZIP.txt
+		echo "gzip ${wTHICKOutName}" >> Step2_Manual_GZIP.txt
 		echo "${run_merlin}/merlin-1.1.2/executables/merlin-offline -m ${fileMap} -f ${fileFreq} --pedinfer ${filePed} --datinfer ${fileDat} -p ${ped_connect},${pedFileName} -d ${dat_connect},${noSADatFileName} --useCovariates --tabulate  --prefix ${noSAOutNamePrefix} > ${noSAOutName}" >> Step1_Manual_GWAS.txt
 		echo "gzip ${noSAOutTBLName}" >> Step2_Manual_GZIP.txt
 		echo "gzip ${noSAOutName}" >> Step2_Manual_GZIP.txt
