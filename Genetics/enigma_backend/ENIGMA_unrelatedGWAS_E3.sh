@@ -50,8 +50,10 @@ case $status in
         chunk=$(basename  ${fileInfo} | awk -F '-' '{print $1}')
 
         outName=${mach2qtlout}/${samplename}_${eName}_healthy_${chr}_${chunk}_${version}.out
+		wTHICKOutName=${mach2qtlout}/${samplename}_${eName}_healthy_wTHICK_${chr}_${chunk}_${version}.out
 		noSAOutName=${mach2qtlout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}_${version}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy.dat
+		wTHICKDatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy_wTHICK.dat
 		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_healthy.ped
 		
@@ -59,12 +61,17 @@ case $status in
         	echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}"
         	${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}
         	gzip -f ${outName}
+			echo "${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}"
+        	${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}
+        	gzip -f ${wTHICKOutName}
 			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}"
 			${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}
 			gzip -f ${noSAOutName}
 		else
 			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
+			echo "${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}" >> Step1_Manual_GWAS.txt
+			echo "gzip -f ${wTHICKOutName}" >> Step2_Manual_GZIP.txt
 			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${noSAOutName}" >> Step2_Manual_GZIP.txt
 		fi
@@ -80,20 +87,27 @@ case $status in
         chunk=$(basename  ${fileInfo} | awk -F '-' '{print $1}')
 
         outName=${mach2qtlout}/${samplename}_${eName}_disease_${chr}_${chunk}_${version}.out
+		wTHICKOutName=${mach2qtlout}/${samplename}_${eName}_disease_wTHICK_${chr}_${chunk}_${version}.out
 		noSAOutName=${mach2qtlout}/${samplename}_${eName}_disease_noSA_${chr}_${chunk}_${version}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_patients.dat
+		wTHICKDatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_patients_wTHICK.dat
 		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_patients_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_patients.ped
 		if [ "$mode" == "run" ]; then
        	 	echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}"
        	 	${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}
        	 	gzip -f ${outName}
+			echo "${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}"
+       	 	${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}
+       	 	gzip -f ${wTHICKOutName}
 			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}"
        	 	${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}
        	 	gzip -f ${noSAOutName}
 		else
 			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
+			echo "${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}" >> Step1_Manual_GWAS.txt
+			echo "gzip -f ${wTHICKOutName}" >> Step2_Manual_GZIP.txt
 			echo "${run_machdir}/executables/mach2qtl --datfile ${saDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${noSAOutName}" >> Step2_Manual_GZIP.txt
 		fi
@@ -111,40 +125,54 @@ case $status in
 
         ###### run healthy and disease -- full group
         outName=${mach2qtlout}/${samplename}_${eName}_mixedHD_${chr}_${chunk}_${version}.out
+		wTHICKOutName=${mach2qtlout}/${samplename}_${eName}_mixedHD_wTHICK_${chr}_${chunk}_${version}.out
 		noSAOutName=${mach2qtlout}/${samplename}_${eName}_mixedHD_noSA_${chr}_${chunk}_${version}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup.dat
+		wTHICKDatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup_wTHICK.dat
 		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_fullGroup_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_fullGroup.ped
 		if [ "$mode" == "run" ]; then
         	echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}"
         	${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}
         	gzip -f ${outName}
+			echo "${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}"
+        	${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}
+        	gzip -f ${wTHICKOutName}
 			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}"
         	${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}
         	gzip -f ${noSAOutName}
 		else
 			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
+			echo "${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}" >> Step1_Manual_GWAS.txt
+			echo "gzip -f ${wTHICKOutName}" >> Step2_Manual_GZIP.txt
 			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${noSAOutName}" >> Step2_Manual_GZIP.txt	
 		fi
 
         ###### run healthy only
         outName=${mach2qtlout}/${samplename}_${eName}_healthy_${chr}_${chunk}_${version}.out
+		wTHICKOutName=${mach2qtlout}/${samplename}_${eName}_healthy_wTHICK_${chr}_${chunk}_${version}.out
 		noSAOutName=${mach2qtlout}/${samplename}_${eName}_healthy_noSA_${chr}_${chunk}_${version}.out
         datFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy.dat
+		wTHICKDatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy_wTHICK.dat
 		noSADatFileName=${peddatdir}/ENIGMA_${eName}_DATfile_healthy_noSA.dat
         pedFileName=${peddatdir}/ENIGMA_${eName}_PEDfile_healthy.ped
 		if [ "$mode" == "run" ]; then
         	echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}"
         	${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}
         	gzip -f ${outName}
+			echo "${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}"
+        	${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}
+        	gzip -f ${wTHICKOutName}
 			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}"
         	${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}
         	gzip -f ${noSAOutName}
 		else
 			echo "${run_machdir}/executables/mach2qtl --datfile ${datFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${outName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${outName}" >> Step2_Manual_GZIP.txt
+			echo "${run_machdir}/executables/mach2qtl --datfile ${wTHICKDatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${wTHICKOutName}" >> Step1_Manual_GWAS.txt
+			echo "gzip -f ${wTHICKOutName}" >> Step2_Manual_GZIP.txt
 			echo "${run_machdir}/executables/mach2qtl --datfile ${noSADatFileName} --pedfile ${pedFileName} --infofile ${fileInfo} --dosefile ${fileDose} --samplesize > ${noSAOutName}" >> Step1_Manual_GWAS.txt
 			echo "gzip -f ${noSAOutName}" >> Step2_Manual_GZIP.txt
 		fi
