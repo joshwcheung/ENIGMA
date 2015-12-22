@@ -399,22 +399,31 @@ writeLines(paste('     -', cbind(colnames(FullInfoFile)[(Nset+1):nVar])),con=zz,
 
 test=NULL
 for (val in (Nids+1):(Nids+Nrois) ) {
+
+A=as.numeric(FullInfoFile[,val])
+if ( length(which(is.na(A))) > 0) {
+	A=A[-which(is.na(A))]
+}
 test=rbind(test,cbind(colnames(FullInfoFile)[val],
-(mean(as.numeric(FullInfoFile[,val]))),
-(sd(as.numeric(FullInfoFile[,val]))),
-(min(as.numeric(FullInfoFile[,val]))),
-(max(as.numeric(FullInfoFile[,val])))))
+(mean(as.numeric(A))),
+(sd(as.numeric(A))),
+(min(as.numeric(A))),
+(max(as.numeric(A)))))
 }
 header=(c('ROI','Mean','SD','Min','Max'))
 write.table(test,file=zz,quote=F,col.names=header,row.names=FALSE,sep = "\t");
 
 test=NULL
 for (val in (Nset+1):nVar ) {
+A=as.numeric(FullInfoFile[,val])
+if ( length(which(is.na(A))) > 0) {
+	A=A[-which(is.na(A))]
+}
 test=rbind(test,cbind(colnames(FullInfoFile)[val],
-(mean(as.numeric(FullInfoFile[,val]))),
-(sd(as.numeric(FullInfoFile[,val]))),
-(min(as.numeric(FullInfoFile[,val]))),
-(max(as.numeric(FullInfoFile[,val])))))
+(mean(as.numeric(A))),
+(sd(as.numeric(A))),
+(min(as.numeric(A))),
+(max(as.numeric(A)))))
 }
 header=(c('Covariate','Mean','SD','Min','Max'))
 write.table(test,file=zz,quote=F,col.names=header,row.names=FALSE,sep = "\t");
