@@ -170,6 +170,10 @@ if (related==0) {
 columnnames = colnames(merged_temp);
 age=as.numeric(merged_temp[,which(columnnames==ageColumnHeader)])
 age_mean=mean(age)
+age_md=median(age)
+min_age=min(age)
+max_age=max(age)
+
 ageC=(age-age_mean)
 ageCsq=ageC*ageC
 
@@ -182,6 +186,17 @@ sexC[-males]<- 0.5
 StandardSex=data.frame("Sex"=sexC)
 StandardSex[which(sexC==-.5),]<- 1
 StandardSex[which(sexC==.5),]<- 2
+
+Nm=length(which(sexC==-.5))
+Nf=length(which(sexC==.5))
+
+writeLines(paste('Distribution stats for age in the full group:'),con=zz,sep="\n")
+writeLines(paste('		mean:',age_mean),con=zz,sep="\n")
+writeLines(paste('		median:',age_md),con=zz,sep="\n")
+writeLines(paste('		min:',min_age),con=zz,sep="\n")
+writeLines(paste('		max:',max_age),con=zz,sep="\n")
+writeLines(paste('There are',Nm,'males in this study.'),con=zz,sep="\n")
+writeLines(paste('There are',Nf,'females in this study.'),con=zz,sep="\n")
 
 age_sexC=age*sexC
 ageCsq_sexC=ageCsq*sexC
@@ -215,15 +230,18 @@ merged_temp_rest=merged_temp_rest[,-which(columnnames=="FID")]
 columnnames = colnames(merged_temp_rest);
 merged_temp_rest=merged_temp_rest[,-which(columnnames=="IID")]
 columnnames = colnames(merged_temp_rest);
-if (length(merged_temp_rest[,-which(columnnames=="MID")]) > 0) {
+if (length(merged_temp_rest[,which(columnnames=="MID")]) > 0) {
     merged_temp_rest=merged_temp_rest[,-which(columnnames=="MID")]
 }
-if (length(merged_temp_rest[,-which(columnnames=="PID")]) > 0) {
+columnnames = colnames(merged_temp_rest);
+if (length(merged_temp_rest[,which(columnnames=="PID")]) > 0) {
     merged_temp_rest=merged_temp_rest[,-which(columnnames=="PID")]
 }
-if (length(merged_temp_rest[,-which(columnnames=="zygosity")]) > 0) {
+columnnames = colnames(merged_temp_rest);
+if (length(merged_temp_rest[,which(columnnames=="zygosity")]) > 0) {
     merged_temp_rest=merged_temp_rest[,-which(columnnames=="zygosity")]
 }
+columnnames = colnames(merged_temp_rest);
 
 VarNames=names(merged_temp_rest)
 
@@ -262,7 +280,8 @@ if (patients!=0) {
 
 #Remove covariates with sd = 0 keeping the patient column if it exists
 for (l in (Nset+1):length(VarNames)){
-    if (sd(as.numeric(FullInfoFile[,l]))==0 ) {
+      columnnames = colnames(FullInfoFile);
+    if (sd(as.numeric(FullInfoFile[,which(columnnames==VarNames[l])]))==0) {
         if (patients==1 && VarNames[l]== "AffectionStatus") {
 			next
     	} else if (patients!=0 && VarNames[l] == patients ) {
@@ -323,7 +342,7 @@ if (patients!=0) {
 
     FullInfoFile_healthy <- subset(FullInfoFile,AffectionStatus==0);
     if (nrow(subset(FullInfoFile,AffectionStatus==0)) > 0) {
-    VarNames=names(FullInfoFile_healthy)
+    VarNames=colnames(FullInfoFile_healthy)
     columnnames = colnames(FullInfoFile_healthy);
     for (l in (Nset+1):length(VarNames)){
         columnnames = colnames(FullInfoFile_healthy);
@@ -334,7 +353,7 @@ if (patients!=0) {
     }
     }
     FullInfoFile_disease <- subset(FullInfoFile,AffectionStatus==1);
-    VarNames=names(FullInfoFile_disease)
+    VarNames=colnames(FullInfoFile_disease)
     columnnames = colnames(FullInfoFile_disease);
     for (l in (Nset+1):length(VarNames)){
         columnnames = colnames(FullInfoFile_disease);
@@ -376,6 +395,29 @@ cat('    There are ',nCov,' covariates for all subjects\n')
 writeLines(paste('    There are ',numsubjects,' total subjects.'),con=zz,sep="\n")
 writeLines(paste('    There are ',nCov,' covariates for all subjects.'),con=zz,sep="\n")
 writeLines(paste('     -', cbind(colnames(FullInfoFile)[(Nset+1):nVar])),con=zz,sep="\n")
+
+
+test=NULL
+for (val in (Nids+1):(Nids+Nrois) ) {
+test=rbind(test,cbind(colnames(FullInfoFile)[val],
+(mean(as.numeric(FullInfoFile[,val]))),
+(sd(as.numeric(FullInfoFile[,val]))),
+(min(as.numeric(FullInfoFile[,val]))),
+(max(as.numeric(FullInfoFile[,val])))))
+}
+header=(c('ROI','Mean','SD','Min','Max'))
+write.table(test,file=zz,quote=F,col.names=header,row.names=FALSE,sep = "\t");
+
+test=NULL
+for (val in (Nset+1):nVar ) {
+test=rbind(test,cbind(colnames(FullInfoFile)[val],
+(mean(as.numeric(FullInfoFile[,val]))),
+(sd(as.numeric(FullInfoFile[,val]))),
+(min(as.numeric(FullInfoFile[,val]))),
+(max(as.numeric(FullInfoFile[,val])))))
+}
+header=(c('Covariate','Mean','SD','Min','Max'))
+write.table(test,file=zz,quote=F,col.names=header,row.names=FALSE,sep = "\t");
 
 ################ now print out the .dat and the .ped files
 #
