@@ -26,8 +26,6 @@
 
 options(stringsAsFactors = FALSE)
 
-versionDate=20151222
-
 # Output files will include .dat and .ped files with all necessary covariates
 # standard covariates include age, sex, age^2, age-x-sex, age^2-x-sex, and 4 MDS components
 ###### sex and interaction terms not included if single-sex study
@@ -136,7 +134,7 @@ if (Ldups > 0){
 
 numsubjects = length(merged_temp$IID);
 
-writeLines(paste0('VERSION: ',substr(versionDate,5,6),'/',substr(versionDate,7,8),'/',substr(versionDate,0,4)),con=zz,sep="\n")
+writeLines(paste0('VERSION: ',format(Sys.Date(),"%m/%d/%Y")),con=zz,sep="\n")
 
 ### if no related individuals, create dummy paternal and maternal IDs
 # otherwise break to make sure these are entered
@@ -433,9 +431,9 @@ if ( dim(FullInfoFile_healthy)[1] > 0 ){
 write.table(FullInfoFile_healthy,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_healthy.ped",sep=""),quote=F,col.names=F,row.names=F);
 write.table(FullInfoFile_healthy,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_healthy.tbl",sep=""),quote=F,col.names=T,row.names=F);
 write.table(colnames(FullInfoFile_healthy),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_healthy.header",sep=""),quote=F,col.names=F,row.names=F);
-write.table(cbind(c(rep("T",Nrois-36),rep("S",34),"C","S",rep("C",nCov_healthy)),c(colnames(FullInfoFile_healthy)[(Nids+1):nVar_healthy])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_healthy.dat",sep=""),col.names=F,row.names=F,quote=F);
+write.table(cbind(c(rep("T",Nrois-36),rep("S",34),"C","S",rep("C",nCov_healthy)),c(colnames(FullInfoFile_healthy)[(Nids+1):nVar_healthy])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_healthy_wSA.dat",sep=""),col.names=F,row.names=F,quote=F);
 write.table(cbind(c(rep("S",Nrois-36),rep("T",34),"S","C",rep("C",nCov_healthy)),c(colnames(FullInfoFile_healthy)[(Nids+1):nVar_healthy])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_healthy_wTHICK.dat",sep=""),col.names=F,row.names=F,quote=F);
-write.table(cbind(c(rep("T",Nrois),rep("C",nCov_healthy)),c(colnames(FullInfoFile_healthy)[(Nids+1):nVar_healthy])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_healthy_noSA.dat",sep=""),col.names=F,row.names=F,quote=F);
+write.table(cbind(c(rep("T",Nrois),rep("C",nCov_healthy)),c(colnames(FullInfoFile_healthy)[(Nids+1):nVar_healthy])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_healthy_wo.dat",sep=""),col.names=F,row.names=F,quote=F);
 } else {
     cat('    There are no healthy individuals in this group. \n')
     writeLines(paste('    There are no healthy individuals in this group.'),con=zz,sep="\n")
@@ -451,9 +449,9 @@ if (patients!=0) {
 		writeLines(paste('     -', colnames(FullInfoFile_healthy)[(Nset+1):nVar_healthy]),con=zz,sep="\n")
 		
 		
-		write.table(cbind(c(rep("T",Nrois-36),rep("S",34),"C","S",rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup.dat",sep=""),col.names=F,row.names=F,quote=F);
+		write.table(cbind(c(rep("T",Nrois-36),rep("S",34),"C","S",rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup_wSA.dat",sep=""),col.names=F,row.names=F,quote=F);
 		write.table(cbind(c(rep("S",Nrois-36),rep("T",34),"S","C",rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup_wTHICK.dat",sep=""),col.names=F,row.names=F,quote=F);
-		write.table(cbind(c(rep("T",Nrois),rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup_noSA.dat",sep=""),col.names=F,row.names=F,quote=F);
+		write.table(cbind(c(rep("T",Nrois),rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup_wo.dat",sep=""),col.names=F,row.names=F,quote=F);
 		write.table(FullInfoFile,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_fullGroup.ped",sep=""),quote=F,col.names=F,row.names=F);
 		write.table(FullInfoFile,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_fullGroup.tbl",sep=""),quote=F,col.names=T,row.names=F);
 		write.table(colnames(FullInfoFile),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_fullGroup.header",sep=""),quote=F,col.names=F,row.names=F);
@@ -469,9 +467,9 @@ if (patients!=0) {
 		write.table(FullInfoFile_disease,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_patients.ped",sep=""),quote=F,col.names=F,row.names=F);
 		write.table(FullInfoFile_disease,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_patients.tbl",sep=""),quote=F,col.names=T,row.names=F);
 		write.table(colnames(FullInfoFile_disease),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_patients.header",sep=""),quote=F,col.names=F,row.names=F);
-		write.table(cbind(c(rep("T",Nrois-36),rep("S",34),"C","S",rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients.dat",sep=""),col.names=F,row.names=F,quote=F);
+		write.table(cbind(c(rep("T",Nrois-36),rep("S",34),"C","S",rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients_wSA.dat",sep=""),col.names=F,row.names=F,quote=F);
 		write.table(cbind(c(rep("S",Nrois-36),rep("T",34),"S","C",rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients_wTHICK.dat",sep=""),col.names=F,row.names=F,quote=F);
-		write.table(cbind(c(rep("T",Nrois),rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients_noSA.dat",sep=""),col.names=F,row.names=F,quote=F);
+		write.table(cbind(c(rep("T",Nrois),rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients_wo.dat",sep=""),col.names=F,row.names=F,quote=F);
 	}
 }
 #### print connecting files if related for MERLIN-offline
