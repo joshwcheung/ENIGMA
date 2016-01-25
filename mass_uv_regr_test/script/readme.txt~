@@ -1,0 +1,103 @@
+---README for mass_uv_regr package of scripts---
+
+Dmitry Isaev
+Boris Gutman
+Neda Jahanshad
+
+Beta version for testing on sites.
+ENIGMA Project, 3.1.015
+-----------------------------------------------
+
+1. Package consists of 3 files:
+	mass_uv_regr.R - script for processing all the data
+	mass_uv_regr_IGC_shapes.sh - wrapper that can be used with qsub for running over the shape data
+	mass_uv_regr_IGC_csv.sh - wrapper that can be used with qsub for running over the csv data
+
+mass_uv_regr.R script SHOULD NOT BE CHANGED.
+.sh scripts should be changed to have your data.
+
+2. Installation. 
+2.1 Prerequisites. R libraries:
+The following packages should be installed for R:
+	matrixStats
+	RCurl
+	ppcor
+2.2 Configuring the shell script.
+2.2.1 Line 3 #$ -o /path_to_your_home_dir/log -j y
+	- will write qsub log into that folder, into the file with name 'log'
+2.2.2 Section 1:
+	scriptDir - directory of the script itself (the folder containing .sh and .R scripts
+	resDir - directory for results
+	logDir - directory for logs
+2.2.3 Section 2. Main configuration section
+	RUN_ID="IJSHAPES"
+	CONFIG_PATH="https://docs.google.com/spreadsheets/d/1AxtW4xN8ETZUHvztqqkF0jD68Mm_5SNPWV2Y6HPFrh8"
+	
+	CONFIG_PATH is the path to Google Sheets documents which contains the links to 2 other documents as well as Study ID, type (csv/raw) and Traits to be examined.
+	RUN_ID - should be the same as the STUDY ID of interest in the Google Sheet.
+	
+	The script will take the links from the line of config file with RUN_ID and will run the models from these files.
+
+	SITE="indiana" - the name of site - the postfix for the resulting files
+	DATADIR="/ifs/loni/faculty/thompson/four_d/disaev/Indiana_Joint/data/" - folder where the data resides.
+	ROI_LIST - list of ROIs (have pre-set value for shapes and csv, maybe no need to change it)
+	SUBJECTS_COV=path to your local subjects file
+	EXCLUDE_FILE=path to file with excluded subjects for each ROI (if you have one)
+	SHAPE_METR_PREFIX - prefix for files with metrics (for instance if you have all files named as metr_FA.csv, metr_MD.csv, metr_AD.csv, etc)
+(!!!)	Nnodes - number of nodes used for computation. This number should match with that you set in qsub command: qsub -q .... -t 1-"Nnodes" mass_uv_regr_...sh
+	if you do not use grid and use just shell execution - use Nnodes=1. Otherwise set the number of nodes up to the number of ROIs.
+2.2.4 Section 5. 
+	Rbin - put here the path to R binary ( for which you installed the packages)
+3. Configuring the linear models and descriptive statistics. Link to those are in the Google Dovs file specified by CONFIG_PATH
+
+3.1 Configuring the linear models Google Sheet. For example see https://docs.google.com/spreadsheets/d/1N98u4C_Tl2jaW_bFDtkdatOdfHNoR2NBAs60UWqL9YM
+3.1.1 ID
+- ID of each distinct linear model, results are written to the file with the name {GROUP_ID}_{SHAPE_METRICS}_{ROI}_{ID}_{SitePostfix}.csv, where SHAPE_METRICS={LogJacs|thick|FA|MD|etc...} 
+3.1.2 Name
+- for your own purposes, not used in the script.
+3.1.3 LM
+- the actual linear model, expressed in R syntax.
+The names of the variables MUST EXACTLY MATCH those in the covariates file (see Subject_Path, p.6) 
+Categorical variables should be embedded as 'factor(variable)'.
+3.1.4 MainFactor
+the factor for which hypothesis is tested.
+if factor appears as 'factor(variable)' - then a T-test for beta is performed.
+if factor appears as 'variable' - partial correlation between shape_metric and a variable is performed, taking into consideration ALL other variables in model.
+3.1.5 Filters_1, Filters_3.1.
+- filters which should be applied to the data before fitting the linear model. Variables should be separated from other syntax with DOUBLE UNDERSCORE ON BOTH SIDES: __Variable__
+3.1.6 Filters_3 - not used.
+3.1.7 SiteRegressors - used if multiple Site variables present in covariates file (e.g. Site1,Site3.1., etc).
+if 'all' is put into the field, all variables named like 'SiteN' are added to the model as regressors. if there's no such variables, no regressors will be added.
+3.1.8 NewRegressors 
+ONLY FOR VERY EXPERIENCED USERS :)))
+New variables that can be created from existing. Applied befor filtering, so new regressors can be used for filtering
+3.1.9 ContValue,PatValue - value of variables used for t-test for 'factor' variable. By default, 0 and 1. If your variable like 'factor(ATBN)' is istead taking values '3.1.' and '3' you should put these values in the ContValue and PatValue fields.
+3.1.10 Active.
+SETS IF THE LINE WILL BE EXECUTED BY THE SCRIPT.
+If you want some lines to be omitted in the run, for debugging purposes, set ACTIVE to 0.
+3.1.11 Comments. 
+Anything you like.
+3.1.12 ContMin,PatMin - minimum amount of elements in controls/patient groups needed to run the test
+3.1.13 SaveLM - should either be 1 or 0. If set to 1, then the linear models in R format are saved to the .RData variable (with the  name {GROUP_ID}_{SHAPE_METRICS}_LM_{ROI}_{ID}_{SitePostfix}.Rdata) in the results folder
+
+4. Configuring descriptive statistics configuration. For Example see https://docs.google.com/spreadsheets/d/11sVXxrtfUf-YzppDpW96IODaVbi5itXtfzGHy9tIVmE
+4.1 Type
+One of three: SHAPE_METRICS,COV,NUM.
+SHAPE_METRICS - statistics gathered from shape metrics (LogJacs, thick)
+COV - statistics gathered from covariates
+NUM - number of elements in the group.
+4.2 varname - name of the variable.
+for SHAPE_metrics section the resulting varname looks like: varname.statsName (e.g. patients.mu.raw, patients.sd.raw, etc).
+for COV metrics section the resulting varname looks like: varname.statsName.Postfix(e.g. age.mu.all,age.sd.all,age.mu.dx0,age.sd.dx0, etc)
+for NUM metrics the resulting varname looks like: varname.StatsName (e.g. n.fem,n.mal,n.fem.dx0, etc)
+4.4. Filter - same principle as in (p. 2.5) - will be applied before the statistics is computed).
+4.4 Stats, StatsNames - DON't CHANGE IT, let it work as it is. it basically tekks R to gather the statistics (mean, sd, range) and put it into variable names (varname.mu, varname.sd, varname.range).
+4.5 SepFile - DEPRECATED IN CURRENT VERSION. sets if the statistics should be gathered in separate .Rdata file.
+4.6 Active - same as (p. 2.10) - the statistics is active only if this field is set to 1.
+4.7 Covariate - for COV section tells the name of the Covariate from which to extract the data. Should EXACTLY match the covariate field name (see p. 6)
+4.8 Postfix - already explained in (p. 4.2)
+
+5. Running the script.
+JUST Q-SUB it!
+qsub -t 1-#N# -q medium.q mass_uv_regr_IGC_csv.sh, where #N# is the Number of ROI in your ROI_LIST variable
+
