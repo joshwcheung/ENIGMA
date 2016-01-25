@@ -15,9 +15,9 @@
 #-----------------------------------------------
 
 #---Section 1. Script directories
-scriptDir=/ifs/loni/faculty/thompson/four_d/disaev/mass_uv_regr_test/script
-resDir=/ifs/loni/faculty/thompson/four_d/disaev/mass_uv_regr_test/res
-logDir=/ifs/loni/faculty/thompson/four_d/disaev/mass_uv_regr_test/log
+scriptDir=/ifshome/disaev/ENIGMA/mass_uv_regr_test/script
+resDir=/ifshome/disaev/testres
+logDir=/ifshome/disaev/testlog
 
 if [ ! -d $scriptDir ]
 then
@@ -72,6 +72,8 @@ fi
 #---Section 4. DO NOT EDIT. qsub variable ---
 #cur_roi=${ROI_LIST[${SGE_TASK_ID}-1]}  
 Nroi=${#ROI_LIST[@]}	
+
+SGE_TASK_ID=${PBS_TASK_ID:-$SGE_TASK_ID}
 
 if [ $Nnodes == 1 ]
 then

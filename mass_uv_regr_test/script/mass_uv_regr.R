@@ -13,7 +13,7 @@
 library(ppcor)
 library(matrixStats)
 # uncomment when moments library is installed..
-# library(moments)
+library(moments)
 #--0.
 require(RCurl)
 
@@ -509,11 +509,13 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
               cat("KURTOSIS is only applicable to csv data")
               next              
             }
-            # Comment out next 2 lines when 'moments' library is installed.
-            cat ("'moments' library is not installed. Skipping kurtosis computation.\n")
-            stVarToSave[iCur]=NA
-            next
-            #eval(parse(text=paste(var,'.',stVars[iCur],'=','kurtosis(dsMetrics$V1[!is.na(dsMetrics$V1)])',sep='')))  
+            # Comment out next 3 lines when 'moments' library is installed.
+            #cat ("'moments' library is not installed. Skipping kurtosis computation.\n")
+            #stVarToSave[iCur]=NA
+            #next
+	    
+ 	    #Uncomment next line when 'moments' library is installed.
+            eval(parse(text=paste(var,'.',stVars[iCur],'=','kurtosis(dsMetrics$V1[!is.na(dsMetrics$V1)])',sep='')))  
             
           }
           else if (stFunc[iCur]=="skewness"){
@@ -521,11 +523,13 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
               cat("SKEWNESS is only applicable to csv data")
               next              
             }
-            # Comment out next 2 lines when 'moments' library is installed.
-            cat ("'moments' library is not installed. Skipping skewness computation.\n")
-            stVarToSave[iCur]=NA
-            next
-            #eval(parse(text=paste(var,'.',stVars[iCur],'=','skewness(dsMetrics$V1[!is.na(dsMetrics$V1)])',sep='')))              
+            # Comment out next 3 lines when 'moments' library is installed.
+            #cat ("'moments' library is not installed. Skipping skewness computation.\n")
+            #stVarToSave[iCur]=NA
+            #next
+
+	    #Uncomment next line when 'moments' library is installed.
+            eval(parse(text=paste(var,'.',stVars[iCur],'=','skewness(dsMetrics$V1[!is.na(dsMetrics$V1)])',sep='')))              
           }
           else {
             eval(parse(text=paste(var,'.',stVars[iCur],'=',stFunc[iCur],'(data.matrix(dsMetrics[',var,',(ncol(dsSubjectsCov)+1):ncol(dsMetrics)]),na.rm=TRUE)',sep='')))
