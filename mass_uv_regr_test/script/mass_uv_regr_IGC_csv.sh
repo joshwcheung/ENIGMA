@@ -38,6 +38,8 @@ fi
 #---Section 2. Configuration variables-----
 
 RUN_ID="SZDTI"
+#CONFIG_PATH for production: https://docs.google.com/spreadsheets/d/1AxtW4xN8ETZUHvztqqkF0jD68Mm_5SNPWV2Y6HPFrh8
+#CONFIG_PATH for testing: https://docs.google.com/spreadsheets/d/142eQItt4C_EJQff56-cpwlUPK7QmPICOgSHfnhGWx-w
 CONFIG_PATH="https://docs.google.com/spreadsheets/d/142eQItt4C_EJQff56-cpwlUPK7QmPICOgSHfnhGWx-w"
 
 SITE="dublin"
