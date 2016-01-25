@@ -27,7 +27,7 @@ The following packages should be installed for R:
 2.2 Configuring the shell script.
 2.2.1 Line 3 #$ -o /path_to_your_home_dir/log -j y
 	- will write qsub log into that folder, into the file with name 'log'
-2.2.2 Section 1:
+c Section 1:
 	scriptDir - directory of the script itself (the folder containing .sh and .R scripts
 	resDir - directory for results
 	logDir - directory for logs
@@ -110,4 +110,24 @@ or
 set the number of nodes (Nnodes variable) to 1 and shell it:
 sh mass_uv_regr_IGC_csv.sh
 
+6. After running the script you may want to concatenate .CSV files from each ROI.
+For this you could use the script: c
+Things you need to configure:
+6.1 Line 3 #$ -o /path_to_your_home_dir/log -j y
+	- same as in mass_uv_regr_IGC.sh, see p. 2.2.1
+6.2 Section 1:
+	scriptDir,
+	resDir,
+	logDir,
+	- same as in mass_uv_regr_IGC.sh, see p. 2.2.2
+6.3 Section 2:
+	RUN_ID,
+	CONFIG_PATH,
+	SITE,
+	- same as in mass_uv_regr_IGC.sh, see p. 2.2.3
+	
+	ROI_LIST - DO NOT CHANGE
+6.4 Running the script:
+sh  same as in mass_uv_regr_IGC.sh, see p. 2.2.2
+6.5 Results: files {GROUP_ID}_{SHAPE_METRICS}_ALL_{MODEL_ID}_{SitePostfix}.csv - all ROI for the same model and same trait concatenated in one file.
 
