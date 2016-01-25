@@ -1,0 +1,2 @@
+load("/Volumes/four_d/disaev/mass_uv_regr_test/res/SZDTI_ALIC_L_SHAPE_METRICS_FA_ALIC_L.RData")
+load("/Volumes/four_d/disaev/mass_uv_regr_test/res/SZDTI_ACR_SHAPE_METRICS_FA_ACR.RData")
