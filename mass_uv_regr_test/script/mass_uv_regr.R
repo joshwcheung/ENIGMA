@@ -652,14 +652,20 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
             
 	    if (dsAnalysisConf$SaveLM[cur_rowAnalysis]==1){
 		    lmList[[cur_vert-nCovariates]]<-lmfit
+		    lmList[[cur_vert-nCovariates]]$model=NA
             }
 	    metaData=c(cur_sm,cur_roi,cur_vertInd)  # -1 because vertexes start from 2nd column
             names(metaData)=c("ShapeMetrics","ROI","Vertex")
-            coeffs=coefficients(lmfit)
-            for (i in 1:length(names(coeffs)))
+            tmp=summary(lmfit)
+	    stes=tmp$coefficients[,2]
+            coeffs=tmp$coefficients[,1]
+#	    coeffs=coefficients(lmfit)
+	    for (i in 1:length(names(coeffs))){
+	      names(stes)[i]<-paste('st_err_',names(coeffs)[i],sep='')
               names(coeffs)[i]<-paste('beta_',names(coeffs)[i],sep='')
+
             # **LM is applied now time for Effect size data processing
-            
+            }
             contvalue=ifelse(!is.na(dsAnalysisConf$ContValue[cur_rowAnalysis])&dsAnalysisConf$ContValue[cur_rowAnalysis]!="",dsAnalysisConf$ContValue[cur_rowAnalysis],0)
             patvalue=ifelse(!is.na(dsAnalysisConf$PatValue[cur_rowAnalysis])&dsAnalysisConf$PatValue[cur_rowAnalysis]!="",dsAnalysisConf$PatValue[cur_rowAnalysis],1)
             
@@ -675,7 +681,7 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
             
             
             #Convert the lm model to a summary format so we can extract statistics
-            tmp=summary(lmfit)
+            
     #       tstat=tmp$coefficients[2,3] # Get t-statistic from regression to convert to Cohens d
             factorName=getTstatFactorName(lmMainFactor,rownames(tmp$coefficients))
             tstat=tmp$coefficients[factorName,3]
@@ -692,11 +698,12 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
               se.cort[cur_vertInd]=tmp$coefficients[factorName,2]  #here se is not derived from Cohen's d, but directly taken from the linear model
               pvalname='p.val_corr'
             }
-            else {
+            else{
               pvalname=paste('p.val_',factorName,sep='')
               #this is the part for factors with levels
               #collect effect size data
-              if((n.controls[cur_vertInd]<contmin)|n.patients[cur_vertInd]<patmin) {
+              if((n.controls[cur_vertInd]<contmin)|(n.patients[cur_vertInd]<patmin))
+		{
                 #this happens when you don't have enough patients and conrols
                 d.cort[cur_vertInd]=NA
                 se.cort[cur_vertInd]=NA
@@ -707,14 +714,36 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
                 std[cur_vertInd]=NA
               }
               else {
-                #this is when you have enough patients and controls - computing cohen's d and standard error
-                d.cort[cur_vertInd]=partial.d(tstat,tstat.df,n.controls[cur_vertInd],n.patients[cur_vertInd])
-                se.cort[cur_vertInd]=se.d2(d.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd])
-                bound.cort=CI1(d.cort[cur_vertInd],se.cort[cur_vertInd])
-                low.ci.cort[cur_vertInd]=bound.cort[1]
-                up.ci.cort[cur_vertInd]=bound.cort[2]
-                pval[cur_vertInd]=tmp$coefficients[factorName,4] #pval is directly taken from linear model                
-              }              
+		cat ("FACTOR NAME: \n")
+		cat(factorName)
+		cat ("lm Main Factor: \n")
+		cat(lmMainFactor)
+		if (length(grep(".*:.*",factorName))>0){
+			d.cort[cur_vertInd]=NA
+		        se.cort[cur_vertInd]=NA
+		        bound.cort=NA
+		        low.ci.cort[cur_vertInd]=NA
+		        up.ci.cort[cur_vertInd]=NA
+			pval[cur_vertInd]=tmp$coefficients[factorName,4] #pval is directly taken from linear model                	
+		}
+		else if (length(unique(lmfit$model[lmMainFactor]))>2) {
+			d.cort[cur_vertInd]=NA
+		        se.cort[cur_vertInd]=NA
+		        bound.cort=NA
+		        low.ci.cort[cur_vertInd]=NA
+		        up.ci.cort[cur_vertInd]=NA
+	                pval[cur_vertInd]=tmp$coefficients[factorName,4] #pval is directly taken from linear model                	
+		}
+		else {
+		        #this is when you have enough patients and controls - computing cohen's d and standard error
+		        d.cort[cur_vertInd]=partial.d(tstat,tstat.df,n.controls[cur_vertInd],n.patients[cur_vertInd])
+		        se.cort[cur_vertInd]=se.d2(d.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd])
+		        bound.cort=CI1(d.cort[cur_vertInd],se.cort[cur_vertInd])
+		        low.ci.cort[cur_vertInd]=bound.cort[1]
+		        up.ci.cort[cur_vertInd]=bound.cort[2]
+		        pval[cur_vertInd]=tmp$coefficients[factorName,4] #pval is directly taken from linear model                
+		}              
+	      }              
             }
               
             
@@ -725,8 +754,8 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
             #create matrix for the effect size for each vertex
             effectSize=c(r.cort[cur_vertInd],d.cort[cur_vertInd],se.cort[cur_vertInd],low.ci.cort[cur_vertInd],up.ci.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd],pval[cur_vertInd])
             
-            names(effectSize)<-c(paste('r_',cur_sm,'_vs_',factorName,sep=''),paste('d_',factorName,sep=''),paste('se_',factorName,sep=''),paste('low.ci_',factorName,sep=''),paste('up.ci_',factorName,sep=''),'n.controls','n.patients',pvalname)
-            resRow<-c(metaData,coeffs,effectSize)
+            names(effectSize)<-c(paste('r_',cur_sm,'_vs_',factorName,sep=''),paste('d_',factorName,sep=''),paste('st_err(d)_',factorName,sep=''),paste('low.ci(d)_',factorName,sep=''),paste('up.ci(d)_',factorName,sep=''),'n.controls','n.patients',pvalname)
+            resRow<-c(metaData,coeffs,stes,effectSize)
             if(!resMatr_created){
               resMatr<-matrix(resRow,nrow=1,ncol=length(resRow),dimnames=list(c(),names(resRow)))
               resMatr_created=TRUE
