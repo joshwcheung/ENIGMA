@@ -16,8 +16,8 @@
 
 #---Section 1. Script directories
 scriptDir=/ENIGMA_Regressions/mass_uv_regr_test/scripts/ # directory where you have downloaded the ENIGMA R scripts
-resDir=/ENIGMA_Regressions/mass_uv_regr_test/results/  # directory where your results will be
-logDir=/ENIGMA_Regressions/mass_uv_regr_test/log/  # directory where your log files will be written
+resDir=/ENIGMA_Regressions/mass_uv_regr_test/results/  # directory where your results have been saved
+logDir=/ENIGMA_Regressions/mass_uv_regr_test/log/  # directory where your log files are
 
 #---Section 2. Configuration variables-----
 
@@ -29,21 +29,24 @@ ROI_LIST_TXT="$scriptDir/roi_list.txt"
 #---Section 5. R binary -- CHANGE this to reflect the full path or your R binary
 Rbin=/usr/local/R-3.1.3/bin/R
 
+##############################################################################################
+## no need to edit below this line!!
+##############################################################################################
 #---Section 6. DO NOT EDIT. Running the R script
 #go into the folder where the script should be run
 if [ ! -d $scriptDir ]
 then
-   mkdir -p $scriptDir
+   "The script directory you indicated does not exist, please recheck this."
 fi
 
 if [ ! -d $resDir ]
 then
-   mkdir -p $resDir
+   "The Results directory you indicated does not exist, please recheck this."
 fi
 
 if [ ! -d $logDir ]
 then
-   mkdir -p $logDir
+   "The Log directory you indicated does not exist, please recheck this."
 fi
 
 
