@@ -10,9 +10,9 @@ please  check our [FAQ](#frequently-asked-questions) to see if your question has
 already been answered.
 
 We have tutorial videos available for running our scripts 
-([run0](https://www.youtube.com/watch?v=hxixl-22Zks), 
-[run1](https://www.youtube.com/watch?v=huCegD-5TLc), 
-[run2](https://www.youtube.com/watch?v=mu-OGpeWcB4)) on our YouTube channel as 
+([run0](https://www.youtube.com/watch?v=mUlhIerJ2HI), 
+[run1](https://www.youtube.com/watch?v=BweGlaNcuos), 
+[run2](https://www.youtube.com/watch?v=TwhLgnBRZiw)) on our YouTube channel as 
 well.
 
 ---
