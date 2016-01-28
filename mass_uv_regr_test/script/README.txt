@@ -114,7 +114,7 @@ You can split this up for parallelized regressions if you Q-SUB it!
 sh mass_uv_regr_csv.sh
 
 6. After running the script you may want to concatenate .CSV files from each ROI.
-For this you could use the script: xxxxxx
+For this you could use the script: concat_mass_uv_regr_csv.sh which calls concat_mass_uv_regr.R
 Things you need to configure:
 
 6.2 Section 1:
