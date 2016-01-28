@@ -51,12 +51,6 @@ ROI<-eval(parse(text=paste('c(',ROI_LIST,')',sep='')))
 Config_Path=cmdargs[6]   #docs.google 
 
 
-#ID='SZDTI'
-#CURRENT_ROI='"ACR","ACR_L","ACR_R","ALIC"' #,"ALIC_L","ALIC_R","AverageFA","BCC"'#,"CC","CGC","CGC_L","CGC_R","CGH","CGH_L","CGH_R","CR","CR_L","CR_R","CST","CST_L","CST_R","EC","EC_L","EC_R","FX","FX_ST_L","FX_ST_R","FXST","GCC","IC","IC_L","IC_R","IFO","IFO_L","IFO_R","PCR","PCR_L","PCR_R","PLIC","PLIC_L","PLIC_R","PTR","PTR_L","PTR_R","RLIC","RLIC_L","RLIC_R","SCC","SCR","SCR_L","SCR_R","SFO","SFO_L","SFO_R","SLF","SLF_L","SLF_R","SS","SS_L","SS_R","UNC","UNC_L","UNC_R"'
-#CURRENT_ROI2='"10","11","12","13","17","18","26","49","50","51","52","53","54","58"'
-#ROI<-eval(parse(text=paste('c(',CURRENT_ROI,')',sep='')))
-#SitePostfix<-"dublin"
-#Config_Path="https://docs.google.com/spreadsheets/d/142eQItt4C_EJQff56-cpwlUPK7QmPICOgSHfnhGWx-w"
 config_csv<-read_web_csv(Config_Path)
 
 config_currentRun<-config_csv[grep(ID, config_csv$ID, ignore.case=T),]
@@ -78,11 +72,10 @@ TYPE<-config_currentRun$Type
 TRAIT_LIST<-config_currentRun$Trait
 TRAIT_LIST<-gsub("[[:space:]]", "", TRAIT_LIST)
 TRAIT_LIST<-gsub(";","\",\"",TRAIT_LIST)
-SHAPE_METRICS<-eval(parse(text=paste('c("',TRAIT_LIST,'")',sep='')))
+METRICS<-eval(parse(text=paste('c("',TRAIT_LIST,'")',sep='')))
 
-trait="FA"
-cur_rowAnalysis=1
-for(trait in SHAPE_METRICS){
+
+for(trait in METRICS){
   for (cur_rowAnalysis in 1:nrow(dsAnalysisConf)){
     i=1
     setwd(resDir)
