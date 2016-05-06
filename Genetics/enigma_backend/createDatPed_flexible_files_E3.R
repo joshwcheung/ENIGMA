@@ -374,6 +374,7 @@ if ("AffectionStatus" %in% colnames(FullInfoFile) && patients==1 ){
         FullInfoFile["AffectionStatus"] = NULL
 		nCov=nCov-1
 		drp=drp+1
+		nVar=nVar-1;  
 	}
 } else if ( patients!=0 ){ 
 	if (sd(sapply(AffectionStatus, as.numeric))==0) {
@@ -381,6 +382,7 @@ if ("AffectionStatus" %in% colnames(FullInfoFile) && patients==1 ){
         FullInfoFile[,-which(columnnames==patients)] = NULL
 		nCov=nCov-1
 		drp=drp+1
+		nVar=nVar-1;  
 	}
 }
 
