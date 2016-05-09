@@ -72,12 +72,12 @@ TYPE<-config_currentRun$Type
 TRAIT_LIST<-config_currentRun$Trait
 TRAIT_LIST<-gsub("[[:space:]]", "", TRAIT_LIST)
 TRAIT_LIST<-gsub(";","\",\"",TRAIT_LIST)
-SHAPE_METRICS<-eval(parse(text=paste('c("',TRAIT_LIST,'")',sep='')))
+METRICS<-eval(parse(text=paste('c("',TRAIT_LIST,'")',sep='')))
 
 READ_FROM_CSV=(TYPE=='csv')
 
-CSV_ROI_NAMES<-as.list(rep(NA,times=length(SHAPE_METRICS)))
-names(CSV_ROI_NAMES)<-SHAPE_METRICS
+CSV_ROI_NAMES<-as.list(rep(NA,times=length(METRICS)))
+names(CSV_ROI_NAMES)<-METRICS
 for (elem in names(CSV_ROI_NAMES)) {
   CSV_ROI_NAMES[[elem]]<-ROI
 }
@@ -99,26 +99,6 @@ while (i<=length(cmdargs)){
 }  
 
 setwd(DATADIR)
-
-
-
- #adding then _thick or _LogJacs, and appending '.csv' extension
-
-
-
-#DemographicsList_Path=cmdargs[9]   #docs.google
-
-
-#---set working directory to datadir----
-
-#Set the names of rows in CSV file
-#CSV_ROI_NAMES[["FA"]]<-c("SubjID","ACR","ACR_L","ACR_R","ALIC","ALIC_L","ALIC_R","AverageFA","BCC","CC","CGC","CGC_L","CGC_R","CGH","CGH_L","CGH_R","CR","CR_L","CR_R","CST","CST_L","CST_R","EC","EC_L","EC_R","FX","FX_ST_L","FX_ST_R","FXST","GCC","IC","IC_L","IC_R","IFO","IFO_L","IFO_R","PCR","PCR_L","PCR_R","PLIC","PLIC_L","PLIC_R","PTR","PTR_L","PTR_R","RLIC","RLIC_L","RLIC_R","SCC","SCR","SCR_L","SCR_R","SFO","SFO_L","SFO_R","SLF","SLF_L","SLF_R","SS","SS_L","SS_R","UNC","UNC_L","UNC_R")
-
-#set ROI from names
-#if(READ_FROM_CSV){
-#  ROI<-c("SubjID","ACR","ACR_L","ACR_R","ALIC","ALIC_L","ALIC_R","AverageFA","BCC","CC","CGC","CGC_L","CGC_R","CGH","CGH_L","CGH_R","CR","CR_L","CR_R","CST","CST_L","CST_R","EC","EC_L","EC_R","FX","FX_ST_L","FX_ST_R","FXST","GCC","IC","IC_L","IC_R","IFO","IFO_L","IFO_R","PCR","PCR_L","PCR_R","PLIC","PLIC_L","PLIC_R","PTR","PTR_L","PTR_R","RLIC","RLIC_L","RLIC_R","SCC","SCR","SCR_L","SCR_R","SFO","SFO_L","SFO_R","SLF","SLF_L","SLF_R","SS","SS_L","SS_R","UNC","UNC_L","UNC_R")
-#}
-
 
 
 
@@ -266,10 +246,6 @@ sink(messages, type="output")
 
 cat("4. READ CONFIGURATION .CSV FILES.\n")
 
-#read Subjects list with covariates (Subjects_Path) and Exclusion list (Exclude_Path). Take care about SEPARATORS (now ";")
-#dsSubjectsCov<-read.csv(Subjects_Path, header = TRUE, sep = ";", quote = "\"", dec = ".")
-# **FOR DERREK's DATA USE ',' and '.
-#dsSubjectsCov<-read.csv(Subjects_Path, header = TRUE, sep = ",", quote = "\"", dec = ".")
 dsSubjectsCov<-read.csv(Subjects_Path, header = TRUE)
 
 #read file with exclusions 
@@ -374,10 +350,10 @@ eval(parse(text=paste('save(',strAllCovToSave,',file=\'',Results_CSV_Path,'NUM.R
 #--6.END OF PROCESSING DEMOGRAPHICS - NUMBER OF ELEMENTS FOR COVARIATES 
 cat("6.END OF PROCESSING DEMOGRAPHICS - NUMBER OF ELEMENTS FOR COVARIATES\n")
 
-#--7. MAIN CYCLE STARTS. PROCESSING SHAPE METRICS
-cat("7. MAIN CYCLE STARTS. PROCESSING SHAPE METRICS\n")
-for (cur_sm in SHAPE_METRICS){    #for each shape metrics
-    cat(paste("Reading Shape Metrics: ", cur_sm,'\n',sep=''))
+#--7. MAIN CYCLE STARTS. PROCESSING  METRICS
+cat("7. MAIN CYCLE STARTS. PROCESSING METRICS\n")
+for (cur_sm in METRICS){    #for each metric
+    cat(paste("Reading Metrics: ", cur_sm,'\n',sep=''))
     
     if(READ_FROM_CSV) {
       #!!! mind the settings for reading csv (sep='.',dec=',')      
@@ -399,9 +375,9 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
   # Now we work on the whole unfiltered bunch of covariates data
   
   
-  #--7.1 READING DATA FOR EACH ROI INTO LIST & PROCESSING DEMOGRAPHICS FOR SHAPE METRICS 
-  #get Shape Metrics for demographics
-  dsDemogSM=dsDemographicsConf[which(dsDemographicsConf$Type=="SHAPE_METRICS"),]    
+  #--7.1 READING DATA FOR EACH ROI INTO LIST & PROCESSING DEMOGRAPHICS FOR METRICS 
+  #get Metrics for demographics
+  dsDemogSM=dsDemographicsConf[which(dsDemographicsConf$Type=="METRICS"),]    
   
   dsMetricsList=list()
   for (cur_roi in ROI) {
@@ -540,7 +516,7 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
         strForSave= if (length(stVarToSave)==0) "" else paste(stVarToSave,collapse=',')
 
         if(dsDemogSM$SepFile[iSM]==1){
-	   cat("saving shape metrics to a separate file is deprecated in current version.\n")
+	   cat("saving metrics to a separate file is deprecated in current version.\n")
 #          strForSave=paste(stVarToSave,collapse=',')
         }
 	      strAllSM<-if (strForSave!="") paste(strForSave,strAllSM,sep=',') else strAllSM
@@ -655,7 +631,7 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
 		    lmList[[cur_vert-nCovariates]]$model=NA
             }
 	    metaData=c(cur_sm,cur_roi,cur_vertInd)  # -1 because vertexes start from 2nd column
-            names(metaData)=c("ShapeMetrics","ROI","Vertex")
+            names(metaData)=c("Metrics","ROI","Vertex")
             tmp=summary(lmfit)
 	    stes=tmp$coefficients[,2]
             coeffs=tmp$coefficients[,1]
@@ -675,10 +651,6 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
             
             n.controls[cur_vertInd] = length(which(lmfit$model[,2] == contvalue))
             n.patients[cur_vertInd] = length(which(lmfit$model[,2] == patvalue))
-            
-            
-            
-            
             
             #Convert the lm model to a summary format so we can extract statistics
             
@@ -746,10 +718,6 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
 	      }              
             }
               
-            
-            
-            #save fitted LM to the file
-            #save(lmfit,file=paste("lmfit_",dsAnalysisConf$ID[cur_rowAnalysis],'_',toString(cur_vertInd),'_',cur_roi,".Rdata",sep=''))
   
             #create matrix for the effect size for each vertex
             effectSize=c(r.cort[cur_vertInd],d.cort[cur_vertInd],se.cort[cur_vertInd],low.ci.cort[cur_vertInd],up.ci.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd],pval[cur_vertInd])
@@ -795,5 +763,5 @@ for (cur_sm in SHAPE_METRICS){    #for each shape metrics
 #--/7.END OF MAIN CYCLE
 close(messages)
 sink(file=NULL)
-print("SCRIPT ENDED.")
+print("The ENIGMA regression script has completed!.")
 

@@ -1,20 +1,15 @@
-# ENIGMA Consortium GWAS Protocols GWAS of the Cortex (ENIGMA3)
+# ENIGMA Consortium GWAS Protocols GWAS of the Cortex for GCLUST (ENIGMA3)
 
-*Version 1.1 – July 14, 2015*
+*Version 1.1 – Jan 15, 2016*
 
-**Written by Derrek Hibar and Neda Jahanshad**
+**Written by Derrek Hibar and Neda Jahanshad; modified by Chi-Hua Chen **
 
 Please address any questions our 
 [Google group](https://groups.google.com/forum/#!forum/enigma3-cortex). Also, 
 please  check our [FAQ](#frequently-asked-questions) to see if your question has 
 already been answered.
 
-We have tutorial videos available for running our scripts 
-([run0](https://www.youtube.com/watch?v=mUlhIerJ2HI), 
-[run1](https://www.youtube.com/watch?v=BweGlaNcuos), 
-[run2](https://www.youtube.com/watch?v=TwhLgnBRZiw)) on our YouTube channel as 
-well.
-
+* Most steps here are the same as those in the ENIGMA3 cortical GWAS protocol using the Desikan atlas ROIs. Here we create a new directory and perform the same steps for cortical genetic clusters.
 ---
 
 Before we start, you need to download and install some required programs (which 
@@ -26,35 +21,39 @@ you may already have).
 *   An ssh client can be downloaded 
     [here](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) 
     (though there are many to choose from).
-*   Download the association scripts and put them in the same folder as your 
+
+
+*   make a new folder
+    mkdir GCLUSTGWAS
+
+*   Download the association scripts and put them in the GCLUSTGWAS folder as your 
     .csv files:
 
 ```bash    
-svn checkout https://github.com/ENIGMA-git/ENIGMA/trunk/Genetics/ENIGMA3
-svn checkout https://github.com/ENIGMA-git/ENIGMA/trunk/Genetics/enigma_backend
+svn checkout https://github.com/ENIGMA-git/ENIGMA/trunk/Genetics/ENIGMA3_GCLUST
+svn checkout https://github.com/ENIGMA-git/ENIGMA/trunk/Genetics/enigma_backend_GCLUST
 ```
 
 ---
 
 You will need four files to run the association analysis (described below).
 
-*   `CorticalMeasuresENIGMA_SurfAvg.csv` - This file contains the mean surface 
-    area within each of the FreeSurfer ROI from the Desikan Atlas. In previous 
-    steps you marked individual ROIs as “NA” (without the quotes) if that ROI 
-    was poorly segmented for a given subject. There are no additional edits 
-    required, however, please make sure that the subject IDs in the first column
-    (SubjID) match the ID format in the other files used in the analysis. Also, 
-    be sure to save this file as a comma separated (CSV) file after making any 
-    edits.
-*   `CorticalMeasuresENIGMA_ThickAvg.csv` - This file contains the mean cortical
-    thickness within each of the FreeSurfer ROI from the Desikan Atlas. In 
-    previous steps you marked individual ROIs as “NA” (without the quotes) if 
-    that ROI was poorly segmented for a given subject. There are no additional 
-    edits required, however, please make sure that the subject IDs in the first 
-    column (SubjID) match the ID format in the other files used in the analysis.
-    Also, be sure to save this file as a comma separated (CSV) file after making
-    any edits.
-*   `HM3mds2R.mds.csv` – In the genetic imputation protocol, you previously 
+*   `gclust_area.csv` - This file contains the mean surface 
+    area within each of the genetic cluster ROI. In previous 
+    steps you removed individuals if one ROI was poorly segmented for a given subject. 
+    There are no additional edits required, however, please make sure that 
+    the subject IDs in the first column SubjID) match the ID format in the 
+    other files used in the analysis. Also, be sure to save this file as a comma 
+    separated (CSV) file after making any edits.
+*   `gclust_thickness.csv` - This file contains the mean cortical
+    thickness within each of the genetic cluster ROI. In previous 
+    steps you removed individuals if one ROI was poorly segmented for a given subject. 
+    There are no additional edits required, however, please make sure that 
+    the subject IDs in the first column SubjID) match the ID format in the 
+    other files used in the analysis. Also, be sure to save this file as a comma 
+    separated (CSV) file after making any edits.
+*   `HM3mds2R.mds.csv` – This is the same file used in ENIGMA3 cortical GWAS.
+    In the genetic imputation protocol, you previously 
     performed an MDS analysis to estimate the ancestry of each subject in your 
     cohort (and to remove subjects with non-homogenous ancestry). Please make 
     sure that the final version of the HM3mds2R.mds.csv file that you end up 
@@ -65,7 +64,8 @@ You will need four files to run the association analysis (described below).
     code to plot the MDS values with the subject IDs overlaid and then remove 
     those subjects from your HM3mds2R.mds.csv file in Excel (or any text 
     editor).
-*	`Covariates.csv` – This file you will have to create, but it should be 
+*	`Covariates.csv` – This is the same file used in ENIGMA3 cortical GWAS.
+    This file you will have to create, but it should be 
     relatively similar (but not the same!) as the covariates files previously 
     created for ENIGMA. Using Excel or your favorite spreadsheet program, create
     a file that contains the following columns: SubjID, Age, Sex. Additional 
@@ -91,16 +91,16 @@ You will need four files to run the association analysis (described below).
     
 ---
 
-Create a working directory (mkdir) and move (mv) all of the required files inside. 
-Move the enigma_backend/ folder to be inside of the ENIGMA3/ folder. Then mv the 
-ENIGMA3 folder so that it is renamed to be SCRIPTS/. After this your working directory should 
+Use 'GCLUSTGWAS' as a working directory and move (mv) all of the required files inside. 
+Move the enigma_backend_GCLUST/ folder to be inside of the ENIGMA3_CLUST/ folder. Then mv the 
+ENIGMA3_CLUST folder so that it is renamed to be SCRIPTS/. After this your working directory should 
 look like this:
 
 ```bash
 enigma@-> ls
 
-CorticalMeasuresENIGMA_SurfAvg.csv 
-CorticalMeasuresENIGMA_ThickAvg.csv
+gclust_area.csv 
+gclust_thickness.csv
 HM3mds2R.mds.csv
 Covariates.csv
 SCRIPTS/
@@ -142,25 +142,25 @@ chmod 755 run0_E3_GWAS_format.sh
 
 <pre>
 #Set the directory where all the enigma association scripts are stored
-<i>run_directory</i>=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend                  
+<i>run_directory</i>=/ENIGMA/GCLUSTGWAS/SCRIPTS/enigma_backend_GCLUST                  
 
 #Give the <b>full path</b> to R binary, can be found by typing `which R` on the 
 #command line.
 <i>Rbin</i>=/usr/local/R/bin/R
 
 #Give the <b>full path</b> to the surf area csv file on your system
-<i>csvFILE_1</i>=/ENIGMA/CortexGWAS/CorticalMeasuresENIGMA_SurfAvg.csv 
+<i>csvFILE_1</i>=/ENIGMA/GCLUSTGWAS/gclust_area.csv 
 
 #Give the <b>full path</b> to the thickness csv file on your system
-<i>csvFILE_2</i>=/ENIGMA/CortexGWAS/CorticalMeasuresENIGMA_ThickAvg.csv
+<i>csvFILE_2</i>=/ENIGMA/GCLUSTGWAS/gclust_thickness.csv
 
 #Give the <b>full path</b> to a directory to write out the updated and filtered csv
 #file (this folder will be created for you)
-<i>csvFOLDER</i>=/ENIGMA/CortexGWAS/E3     									 
+<i>csvFOLDER</i>=/ENIGMA/GCLUSTGWAS/E3     									 
 
 #Please indicate the <b>full path</b> to the file where your covariate data is 
 #stored so that we can merge in relevant covariates to the ENIGMA phenotype files
-<i>TableFile</i>=/ENIGMA/CortexGWAS/Covariates.csv
+<i>TableFile</i>=/ENIGMA/GCLUSTGWAS/Covariates.csv
 
 #What is the column name where the subject IDs are listed in your Covariates.csv
 #file (needed to match subject-by-subject with the ENIGMA files)
@@ -218,7 +218,7 @@ parameters (see below):
 
 <pre>
 #Give the <b>full path</b> to where all the enigma association scripts are stored
-<i>run_directory</i>=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend
+<i>run_directory</i>=/ENIGMA/GCLUSTGWAS/SCRIPTS/enigma_backend_GCLUST
 
 #Give the <b>full path</b> to R binary	(can be found by typing `which R` on the 
 #command line)
@@ -228,11 +228,11 @@ parameters (see below):
 #Give the <b>full path</b> to your HM3mds2Rmds.csv file -- has 4 MDS components to 
 #use as covariates 
 #(output from the MDS Analysis Protocol)
-<i>csvFILE</i>=/ENIGMA/CortexGWAS/HM3mds2R.mds.csv
+<i>csvFILE</i>=/ENIGMA/GCLUSTGWAS/HM3mds2R.mds.csv
 
 #Give the <b>full path</b> to the csv file where your phenotypes and covariates are
 #stored after running ./run0_E3_GWAS_format.sh
-<i>combinedROItableFILE</i>=/ENIGMA/CortexGWAS/E3/combinedROItable_eCORTEX4GWAS.csv
+<i>combinedROItableFILE</i>=/ENIGMA/GCLUSTGWAS/E3/combinedROItable_eCORTEX4GWAS.csv
 
 #Please give some information about the covariate coding you used:
 
@@ -247,7 +247,7 @@ parameters (see below):
 
 #Give the <b>full path</b> of the output diriectory for the ped and dat file 
 outputs (folder will be created for you)
-<i>peddatdir</i>=/ENIGMA/CortexGWAS/PedDat/
+<i>peddatdir</i>=/ENIGMA/GCLUSTGWAS/PedDat/
 
 #<b>Does you sample have related or unrelated subjects?</b>
 <i>related</i>=0  # Mark 0 for unrelated sample, 1 for related
@@ -268,7 +268,7 @@ then
 
 else
 
-<b>localfamFILE</b>=/ENIGMA/CortexGWAS/local.fam   # RELATED ONLY: Path to your 
+<b>localfamFILE</b>=/ENIGMA/GCLUSTGWAS/local.fam   # RELATED ONLY: Path to your 
                                             #local.fam file outputted #during 
                                             # the Genetic #Imputation step
 
@@ -309,7 +309,7 @@ chmod 755 run2_GWAS_flexible_step2.sh
 
 <pre>
 #Give the <b>full path</b> to where all the enigma association scripts are stored
-<i>run_directory</i>=/ENIGMA/CortexGWAS/SCRIPTS/enigma_backend/
+<i>run_directory</i>=/ENIGMA/GCLUSTGWAS/SCRIPTS/enigma_backend_GCLUST/
 
 #You can split up the processing into this many nodes, if running in series or 
 #manually, set Nnodes=1
@@ -321,14 +321,14 @@ chmod 755 run2_GWAS_flexible_step2.sh
 
 #Give the <b>full path</b> to the ped and dat files created in 
 #run1_GWAS_flexible_step1.sh
-<i>peddatdir</i>=/ENIGMA/CortexGWAS/PedDat/                					
+<i>peddatdir</i>=/ENIGMA/GCLUSTGWAS/PedDat/                					
 
 #Give abbreviated name of your sample, no spaces in the name (i.e. ADNI)
 <i>samplename</i>=ADNI
 
 #Give the <b>full path</b> for the output from mach2qtl or merlin (folder will be 
 #created for you)
-<i>GWASout</i>=/ENIGMA/CortexGWAS/GWAS_out/     							
+<i>GWASout</i>=/ENIGMA/GCLUSTGWAS/GCLUSTGWAS_out/     							
 
 #Can change to "manual" if you want to output a list of commands that you can 
 #batch process yourself, otherwise set to "run"
@@ -365,7 +365,7 @@ else
 #RELATED ONLY: give the directory to the imputed output for merlin (will be 
 #created if files do not exist), see 
 #http://genepi.qimr.edu.au/staff/sarahMe/mach2merlin.html
-<i>merlinFILEdir</i>=/ENIGMA/CortexGWAS/merlin/    
+<i>merlinFILEdir</i>=/ENIGMA/GCLUSTGWAS/merlin/    
 
 fi
 </pre>

@@ -134,8 +134,6 @@ if (Ldups > 0){
 
 numsubjects = length(merged_temp$IID);
 
-writeLines(paste0('VERSION: ',format(Sys.Date(),"%m/%d/%Y")),con=zz,sep="\n")
-
 ### if no related individuals, create dummy paternal and maternal IDs
 # otherwise break to make sure these are entered
 if (related==0) {
@@ -172,10 +170,6 @@ if (related==0) {
 columnnames = colnames(merged_temp);
 age=as.numeric(merged_temp[,which(columnnames==ageColumnHeader)])
 age_mean=mean(age)
-age_md=median(age)
-min_age=min(age)
-max_age=max(age)
-
 ageC=(age-age_mean)
 ageCsq=ageC*ageC
 
@@ -188,17 +182,6 @@ sexC[-males]<- 0.5
 StandardSex=data.frame("Sex"=sexC)
 StandardSex[which(sexC==-.5),]<- 1
 StandardSex[which(sexC==.5),]<- 2
-
-Nm=length(which(sexC==-.5))
-Nf=length(which(sexC==.5))
-
-writeLines(paste('Distribution stats for age in the full group:'),con=zz,sep="\n")
-writeLines(paste('		mean:',age_mean),con=zz,sep="\n")
-writeLines(paste('		median:',age_md),con=zz,sep="\n")
-writeLines(paste('		min:',min_age),con=zz,sep="\n")
-writeLines(paste('		max:',max_age),con=zz,sep="\n")
-writeLines(paste('There are',Nm,'males in this study.'),con=zz,sep="\n")
-writeLines(paste('There are',Nf,'females in this study.'),con=zz,sep="\n")
 
 age_sexC=age*sexC
 ageCsq_sexC=ageCsq*sexC
@@ -232,18 +215,15 @@ merged_temp_rest=merged_temp_rest[,-which(columnnames=="FID")]
 columnnames = colnames(merged_temp_rest);
 merged_temp_rest=merged_temp_rest[,-which(columnnames=="IID")]
 columnnames = colnames(merged_temp_rest);
-if (length(merged_temp_rest[,which(columnnames=="MID")]) > 0) {
+if (length(merged_temp_rest[,-which(columnnames=="MID")]) > 0) {
     merged_temp_rest=merged_temp_rest[,-which(columnnames=="MID")]
 }
-columnnames = colnames(merged_temp_rest);
-if (length(merged_temp_rest[,which(columnnames=="PID")]) > 0) {
+if (length(merged_temp_rest[,-which(columnnames=="PID")]) > 0) {
     merged_temp_rest=merged_temp_rest[,-which(columnnames=="PID")]
 }
-columnnames = colnames(merged_temp_rest);
-if (length(merged_temp_rest[,which(columnnames=="zygosity")]) > 0) {
+if (length(merged_temp_rest[,-which(columnnames=="zygosity")]) > 0) {
     merged_temp_rest=merged_temp_rest[,-which(columnnames=="zygosity")]
 }
-columnnames = colnames(merged_temp_rest);
 
 VarNames=names(merged_temp_rest)
 
@@ -374,7 +354,6 @@ if ("AffectionStatus" %in% colnames(FullInfoFile) && patients==1 ){
         FullInfoFile["AffectionStatus"] = NULL
 		nCov=nCov-1
 		drp=drp+1
-		nVar=nVar-1;  
 	}
 } else if ( patients!=0 ){ 
 	if (sd(sapply(AffectionStatus, as.numeric))==0) {
@@ -382,7 +361,6 @@ if ("AffectionStatus" %in% colnames(FullInfoFile) && patients==1 ){
         FullInfoFile[,-which(columnnames==patients)] = NULL
 		nCov=nCov-1
 		drp=drp+1
-		nVar=nVar-1;  
 	}
 }
 
@@ -400,38 +378,6 @@ writeLines(paste('    There are ',numsubjects,' total subjects.'),con=zz,sep="\n
 writeLines(paste('    There are ',nCov,' covariates for all subjects.'),con=zz,sep="\n")
 writeLines(paste('     -', cbind(colnames(FullInfoFile)[(Nset+1):nVar])),con=zz,sep="\n")
 
-
-test=NULL
-for (val in (Nids+1):(Nids+Nrois) ) {
-
-A=as.numeric(FullInfoFile[,val])
-if ( length(which(is.na(A))) > 0) {
-	A=A[-which(is.na(A))]
-}
-test=rbind(test,cbind(colnames(FullInfoFile)[val],
-(mean(as.numeric(A))),
-(sd(as.numeric(A))),
-(min(as.numeric(A))),
-(max(as.numeric(A)))))
-}
-header=(c('ROI','Mean','SD','Min','Max'))
-write.table(test,file=zz,quote=F,col.names=header,row.names=FALSE,sep = "\t");
-
-test=NULL
-for (val in (Nset+1):nVar ) {
-A=as.numeric(FullInfoFile[,val])
-if ( length(which(is.na(A))) > 0) {
-	A=A[-which(is.na(A))]
-}
-test=rbind(test,cbind(colnames(FullInfoFile)[val],
-(mean(as.numeric(A))),
-(sd(as.numeric(A))),
-(min(as.numeric(A))),
-(max(as.numeric(A)))))
-}
-header=(c('Covariate','Mean','SD','Min','Max'))
-write.table(test,file=zz,quote=F,col.names=header,row.names=FALSE,sep = "\t");
-
 ################ now print out the .dat and the .ped files
 #
 # Output names have been hard-coded for formatting of follow-up scripts.
@@ -442,9 +388,7 @@ if ( dim(FullInfoFile_healthy)[1] > 0 ){
 write.table(FullInfoFile_healthy,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_healthy.ped",sep=""),quote=F,col.names=F,row.names=F);
 write.table(FullInfoFile_healthy,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_healthy.tbl",sep=""),quote=F,col.names=T,row.names=F);
 write.table(colnames(FullInfoFile_healthy),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_healthy.header",sep=""),quote=F,col.names=F,row.names=F);
-write.table(cbind(c(rep("T",Nrois-36),rep("S",34),"C","S",rep("C",nCov_healthy)),c(colnames(FullInfoFile_healthy)[(Nids+1):nVar_healthy])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_healthy_wSA.dat",sep=""),col.names=F,row.names=F,quote=F);
-write.table(cbind(c(rep("S",Nrois-36),rep("T",34),"S","C",rep("C",nCov_healthy)),c(colnames(FullInfoFile_healthy)[(Nids+1):nVar_healthy])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_healthy_wTHICK.dat",sep=""),col.names=F,row.names=F,quote=F);
-write.table(cbind(c(rep("T",Nrois),rep("C",nCov_healthy)),c(colnames(FullInfoFile_healthy)[(Nids+1):nVar_healthy])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_healthy_wo.dat",sep=""),col.names=F,row.names=F,quote=F);
+write.table(cbind(c(rep("T",Nrois),rep("C",nCov_healthy)),c(colnames(FullInfoFile_healthy)[(Nids+1):nVar_healthy])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_healthy.dat",sep=""),col.names=F,row.names=F,quote=F);
 } else {
     cat('    There are no healthy individuals in this group. \n')
     writeLines(paste('    There are no healthy individuals in this group.'),con=zz,sep="\n")
@@ -459,29 +403,22 @@ if (patients!=0) {
 		writeLines(paste('    There are ',nCov_healthy,' covariates for all healthy subjects.'),con=zz,sep="\n")
 		writeLines(paste('     -', colnames(FullInfoFile_healthy)[(Nset+1):nVar_healthy]),con=zz,sep="\n")
 		
-		
-		write.table(cbind(c(rep("T",Nrois-36),rep("S",34),"C","S",rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup_wSA.dat",sep=""),col.names=F,row.names=F,quote=F);
-		write.table(cbind(c(rep("S",Nrois-36),rep("T",34),"S","C",rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup_wTHICK.dat",sep=""),col.names=F,row.names=F,quote=F);
-		write.table(cbind(c(rep("T",Nrois),rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup_wo.dat",sep=""),col.names=F,row.names=F,quote=F);
+		write.table(cbind(c(rep("T",Nrois),rep("C",nCov-drp)),c(colnames(FullInfoFile)[(Nids+1):(nVar-drp)])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_fullGroup.dat",sep=""),col.names=F,row.names=F,quote=F);
 		write.table(FullInfoFile,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_fullGroup.ped",sep=""),quote=F,col.names=F,row.names=F);
 		write.table(FullInfoFile,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_fullGroup.tbl",sep=""),quote=F,col.names=T,row.names=F);
 		write.table(colnames(FullInfoFile),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_fullGroup.header",sep=""),quote=F,col.names=F,row.names=F);
 	}
-	
-	if (nSub_healthy == 0) {
-		cat('    There are ',nSub_disease,' patients\n')
-		cat('    There are ',nCov_disease,' covariates for all patients\n')
-		writeLines(paste('    There are ',nSub_disease,' patients.'),con=zz,sep="\n")
-		writeLines(paste('    There are ',nCov_disease,' covariates for all patients.'),con=zz,sep="\n")
-		writeLines(paste('     -', colnames(FullInfoFile_disease)[(Nset+1):nVar_disease]),con=zz,sep="\n")
-		
-		write.table(FullInfoFile_disease,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_patients.ped",sep=""),quote=F,col.names=F,row.names=F);
-		write.table(FullInfoFile_disease,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_patients.tbl",sep=""),quote=F,col.names=T,row.names=F);
-		write.table(colnames(FullInfoFile_disease),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_patients.header",sep=""),quote=F,col.names=F,row.names=F);
-		write.table(cbind(c(rep("T",Nrois-36),rep("S",34),"C","S",rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients_wSA.dat",sep=""),col.names=F,row.names=F,quote=F);
-		write.table(cbind(c(rep("S",Nrois-36),rep("T",34),"S","C",rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients_wTHICK.dat",sep=""),col.names=F,row.names=F,quote=F);
-		write.table(cbind(c(rep("T",Nrois),rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients_wo.dat",sep=""),col.names=F,row.names=F,quote=F);
-	}
+
+    cat('    There are ',nSub_disease,' patients\n')
+    cat('    There are ',nCov_disease,' covariates for all patients\n')
+    writeLines(paste('    There are ',nSub_disease,' patients.'),con=zz,sep="\n")
+    writeLines(paste('    There are ',nCov_disease,' covariates for all patients.'),con=zz,sep="\n")
+    writeLines(paste('     -', colnames(FullInfoFile_disease)[(Nset+1):nVar_disease]),con=zz,sep="\n")
+    
+    write.table(FullInfoFile_disease,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_patients.ped",sep=""),quote=F,col.names=F,row.names=F);
+    write.table(FullInfoFile_disease,paste(outFolder,"/ENIGMA_",eName,"_PEDfile_wColNames_patients.tbl",sep=""),quote=F,col.names=T,row.names=F);
+    write.table(colnames(FullInfoFile_disease),paste(outFolder,"/ENIGMA_",eName,"_PEDfile_patients.header",sep=""),quote=F,col.names=F,row.names=F);
+    write.table(cbind(c(rep("T",Nrois),rep("C",nCov_disease)),c(colnames(FullInfoFile_disease)[(Nids+1):nVar_disease])),paste(outFolder,"/ENIGMA_",eName,"_DATfile_patients.dat",sep=""),col.names=F,row.names=F,quote=F);
 }
 #### print connecting files if related for MERLIN-offline
 if (related==1) {
