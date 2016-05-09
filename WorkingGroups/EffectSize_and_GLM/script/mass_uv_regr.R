@@ -544,7 +544,7 @@ for (cur_sm in METRICS){    #for each metric
       lmText<-getLmText(dsAnalysisConf$LM[cur_rowAnalysis],dsAnalysisConf$SiteRegressors,colnames(dsSubjectsCov)) 
       
       lmMainFactor<-dsAnalysisConf$MainFactor[cur_rowAnalysis]
-      
+      error_occured=0     
       
       #-- 7.2.1 Applying LM to each ROI
       for (cur_roi in ROI){           
@@ -734,11 +734,13 @@ for (cur_sm in METRICS){    #for each metric
             setTxtProgressBar(pbLinModels,iPb)
             iPb=iPb+1
         }
-        
+        error_occured<<-0
         }, warning = function(w) {
           cat(paste("WARNING: "), toString(w),sep='')
         }, error = function(e) {
           cat(paste("ERROR: ",toString(e),sep=''))
+	  error_occured<<-1
+
         }, finally = {
           
         })
@@ -747,12 +749,14 @@ for (cur_sm in METRICS){    #for each metric
         detach(dsMetricsFiltered_CurrentLM)
       
     }
-    
-      #-- /7.2.1 END OF Applying LM to each ROI
-    write.csv(resMatr,file=paste(Results_CSV_Path,cur_sm,'_',dsAnalysisConf$ID[cur_rowAnalysis],"_",SitePostfix,".csv",sep=''),row.names=FALSE)
-    if (dsAnalysisConf$SaveLM[cur_rowAnalysis]==1){
-    	save(lmList,file=paste(Results_CSV_Path,cur_sm,'_LM_',dsAnalysisConf$ID[cur_rowAnalysis],"_",SitePostfix,'.Rdata',sep=''))
-    }
+    cat(paste("error_occ:",as.character(error_occured),sep=''))
+    if(error_occured==0) {   
+       #-- /7.2.1 END OF Applying LM to each ROI
+	    write.csv(resMatr,file=paste(Results_CSV_Path,cur_sm,'_',dsAnalysisConf$ID[cur_rowAnalysis],"_",SitePostfix,".csv",sep=''),row.names=FALSE)
+	    if (dsAnalysisConf$SaveLM[cur_rowAnalysis]==1){
+	    	save(lmList,file=paste(Results_CSV_Path,cur_sm,'_LM_',dsAnalysisConf$ID[cur_rowAnalysis],"_",SitePostfix,'.Rdata',sep=''))
+	    }
+	}
     cat(paste("End of processing model: ",dsAnalysisConf$ID[cur_rowAnalysis],":",dsAnalysisConf$Name[cur_rowAnalysis],'\n',sep=''))
     
     close(pbLinModels)
