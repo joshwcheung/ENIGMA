@@ -154,7 +154,7 @@ if (related==0) {
           p=matrix(0,nrow=numsubjects,ncol=1)
           
           #### added July 2015 -- in case no MID or PID are in the plink files, ERROR to create new parental IDs
-	        if ( (merged_temp$MID == merged_temp$PID) || ( sum(merged_temp$MID) == 0 ) || ( sum(merged_temp$PID) == 0 ) ) {
+	        if ( (merged_temp$MID == merged_temp$PID) || (identical(merged_temp$MID, c(p))) || (identical(merged_temp$PID, c(p)))) {
 	  	    stop("ERROR: You have indicated a related cohort, yet no unique Maternal or Paternal IDs were detected in your data file, or in your  HM3mds2R.mds.csv file, so we can't compile it for you! Please go back to your data csv file and add in two columns MID and PID and enter a unique ID for each parent of the family. You do not have to have phenotype data on them, but this is necessary to correctly model the known family relatedness. ")
 	        }
           
