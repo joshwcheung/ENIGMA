@@ -17,7 +17,7 @@ Rbin=/usr/bin/R                 								 # Full path to R binary
 
 csvFILE_1=/ENIGMA/GCLUSTGWAS/gclust_area.csv          # Path to the surf area csv file
 csvFILE_2=/ENIGMA/GCLUSTGWAS/gclust_thickness.csv          # Path to the thickness csv file
-csvFOLDER=/ENIGMA/GCLUSTGWAS/E3/E3_out     									 # Directory to write out the updated and filtered csv file (this folder will be created for you)
+csvFOLDER=/ENIGMA/GCLUSTGWAS/E3     									 # Directory to write out the updated and filtered csv file (this folder will be created for you)
 																		 ## new csv file will be named "${csvFOLDER}/CorticalMeasuresENIGMA_ALL_Avg.csv" and "${csvFOLDER}/combinedROItable_eCORTEX4GWAS.csv"
 
 ## please indicate the file where your meta data is stored so that we can merge in relavent covariates to the ENIGMA phenotype files
