@@ -24,6 +24,30 @@ read_web_csv<-function(url_address){
   return (csv_res)
 }
 
+#grabbed from stackOverflow - function for binding two datasets with non-equal list of columns
+rbind.ordered=function(x,y){
+
+  if (is.null(x)) return(y)
+
+  if (is.null(y)) return(x)
+
+  diffCol = setdiff(colnames(x),colnames(y))
+  if (length(diffCol)>0){
+    cols=colnames(y)
+    for (i in 1:length(diffCol)) y=cbind(y,NA)
+    colnames(y)=c(cols,diffCol)
+  }
+
+  diffCol = setdiff(colnames(y),colnames(x))
+  if (length(diffCol)>0){
+    cols=colnames(x)
+    for (i in 1:length(diffCol)) x=cbind(x,NA)
+    colnames(x)=c(cols,diffCol)
+  }
+  return(rbind(x, y[, colnames(x)]))
+}
+
+
 
 #--0.
 #--1. READING THE COMMAND LINE---
@@ -74,26 +98,33 @@ TRAIT_LIST<-gsub("[[:space:]]", "", TRAIT_LIST)
 TRAIT_LIST<-gsub(";","\",\"",TRAIT_LIST)
 METRICS<-eval(parse(text=paste('c("',TRAIT_LIST,'")',sep='')))
 
-
+curModelInvalid<-FALSE
 for(trait in METRICS){
   for (cur_rowAnalysis in 1:nrow(dsAnalysisConf)){
     i=1
     setwd(resDir)
+    curModelInvalid<-FALSE
     if (dsAnalysisConf$Active[cur_rowAnalysis]==1) 
     {
       
       for (cur_roi in ROI) {
         f_name=paste(ID,'_',cur_roi,'_',trait,'_',dsAnalysisConf$ID[cur_rowAnalysis],'_',SitePostfix,'.csv',sep='')
+	if (!(file.exists(f_name))) {
+		cat(paste("File ",f_name," for METRICS: ", trait, " Linear model: ", dsAnalysisConf$ID[cur_rowAnalysis], " ROI: ", cur_roi, " does not exist. Skipping the whole model.\n"))
+		curModelInvalid<<-TRUE
+		break
+	}
         cur_csv<-read.csv(f_name, header = TRUE,sep=',',dec='.')
         if(i==1) {
           data_csv<-cur_csv
         }
         else{
-          data_csv<-rbind(data_csv,cur_csv,deparse.level = 0)
+		data_csv<-rbind.ordered(data_csv, cur_csv)
+#          data_csv<-rbind(data_csv,cur_csv,deparse.level = 0)
         }
         i=i+1
       }
-      write.csv(data_csv,file=paste(ID,'_ALL_',trait,'_',dsAnalysisConf$ID[cur_rowAnalysis],'_',SitePostfix,'.csv',sep=''))
+      if(!curModelInvalid) write.csv(data_csv,file=paste(ID,'_ALL_',trait,'_',dsAnalysisConf$ID[cur_rowAnalysis],'_',SitePostfix,'.csv',sep=''))
     }
   }
 }
