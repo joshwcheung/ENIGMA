@@ -39,6 +39,7 @@ Nnodes=1		# *** otherwise we're going to set the number of nodes to 1 and assume
 Rbin=/usr/local/R-3.1.3/bin/R
 
 ###### optional edits:
+QA_LEVEL=""
 EXCLUDE_FILE=""
 METR_PREFIX="metr_"
 
@@ -122,6 +123,7 @@ do
 			${SUBJECTS_COV} \
 			${cur_roi} \
 			${CONFIG_PATH} \
+			${QA_LEVEL}  \
 			${EXCLUDE_STR} \
 			${METR_PREFIX_STR} \
 			<  ${scriptDir}/mass_uv_regr.R
