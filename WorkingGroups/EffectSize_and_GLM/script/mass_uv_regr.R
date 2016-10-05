@@ -52,7 +52,10 @@ subjects_cov=cmdargs[6]
 Subjects_Path<-subjects_cov
 
 Config_Path=cmdargs[8]   #docs.google 
-
+QA_LEVEL=1000
+if ( (length(cmdargs)>8) & (cmdargs[8]!="-exclude_path") & (cmdargs[8]!="-shape_prefix")){
+	QA_LEVEL<<-as.numeric(cmdargs[9])
+}
 config_csv<-read_web_csv(Config_Path)
 
 config_currentRun<-config_csv[grep(ID, config_csv$ID, ignore.case=T),]
@@ -169,9 +172,9 @@ getMainFactorString<-function(strMainFactor){
   return(strRegexp)
 }
 
-getTstatFactorName<-function(coeffName,rowCoeffNames){
+getTstatFactorName<-function(coeffFactorName,rowCoeffNames){
   
-  coeffName=getMainFactorString(lmMainFactor)
+  coeffName=getMainFactorString(coeffFactorName)
   for (i in 1:length(rowCoeffNames)) {
     factorName=grep(coeffName,rowCoeffNames[i],value=TRUE)
     if (length(factorName)!=0) break
@@ -381,10 +384,12 @@ for (cur_sm in METRICS){    #for each metric
   
   dsMetricsList=list()
   for (cur_roi in ROI) {
-    
+      
       #Read subjects to exlude for current ROI//
       if(Exclude_Path!="") {
-        excludedSubjectsRoi<-eval(parse(text=paste("dsExcludeSubj$R",toString(cur_roi),sep='')))
+#        excludedSubjectsRoi<-eval(parse(text=paste("dsExcludeSubj$R",toString(cur_roi),sep='')))
+	 excludedSubjectsRoi<-eval(parse(text=paste("as.vector(dsExcludeSubj$SubjID[as.vector(dsExcludeSubj$ROI",toString(cur_roi),"<",toString(QA_LEVEL),")])",sep='')))
+	cat(paste("QA Level=",QA_LEVEL,sep=''))
       }
       else {
         excludedSubjectsRoi=c()
@@ -399,7 +404,7 @@ for (cur_sm in METRICS){    #for each metric
       else {
         dsSubjectsCovToRead<-dsSubjectsCov
       }
-      
+#      print (paste("Included subjects for ROI", toString(cur_roi),": ",toString(dsSubjectsCovToRead$SubjID),sep=''))
       #-- 7.1.1 READ DATA FOR ROI
       cat(paste("7.1.1 READ DATA FOR ROI: ",toString(cur_roi),'\n',sep=''))
       matr_created=FALSE
@@ -542,8 +547,29 @@ for (cur_sm in METRICS){    #for each metric
       
       
       lmText<-getLmText(dsAnalysisConf$LM[cur_rowAnalysis],dsAnalysisConf$SiteRegressors,colnames(dsSubjectsCov)) 
+      lmvars<-strsplit(lmText,'\\+')[[1]]
+      lmvars<-gsub(" ","",lmvars)
+
+      lmvars_plain<-c()      
+	for (elem in lmvars) {
+		if (length(grep(".*:.*",elem))>0) {
+			elemlist<-strsplit(elem,'\\:')[[1]]
+			
+			lmvars_plain<-c(lmvars_plain,elemlist)
+		}
+		else {
+			lmvars_plain<-c(lmvars_plain,elem)
+		}		
+	}
+      lmvars_plain<-mapply(gsub,"factor\\(","",lmvars_plain)
+      lmvars_plain<-mapply(gsub,"\\(","",lmvars_plain)
+      lmvars_plain<-mapply(gsub,"\\)","",lmvars_plain)
+     
+      lmvars_plain<-unique(lmvars_plain)
       
+
       lmMainFactor<-dsAnalysisConf$MainFactor[cur_rowAnalysis]
+ 	factorOfInterest<-dsAnalysisConf$FactorOfInterest[cur_rowAnalysis]
       error_occured=0     
       
       #-- 7.2.1 Applying LM to each ROI
@@ -553,7 +579,7 @@ for (cur_sm in METRICS){    #for each metric
         
         
         #Read subjects to exlude for current ROI//
-        if(!is.na(dsExcludeSubj)) excludedSubjectsRoi<-eval(parse(text=paste("dsExcludeSubj$R",toString(cur_roi),sep='')))
+        if(!is.na(dsExcludeSubj)) excludedSubjectsRoi<-eval(parse(text=paste("as.vector(dsExcludeSubj$SubjID[as.vector(dsExcludeSubj$ROI",toString(cur_roi),"<",toString(QA_LEVEL),")])",sep=''))) #excludedSubjectsRoi<-eval(parse(text=paste("dsExcludeSubj$R",toString(cur_roi),sep='')))
         else excludedSubjectsRoi=c()
         print (paste("Excluded subjects for ROI",toString(cur_roi),": ",toString(excludedSubjectsRoi),sep=''))
         
@@ -570,13 +596,15 @@ for (cur_sm in METRICS){    #for each metric
         else {
           dsMetricsFiltered<-dsMetrics
         }
-
+	lmvars_plain<-intersect(lmvars_plain,colnames(dsMetricsFiltered))
+	dsMetricsFiltered<-dsMetricsFiltered[complete.cases(dsMetricsFiltered[,lmvars_plain]),]
         nCovariates=ncol(dsSubjectsCov)
         #Additional covariates
         if(strCovariates!=""&& !(is.na(strCovariates))){
           arrCovSplitted<-strsplit(strCovariates,';')[[1]]
           arrCovText<-gsub("__(.*?)__","dsMetricsFiltered$\\1",arrCovSplitted)
           for (cur_covText in arrCovText){
+
             eval(parse(text=cur_covText))
             #put the new column into the beginning
             cNames<-colnames(dsMetricsFiltered)
@@ -604,7 +632,9 @@ for (cur_sm in METRICS){    #for each metric
         up.ci.cort=rep(NA,ncol(dsMetrics)-1)
         n.controls=rep(NA,ncol(dsMetrics)-1)
         n.patients=rep(NA,ncol(dsMetrics)-1)
+	n.overall=rep(NA,ncol(dsMetrics)-1)
         pval=rep(NA,ncol(dsMetrics)-1)
+	pvalOfInt=rep(NA,ncol(dsMetrics)-1)
         std=rep(NA,ncol(dsMetrics)-1)
        # ** by now, all the filters are applied to the data, the text of LM is prepared, and we are ready to run LM on each vertex
         
@@ -616,12 +646,13 @@ for (cur_sm in METRICS){    #for each metric
         pbLinModels <- txtProgressBar(1,ncol(dsMetricsFiltered_CurrentLM),title='Reading subjects.')
         iPb=1 #counter for progress bar
  	lmList<-c()      
-        
+	
         result = tryCatch({
          
           # **APPLYING LM TO EACH VERTEX // ncol(dsSubjectsCov)//
           for (cur_vert in (nCovariates+1):ncol(dsMetricsFiltered_CurrentLM)) { #beginning from 1st metrics column
-            cur_vertInd=cur_vert-ncol(dsSubjectsCov)
+            #cur_vertInd=cur_vert-ncol(dsSubjectsCov)
+	    cur_vertInd=cur_vert-nCovariates
             res<-dsMetricsFiltered_CurrentLM[,cur_vert]
             lmFullText<-paste('lmfit<-lm(res','~',lmText,')',sep='')
             eval(parse(text=lmFullText))
@@ -651,31 +682,43 @@ for (cur_sm in METRICS){    #for each metric
             
             n.controls[cur_vertInd] = length(which(lmfit$model[,2] == contvalue))
             n.patients[cur_vertInd] = length(which(lmfit$model[,2] == patvalue))
-            
+            n.overall[cur_vertInd]= nrow(lmfit$model)
+
             #Convert the lm model to a summary format so we can extract statistics
             
     #       tstat=tmp$coefficients[2,3] # Get t-statistic from regression to convert to Cohens d
             factorName=getTstatFactorName(lmMainFactor,rownames(tmp$coefficients))
+	    factorOfIntName<-getTstatFactorName(factorOfInterest,rownames(tmp$coefficients))
             tstat=tmp$coefficients[factorName,3]
             
             tstat.df=tmp$df[2]
             pvalname=''
             #if lmMainFactor contains word "factor" => do a T-Test. Else - do Partial Correlations
-            if (length(grep("factor",lmMainFactor,value=TRUE))==0) {
+	    
+	    pvalOfInt[cur_vertInd]<-tmp$coefficients[factorOfIntName,4]            
+            pvalOfIntName<-paste('p.val.OfInt_',factorOfIntName,sep='')
+	    if (length(grep("factor",lmMainFactor,value=TRUE))==0) {
               # this is the part for continuous variables.
-              cat("Partial correlations\n")
-              partcor.i <- pcor.test(lmfit$model[1],lmfit$model[,2],lmfit$model[,c(3:ncol(lmfit$model))])	
-              r.cort[cur_vertInd]=partcor.i[,1]
-              pval[cur_vertInd]=partcor.i[,2]   #mind that here pval is not for the beta, but for partial correlations
-              se.cort[cur_vertInd]=tmp$coefficients[factorName,2]  #here se is not derived from Cohen's d, but directly taken from the linear model
-              pvalname='p.val_corr'
+              if(lmMainFactor!=""){
+		      #cat("Partial correlations\n")
+		      partcor.i <- pcor.test(lmfit$model[1],lmfit$model[,2],lmfit$model[,c(3:ncol(lmfit$model))])	
+		      r.cort[cur_vertInd]=partcor.i[,1]
+		      pval[cur_vertInd]=partcor.i[,2]   #mind that here pval is not for the beta, but for partial correlations
+		      se.cort[cur_vertInd]=tmp$coefficients[factorName,2]  #here se is not derived from Cohen's d, but directly taken from the linear model
+		      pvalname='p.val_corr'
+	      }
+	      else {
+		      pval[cur_vertInd]=NA
+		      pvalname='p.val'
+
+	      }
             }
-            else{
+            else {
               pvalname=paste('p.val_',factorName,sep='')
               #this is the part for factors with levels
               #collect effect size data
               if((n.controls[cur_vertInd]<contmin)|(n.patients[cur_vertInd]<patmin))
-		{
+		{		
                 #this happens when you don't have enough patients and conrols
                 d.cort[cur_vertInd]=NA
                 se.cort[cur_vertInd]=NA
@@ -686,11 +729,11 @@ for (cur_sm in METRICS){    #for each metric
                 std[cur_vertInd]=NA
               }
               else {
-		cat ("FACTOR NAME: \n")
-		cat(factorName)
-		cat ("lm Main Factor: \n")
-		cat(lmMainFactor)
-		if (length(grep(".*:.*",factorName))>0){
+#		cat ("FACTOR NAME: \n")
+#		cat(factorName)
+#		cat ("lm Main Factor: \n")
+#		cat(lmMainFactor)
+		if (length(grep(".*:.*",factorName))>0){	# interaction means no Cohen's D
 			d.cort[cur_vertInd]=NA
 		        se.cort[cur_vertInd]=NA
 		        bound.cort=NA
@@ -698,7 +741,7 @@ for (cur_sm in METRICS){    #for each metric
 		        up.ci.cort[cur_vertInd]=NA
 			pval[cur_vertInd]=tmp$coefficients[factorName,4] #pval is directly taken from linear model                	
 		}
-		else if (length(unique(lmfit$model[lmMainFactor]))>2) {
+		else if (length(unique(lmfit$model[lmMainFactor]))>2) { #if factor level amount is greater than 2 that also means no Cohen's D
 			d.cort[cur_vertInd]=NA
 		        se.cort[cur_vertInd]=NA
 		        bound.cort=NA
@@ -706,7 +749,7 @@ for (cur_sm in METRICS){    #for each metric
 		        up.ci.cort[cur_vertInd]=NA
 	                pval[cur_vertInd]=tmp$coefficients[factorName,4] #pval is directly taken from linear model                	
 		}
-		else {
+		else {	
 		        #this is when you have enough patients and controls - computing cohen's d and standard error
 		        d.cort[cur_vertInd]=partial.d(tstat,tstat.df,n.controls[cur_vertInd],n.patients[cur_vertInd])
 		        se.cort[cur_vertInd]=se.d2(d.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd])
@@ -720,9 +763,9 @@ for (cur_sm in METRICS){    #for each metric
               
   
             #create matrix for the effect size for each vertex
-            effectSize=c(r.cort[cur_vertInd],d.cort[cur_vertInd],se.cort[cur_vertInd],low.ci.cort[cur_vertInd],up.ci.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd],pval[cur_vertInd])
+            effectSize=c(r.cort[cur_vertInd],d.cort[cur_vertInd],se.cort[cur_vertInd],low.ci.cort[cur_vertInd],up.ci.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd],n.overall[cur_vertInd],pval[cur_vertInd])
             
-            names(effectSize)<-c(paste('r_',cur_sm,'_vs_',factorName,sep=''),paste('d_',factorName,sep=''),paste('st_err(d)_',factorName,sep=''),paste('low.ci(d)_',factorName,sep=''),paste('up.ci(d)_',factorName,sep=''),'n.controls','n.patients',pvalname)
+            names(effectSize)<-c(paste('r_',cur_sm,'_vs_',factorName,sep=''),paste('d_',factorName,sep=''),paste('st_err(d)_',factorName,sep=''),paste('low.ci(d)_',factorName,sep=''),paste('up.ci(d)_',factorName,sep=''),'n.controls','n.patients','n.overall',pvalname)
             resRow<-c(metaData,coeffs,stes,effectSize)
             if(!resMatr_created){
               resMatr<-matrix(resRow,nrow=1,ncol=length(resRow),dimnames=list(c(),names(resRow)))
