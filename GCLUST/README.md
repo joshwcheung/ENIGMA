@@ -61,7 +61,7 @@ ln -s ${FREESURFER_HOME}/subjects/fsaverage .
 Create a list of FreeSurfer subject directories to be included in the result 
 spreadsheets using the `set_subjlist.csh` script.
 
-*	Open the set_subjlist.csh script in any text editor and edit the 
+*	Open the `set_subjlist.csh` script in any text editor and edit the 
 	environment variable:
 
 <pre>
@@ -90,7 +90,7 @@ Resample FreeSurfer surface measures to the atlas and extract weighted averages
 using fuzzy cluster ROIs based on genetic correlations using the `gclust.csh` 
 script.
 
-*	Open the gclust.csh script in any text editor and edit environment 
+*	Open the `gclust.csh` script in any text editor and edit environment 
 	variables:
 	
 <pre>
