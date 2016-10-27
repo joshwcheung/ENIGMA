@@ -24,7 +24,7 @@ that the commands work on your system and data.
 
 This section assumes that you have on your system:
 
-*	Download the [driver script](prepoc.csh)
+*	Download the [driver script](preproc.csh)
 *	Download [design matrix file template](subjects.fsgd)
 
 NOTE: It is recommended that vertexwise analyses be performed on data that have 
