@@ -17,6 +17,121 @@ The following scripts should be downloaded from GitHub:
 - Shell-wrapper for script for concatenating results from all ROIs (*concat_mass_uv_regr\[_csv\].sh file on end user machine*)
 - The R executable code for concatenating results from all ROIs (*concat_mass_uv_regr\[_csv\].R file on end user machine*)
 
+# Step by step tutorial on setting up your analysis with Average ROI metrics
+This section is a step-by-step tutorial on setting up analysis with Average ROI metrics.
+### Step 1. Prepare directory structure
+Create a folder on your machine/server where you will be performing your analysis. For example:    
+
+    mkdir /<path-to-your-folder>/ENIGMA
+
+In that folder create 4 subfolders where you will put your data, logs, results and scripts. For example:
+
+    mkdir /<path-to-your-folder>/ENIGMA/data
+    mkdir /<path-to-your-folder>/ENIGMA/logs
+    mkdir /<path-to-your-folder>/ENIGMA/results
+    mkdir /<path-to-your-folder>/ENIGMA/scripts
+
+### Step 2. Prepare metrics CSV files
+Create or copy your existing metrics files to `data` folder. Metrics file should have name `prefix_TRAIT.csv`, where `prefix` is any string, and `TRAIT` - the name of metric, contained in that file. For example:
+```
+    /<path-to-your-folder>/ENIGMA/data/metr_FA.csv
+    /<path-to-your-folder>/ENIGMA/data/metr_MD.csv
+    /<path-to-your-folder>/ENIGMA/data/metr_AD.csv
+    /<path-to-your-folder>/ENIGMA/data/metr_RD.csv
+``` 
+\- are traditional Diffusion Tensor FA, MD, AD, RD metrics.
+
+Please mind, that *Each metrics should have its separate file*.
+
+Required structure of metrics file:
+
+SubjID | ROI_Name1 | ROI_Name2 | ... | ROI_Name#N
+-------|-----------|-----------|-----|-----------
+\<ID_1\>|0.42|0.81| ... | 0.64
+\<ID_2\>|0.61|0.58| ... | 0.55
+...|...|...|...|...
+
+**SubjID** column name should not be changed. You will later need list of ROI names (ROI_name1, ROI_name2, etc.) for configuring shell script, so keep them meaningful. Please take a look at the [Example of metr_FA.csv](http://metr_FA.csv).
+
+### Step 3. Prepare your covariates CSV file.
+Create or copy your covariates file to `data` folder. For example:
+```
+    /<path-to-your-folder>/ENIGMA/data/covariates.csv    
+```
+Example structure of covariates file:
+
+SubjID | Site | Age | Sex |... 
+-------|------|-----|-----|---
+\<ID_1\>|USC|34| 1 | ... 
+\<ID_2\>|USC|37| 0 | ...
+...|...|...|...|...
+
+**SubjID** column name should not be changed. If you do multi-site study, then **Site** column is obligatory.  Please check that Subject IDs and number of rows in covariates and metrics CSV match. It's necessary for correct script performance. Please take a look at the [Example of covariates.csv](http://covariates.csv)
+
+
+### Step 4. Prepare QA analysis file (if you have one).
+If you did automatic QA, please copy your QA analysis output .csv file to `data` folder. For example:
+```
+	/<path-to-your-folder>/ENIGMA/data/QA.csv
+```
+Required structure of QA file:
+
+
+SubjID | **ROI**\<ROI_Name1\> | **ROI**\<ROI_Name2\> | ... | **ROI**\<ROI_Name#N\>
+-------|-----------|-----------|-----|-----------
+\<ID_1\>|0.42|0.81| ... | 0.64
+\<ID_2\>|0.61|0.58| ... | 0.55
+...|...|...|...|...
+
+**SubjID** column name should not be changed. Columns corresponding to ROIs have to have prefix **ROI** and then real ROI name(same as in metrics and covariates CSV files) without any space.
+
+### Step 5. Register your study in ENIGMA-Analysis Google Sheet (Should be done by Group Leader).
+Main configuration file is [ENIGMA Analysis Google Sheet](http://www.link/), that is shared by all group leaders, each of them owning one or several lines in the sheet.
+#### ENIGMA Analysis Google Sheet structure
+[ENIGMA Analysis Google Sheet](http://www.link/) consists of the following columns:
+
+1. **ID**. Unique ID of your study
+2. **AnalysisList_Path**. Link to Google Sheet with configuration of your Linear Models.
+3. **DemographicsList_Path**. Link to Google Sheet with configuration for descriptive statistics you want to gather from your sample (mean Age, amount of Men/Women, mean Age of Men/Women, etc.).
+4. **Type**. Can take either of two values: **raw**/**csv**. Use **raw** if your study is dealing with shape data. Use **csv** if you read average ROI metrics from .csv files.
+5. **Trait**. List metric names that correspond to names of your csv file name. If your metrics files are named `metr_FA.csv`, `metr_MD.csv`, `metr_AD.csv`, `metr_RD.csv` then your **Trait** field should be `FA; MD; AD; RD`. **Names should be separated with semicolon and a space**. 
+See [Example for ENIGMA Analysis Google Sheet](http://www.example-enigma-analysis/).
+
+### Step 6. Create Linear Model Google Sheet (AnalysisList_Path).
+
+### Step 7. Create Demographics Google Sheet (DemographicsList_Path).
+
+### Step 8. Download scripts.
+
+### Step 9. Adjust mass_uv_regr_csv.sh
+
+### Step 10. Make sure you have R packages installed.
+
+....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Confuguration and input data preparation for usage with Average ROI imaging metrics
 Main configuration file is [ENIGMA Analysis Google Sheet](http://www.link/), that is shared by all group leaders, each of them owning one or several lines in the sheet.
 ### ENIGMA Analysis Google Sheet structure
@@ -26,10 +141,11 @@ Main configuration file is [ENIGMA Analysis Google Sheet](http://www.link/), tha
 2. **AnalysisList_Path**. Link to Google Sheet with configuration of your Linear Models.
 3. **DemographicsList_Path**. Link to Google Sheet with configuration for descriptive statistics you want to gather from your sample (mean Age, amount of Men/Women, mean Age of Men/Women, etc.).
 4. **Type**. Can take either of two values: **raw**/**csv**. Use **raw** if your study is dealing with shape data. Use **csv** if you read average ROI metrics from .csv files.
-5. **Trait**. List metric names as they are named in your csv/raw file. **Names should be separated with semicolon and a space**. *Need to be more clear - tell about column names in metr_FA.csv, or names of .raw files*.
+5. **Trait**. List metric names that correspond to names of your csv/raw file (see below in **Script shell-wrapper** section).  **Names should be separated with semicolon and a space**. *Need to be more clear - tell about column names in metr_FA.csv, or names of .raw files*.
 See [Example for ENIGMA Analysis Google Sheet](http://www.example-enigma-analysis/).
 
-
+### Average ROI imaging metrics file
+ROI imaging metrics file should have structure
 
 ### Configuration of the models and input data preparation
 
