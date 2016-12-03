@@ -1,3 +1,45 @@
+# ENIGMA Effect size and GLM script
+*Dmitry Isaev, Boris Gutman, Neda Jahanshad, Sinead Kelly*
+
+The script is intended at batch processing of multiple linear models, and the results can be carried on to meta-analysis stage. 
+Each working group may configure its own set of linear models, depending on imaging metrics and covariates data it has.
+Imaging metrics could be: **average ROI values (FA, MD, etc.)** or **shape vertexwise values**.
+Configuring script for average ROI values and shape vertexwise data is in a big way different, so below it is explained in 2 different paragraphs.
+
+### Contents of the package
+In order to run the package, the following data should be present:
+- Linear Models and Demographics statistics configuration file (*Google Docs*)
+- Average ROI imaging measures/vertexwise shape measures (*shape output .raw or average ROI .csv files on end user machine*)
+- Covariates files (*.csv files on end user machine*)
+The following scripts should be downloaded from GitHub:
+- Script shell-wrapper (*mass_uv_regr\[_csv\].sh file on end user machine*)
+- The R executable code (*mass_uv_regr.R file on end user machine*)
+- Shell-wrapper for script for concatenating results from all ROIs (*concat_mass_uv_regr\[_csv\].sh file on end user machine*)
+- The R executable code for concatenating results from all ROIs (*concat_mass_uv_regr\[_csv\].R file on end user machine*)
+
+## Confuguration and input data preparation for usage with Average ROI imaging metrics
+Main configuration file is [ENIGMA Analysis Google Sheet](http://www.link/), that is shared by all group leaders, each of them owning one or several lines in the sheet.
+### ENIGMA Analysis Google Sheet structure
+[ENIGMA Analysis Google Sheet](http://www.link/) consists of the following columns:
+
+1. **ID**. Unique ID of your study
+2. **AnalysisList_Path**. Link to Google Sheet with configuration of your Linear Models.
+3. **DemographicsList_Path**. Link to Google Sheet with configuration for descriptive statistics you want to gather from your sample (mean Age, amount of Men/Women, mean Age of Men/Women, etc.).
+4. **Type**. Can take either of two values: **raw**/**csv**. Use **raw** if your study is dealing with shape data. Use **csv** if you read average ROI metrics from .csv files.
+5. **Trait**. List metric names as they are named in your csv/raw file. **Names should be separated with semicolon and a space**. *Need to be more clear - tell about column names in metr_FA.csv, or names of .raw files*.
+See [Example for ENIGMA Analysis Google Sheet](http://www.example-enigma-analysis/).
+
+
+
+### Configuration of the models and input data preparation
+
+### Configuration of the script on end-user machine
+
+### Running the script
+
+### Appendix A. Installation and prerequisites.
+
+
 ---README for mass_uv_regr package of scripts---
 
 Dmitry Isaev
