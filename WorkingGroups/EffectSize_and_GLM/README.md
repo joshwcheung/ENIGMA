@@ -205,9 +205,9 @@ Open `mass_uv_regr_csv.sh` in any text editor and configure as follows for your 
 ### Step 9. Make sure you have R packages installed.
 Before running the script you have to make sure you have all necessary libraries for R.
 The following packages should be installed for R:
-	`matrixStats`
-	`RCurl`
-	`ppcor`
+	`matrixStats`,
+	`RCurl`,
+	`ppcor`,
 	`moments`.
 ### Step 10. Running the script.
 You can split this up for parallelized regressions if you Q-SUB it!
@@ -242,7 +242,7 @@ Configuring `concat_mass_uv_regr_csv.sh` script:
 Results: files {GROUP_ID}_{METRICS}_ALL_{MODEL_ID}_{SitePostfix}.csv - all ROI for the same model and same trait concatenated in one file.
 
 
-
+...
 
 
 
