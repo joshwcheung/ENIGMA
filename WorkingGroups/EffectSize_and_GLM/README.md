@@ -98,6 +98,78 @@ Main configuration file is [ENIGMA Analysis Google Sheet](http://www.link/), tha
 See [Example for ENIGMA Analysis Google Sheet](http://www.example-enigma-analysis/).
 
 ### Step 6. Create Linear Model Google Sheet (AnalysisList_Path).
+Configuring the linear models Google Sheet. For example see [Example of Enigma Linear models Google sheet](https://docs.google.com/spreadsheets/d/1N98u4C_Tl2jaW_bFDtkdatOdfHNoR2NBAs60UWqL9YM)
+Overall you may do three different types of analysis with the package:
+
+- effect size analysis (Cohen's D). In that case you should have two-level diagnosis variable, for which the system will compute the size of effect.
+- Partial correlations. In that case you compute partial correlations between imaging metric and first variable in your analysis, controlling for all other variables included in your linear model.
+- Linear model computing betas for all covariates, and outputting p-value for particular covariate of interest.
+
+These three different behaviours are defined by 3 fields: **LM**,**MainFactor** and **FactorOfInterest**. 
+
+- For Effect size analysis - see section 6.3
+- For Partial correlations - see section 6.4
+- For Beta and p-value - see section 6.5
+
+#### 6.1. ID
+- ID of each distinct linear model, results are written to the file with the name {GROUP_ID}_{METRICS}_{ROI}_{ID}_{SitePostfix}.csv, where METRICS={LogJacs|thick|FA|MD|etc...} 
+
+#### 6.2 Name
+- for your own purposes, not used in the script.
+
+#### 6.3 Effect size analysis (Cohen's D).
+
+##### 6.3.1 LM
+The actual linear model, expressed in R syntax. Covariate, which effect size you want to find, **should go first in Linear Model formula**.
+The names of the variables MUST EXACTLY MATCH those in the covariates file (see **Step 3**) 
+Categorical variables should be embedded as 'factor(variable)'.
+
+#### 6.3.2 MainFactor and FactorOfInterest
+Variable, which effect size is of interest, should be listed as MainFactor. For example, if your LM=*'factor(Dx)+Age+Sex+Age:Sex'*, then your MainFactor should be *'factor(Dx)'*. FactorOfInterest should be left empty.
+
+#### 6.4 Partial correlations analysis.
+
+##### 6.4.1 LM
+The actual linear model, expressed in R syntax. Covariate, which you want to correlate with imaging metrics , **should go first in Linear Model formula**.
+The names of the variables MUST EXACTLY MATCH those in the covariates file (see **Step 3**) 
+LM should not contain variables embedded as 'factor(variable)'. For partial correlations to work properly, all variables have to be continious.
+
+#### 6.4.2 MainFactor and FactorOfInterest
+Covariate, for which we want to get partial correlations, should be listed in the field MainFactor. For example, if your LM=*'Age+Sex+Age:Sex'*, and you're looking for correlations between imaging metrics and Age, then your MainFactor should be *'Age'*. FactorOfInterest should be left empty. Mind, that Age should go in first place in Linear Model.
+
+#### 6.5 Beta and p-value for particular variable.
+If we just want to output beta and p-value for particular covariate, we should put it in first place in Linear Model, and put it's name into "FactorOfInterest" field.
+##### 6.5.1 LM
+Except putting factor of interest in first place, no special restrictions are set on linear model.
+##### 6.5.2 MainFactor and FactorOfInterest
+MainFactor should be left empty. FactorOfInterest should represent the name of the covariate for which we need beta and p-value.
+
+#### 6.6 Filters_1, Filters_2
+- filters which should be applied to the data before fitting the linear model. Variables should be separated from other syntax with DOUBLE UNDERSCORE ON BOTH SIDES: __Variable__
+- Filters_3 - not used.
+
+#### 6.7 SiteRegressors 
+- used if multiple Site variables present in covariates file (e.g. Site1,Site3.1., etc). If 'all' is put into the field, all variables named like 'SiteN' are added to the model as regressors. if there's no such variables, no regressors will be added.
+
+#### 6.8 NewRegressors 
+ONLY FOR VERY EXPERIENCED USERS :))) -- let us know if you want to learn to work with these!
+New variables that can be created from existing. Applied before filtering, so new regressors can be used for filtering
+
+#### 6.9 ContValue,PatValue 
+- value of variables used for t-test for 'factor' variable. By default, 0 and 1. If your variable like 'factor(ATBN)' is istead taking values '3.1.' and '3' you should put these values in the ContValue and PatValue fields.
+
+#### 6.10 Active.
+SETS IF THE LINE WILL BE EXECUTED BY THE SCRIPT.
+If you want some lines to be omitted in the run, for debugging purposes, set ACTIVE to 0.
+
+#### 6.11 Comments. 
+Anything you like.
+
+#### 6.12 ContMin,PatMin 
+- minimum amount of elements in controls/patient groups needed to run the test
+
+#### 6.13 SaveLM 
+- should either be 1 or 0. If set to 1, then the linear models in R format are saved to the .RData variable (with the  name {GROUP_ID}_{METRICS}_LM_{ROI}_{ID}_{SitePostfix}.Rdata) in the results folder
 
 ### Step 7. Create Demographics Google Sheet (DemographicsList_Path).
 
