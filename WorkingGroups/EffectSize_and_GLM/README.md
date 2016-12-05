@@ -79,8 +79,8 @@ Required structure of QA file:
 
 SubjID | **ROI**\<ROI_Name1\> | **ROI**\<ROI_Name2\> | ... | **ROI**\<ROI_Name#N\>
 -------|-----------|-----------|-----|-----------
-\<ID_1\>|0.42|0.81| ... | 0.64
-\<ID_2\>|0.61|0.58| ... | 0.55
+\<ID_1\>|3|2| ... | 1
+\<ID_2\>|1|2| ... | 3
 ...|...|...|...|...
 
 **SubjID** column name should not be changed. Columns corresponding to ROIs have to have prefix **ROI** and then real ROI name(same as in metrics and covariates CSV files) without any space.
@@ -124,7 +124,7 @@ The actual linear model, expressed in R syntax. Covariate, which effect size you
 The names of the variables MUST EXACTLY MATCH those in the covariates file (see **Step 3**) 
 Categorical variables should be embedded as 'factor(variable)'.
 
-#### 6.3.2 MainFactor and FactorOfInterest
+##### 6.3.2 MainFactor and FactorOfInterest
 Variable, which effect size is of interest, should be listed as MainFactor. For example, if your LM=*'factor(Dx)+Age+Sex+Age:Sex'*, then your MainFactor should be *'factor(Dx)'*. FactorOfInterest should be left empty.
 
 #### 6.4 Partial correlations analysis.
@@ -134,7 +134,7 @@ The actual linear model, expressed in R syntax. Covariate, which you want to cor
 The names of the variables MUST EXACTLY MATCH those in the covariates file (see **Step 3**) 
 LM should not contain variables embedded as 'factor(variable)'. For partial correlations to work properly, all variables have to be continious.
 
-#### 6.4.2 MainFactor and FactorOfInterest
+##### 6.4.2 MainFactor and FactorOfInterest
 Covariate, for which we want to get partial correlations, should be listed in the field MainFactor. For example, if your LM=*'Age+Sex+Age:Sex'*, and you're looking for correlations between imaging metrics and Age, then your MainFactor should be *'Age'*. FactorOfInterest should be left empty. Mind, that Age should go in first place in Linear Model.
 
 #### 6.5 Beta and p-value for particular variable.
@@ -173,13 +173,75 @@ Anything you like.
 
 ### Step 7. Create Demographics Google Sheet (DemographicsList_Path).
 
-### Step 8. Download scripts.
+### Step 8. Download scripts and adjust mass_uv_regr_csv.sh
+Download all files from `script` folder on GitHub into `/<path-to-your-folder>/ENIGMA/scripts`.
+Give yourself permissions to everything in the folders
 
-### Step 9. Adjust mass_uv_regr_csv.sh
+    chmod -R 755 /<path-to-your-folder>/ENIGMA/scripts  
 
-### Step 10. Make sure you have R packages installed.
+Open `mass_uv_regr_csv.sh` in any text editor and configure as follows for your own analysis.
+##### 8.1  Section 1:
 
-....
+- `scriptDir="/<path-to-your-folder>/ENIGMA/scripts"`
+- `resDir="/<path-to-your-folder>/ENIGMA/results"`
+- `logDir="/<path-to-your-folder>/ENIGMA/logs"`
+    
+    
+##### 8.2 Section 2. Main configuration section
+
+- `RUN_ID="<STUDY_ID>"` - Unique ID of your study from ENIGMA Analysis Google Docs file (see **Step 5**)
+- `CONFIG_PATH="https://docs.google.com/spreadsheets/d/1AxtW4xN8ETZUHvztqqkF0jD68Mm_5SNPWV2Y6HPFrh8"` - path to ENIGMA Analysis Google Docs file. The script will take the AnalysisList_Path and DemographicsList_Path links from the line of config file with RUN_ID and will run the models from these files.
+- `SITE="<SITE_NAME>"` - the name of particular site for which the script is being configured. It will become the postfix for the resulting files.
+- `DATADIR="/<path-to-your-folder>/ENIGMA/data"` - folder where the covariates,metrics and QC reside.
+- `ROI_LIST` - list of ROIs (have pre-set value for shapes and csv, maybe no need to change it)
+- `SUBJECTS_COV="/<path-to-your-folder>/ENIGMA/data/covariates.csv"`
+- `EXCLUDE_FILE="/<path-to-your-folder>/ENIGMA/data/QA.csv"` path to QA file. (!!!) ADD QA_LEVEL
+- `METR_PREFIX="metr_"` - prefix for files with metrics (for instance if you have all files named as metr_FA.csv, metr_MD.csv, metr_AD.csv, etc)
+-  Nnodes - number of nodes used for computation. This number should match with that you set in qsub command: qsub -q .... -t 1-"Nnodes" mass_uv_regr_...sh. if you do not use grid and use just shell execution - use Nnodes=1. Otherwise set the number of nodes up to the number of ROIs.
+
+##### 8.3 Section 5. Path to R binary 
+- `Rbin="<path_to_R_binary>` - put here the path to R binary ( for which you installed the packages)
+
+### Step 9. Make sure you have R packages installed.
+Before running the script you have to make sure you have all necessary libraries for R.
+The following packages should be installed for R:
+	`matrixStats`
+	`RCurl`
+	`ppcor`
+	`moments`.
+### Step 10. Running the script.
+You can split this up for parallelized regressions if you Q-SUB it!
+
+`qsub -t 1-#N# mass_uv_regr_csv.sh`, where `#N#` is the Number of Nodes (Nnodes variable in your script)
+
+Another option is to set the number of nodes (**Nnodes** variable) to 1 and run it from command-line:
+
+`sh mass_uv_regr_csv.sh`
+
+### Step 11. Analyzing results.
+
+### Step 12. Concatenating results for subsequent meta-analysis.
+ After running the script you may want to concatenate .CSV files from each ROI.
+For this you should use the script `concat_mass_uv_regr_csv.sh` which calls `concat_mass_uv_regr.R`
+Configuring `concat_mass_uv_regr_csv.sh` script:
+##### 12.2 Section 1:
+
+	scriptDir,
+	resDir,
+	logDir,
+	
+\-same as in mass_uv_regr.sh, see **Step 8.1**
+##### 12.2 Section 2:
+	RUN_ID,
+	CONFIG_PATH,
+	SITE,
+\-same as in mass_uv_regr.sh, see **Step 8.2**
+\-ROI_LIST - DO NOT CHANGE
+##### 12.3 Running the script:
+	sh  concat_mass_uv_regr_csv.sh
+Results: files {GROUP_ID}_{METRICS}_ALL_{MODEL_ID}_{SitePostfix}.csv - all ROI for the same model and same trait concatenated in one file.
+
+
 
 
 
