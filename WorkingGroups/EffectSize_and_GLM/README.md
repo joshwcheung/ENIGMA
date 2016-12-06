@@ -144,23 +144,54 @@ Except putting factor of interest in first place, no special restrictions are se
 ##### 6.5.2 MainFactor and FactorOfInterest
 MainFactor should be left empty. FactorOfInterest should represent the name of the covariate for which we need beta and p-value.
 
-#### 6.6 Filters_1, Filters_2
-- filters which should be applied to the data before fitting the linear model. Variables should be separated from other syntax with DOUBLE UNDERSCORE ON BOTH SIDES: __Variable__
-- Filters_3 - not used.
+#### 6.6 Adding filters (Filters_1, Filters_2)
+
+In the Filters columns, various filters for the data can be applied.  Variables should be separated from other syntax with DOUBLE UNDERSCORE ON BOTH SIDES: \_\_Variable\_\_.
+For example, if you want to investigate the effects of age at onset in patients only, include: 
+	
+	(__Dx__==1) & (!is.na(__AO__))
+
+Here, we assume that patients are coded as “1” and age at onset is coded as “AO”
+
+If you have a variable that has multiple levels, e.g antipsychotic medication (unmediated, typical, atypical, both), you may want to include more than one filter for individual t-tests between these groups. 
+In this example, we may want to compare patients on atypical medication with patients on typical medication (excluding the other two medication groups, as well as healthy controls).
+In this case, we would add the first filter to look at patients only and then patients on typical medication (assuming patients on typical medication are coded as “2” in your antipsychotic (“AP”) variable):
+
+	(__Dx__==1) & (__AP__==2)
+
+Then, in the second filter column, you will filter for patients only, as well as patients on atypical medication (assuming atypical patients are coded as “3” in your “AP” variable):
+
+	(__Dx__==1) & (__AP__==3)
+
+Finally, in the ‘ContValue’ and ‘PatValue’ columns, enter “2” and “3” respectively, to indicate that you are comparing groups 2 and 3 for your antipsychotic medication (“AP”) variable. 
+
+*Filters_3 column should not be used.*
 
 #### 6.7 SiteRegressors 
 - used if multiple Site variables present in covariates file (e.g. Site1,Site3.1., etc). If 'all' is put into the field, all variables named like 'SiteN' are added to the model as regressors. if there's no such variables, no regressors will be added.
 
 #### 6.8 NewRegressors 
-ONLY FOR VERY EXPERIENCED USERS :))) -- let us know if you want to learn to work with these!
-New variables that can be created from existing. Applied before filtering, so new regressors can be used for filtering
+
+In the “NewRegressers” column, you can introduce new regressors that may not be included in your covariate spreadsheets. For example, if you want to also covary for age demeaned (“AgeC”), enter a formula to calculate “AgeC”:
+
+	__AgeC__=__Age__-mean(__Age__)
+
+If you want to covary for Age demeaned squared (“AgeC2”), enter the following (all in the same cell):
+
+	__AgeC__=__Age__-mean(__Age__); __AgeC2__=__AgeC__*__AgeC__
+
+In the example config file you will see formulas for age demeaned by sex (“AgeCSex”), age squared demeaned (“Age2C”), and Age squared demeaned by sex (“Age2CSex”)
+These new variables can then be included as covariates in linear model (‘LM’ column):
+	
+	factor(Dx) + Age + factor(Sex) + AgeCSex +Age2C + Age2CSex
+
+New regressors are created  before filtering, so they in turn can be used for filtering.
 
 #### 6.9 ContValue,PatValue 
-- value of variables used for t-test for 'factor' variable. By default, 0 and 1. If your variable like 'factor(ATBN)' is istead taking values '3.1.' and '3' you should put these values in the ContValue and PatValue fields.
+- value of variables used for t-test for 'factor' variable. By default, 0 and 1. If your variable like 'factor(ATBN)' is instead taking values '2' and '3' you should put these values in the ContValue and PatValue fields.
 
 #### 6.10 Active.
-SETS IF THE LINE WILL BE EXECUTED BY THE SCRIPT.
-If you want some lines to be omitted in the run, for debugging purposes, set ACTIVE to 0.
+In the ‘Active’ column, you can activate the individual tests by entering “1” or deactivate individual tests by entering “0”.
 
 #### 6.11 Comments. 
 Anything you like.
@@ -172,6 +203,41 @@ Anything you like.
 - should either be 1 or 0. If set to 1, then the linear models in R format are saved to the .RData variable (with the  name {GROUP_ID}_{METRICS}_LM_{ROI}_{ID}_{SitePostfix}.Rdata) in the results folder
 
 ### Step 7. Create Demographics Google Sheet (DemographicsList_Path).
+This file specifies the descriptive statistics you want to obtain. 
+Three types of descriptive statistics can be specified in this file:
+
+- METRICS
+- COV
+- NUM
+#### 7.1. Metrics
+**METRICS** will output summary information (mean, sd, min, max) for each imaging measure (e.g. FA, volume, thickness) for each ROI or structure.  You can also split this up based on the groups in your analysis (patients, controls, medicated patients, unmedicated patients etc). See the ‘Filter’ column.  ‘Stats’ and ‘StatsNames’ columns indicate the statistics you want to obtain (sd, mean etc). 
+#### 7.2. COV (Covariates)
+**COV** obtains descriptive statistics (mean, sd, range) for each of your continuous variables in the analysis (e.g. age, duration of illness, age at onset etc.).  If you want to split this up in terms of your groups (patients, controls, medicated, unmedicated) use the ‘Filter’ column to specify your groups (see example). The ‘Covariate’ column will remain the same as the ‘Varname’ column and the ‘Postfix’ column will contain the postfix you want to give each output file. 
+#### 7.3. NUM (amount of subjects in different subsets
+**NUM** obtains the number (n) of participants for each categorical variable in your analysis (e.g. Diagnosis, Sex, medication type, smokers, non-smokers), but you also can filter subjects with continious variables (e.g. Age>30)
+Using the ‘Filter’ column, indicate if you want n for:
+Females only (assuming females are coded as “2”):
+
+	(__Sex__==2)
+
+Males only (assuming males are coded as “1”):
+
+	(__Sex__==1)
+
+Female healthy controls (assuming healthy controls are coded as “0’):
+
+	(__Sex__==2) & (__Dx__==0)
+
+Unmedicated females (assuming unmedicated patients are coded as “1”):
+
+	(__Sex__==2) & (__AP__==1)
+
+See example [Example DempographicsList Google Sheet](http://dem_config.csv) file for more filters.
+The working group leader in this case can intuitively name the ‘StatsNames’ column.
+
+‘Active’ columns can be left as “1” for active or “0” for inactive.
+
+*'Sepfile' column is deprecated. Set it to 0*.
 
 ### Step 8. Download scripts and adjust mass_uv_regr_csv.sh
 Download all files from `script` folder on GitHub into `/<path-to-your-folder>/ENIGMA/scripts`.
