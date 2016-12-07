@@ -19,6 +19,9 @@ The following scripts should be downloaded from GitHub:
 
 # Step by step tutorial on setting up your analysis with Average ROI metrics
 This section is a step-by-step tutorial on setting up analysis with Average ROI metrics.
+As an example of pre-configured scripts and data files, you can go to [example_tutorial](https://github.com/dyisaev/ENIGMA/tree/master/WorkingGroups/EffectSize_and_GLM/example_tutorial)
+
+
 ### Step 1. Prepare directory structure
 Create a folder on your machine/server where you will be performing your analysis. For example:    
 
@@ -51,7 +54,7 @@ SubjID | ROI_Name1 | ROI_Name2 | ... | ROI_Name#N
 \<ID_2\>|0.61|0.58| ... | 0.55
 ...|...|...|...|...
 
-**SubjID** column name should not be changed. You will later need list of ROI names (ROI_name1, ROI_name2, etc.) for configuring shell script, so keep them meaningful. Please take a look at the [Example of metr_FA.csv](http://metr_FA.csv).
+**SubjID** column name should not be changed. You will later need list of ROI names (ROI_name1, ROI_name2, etc.) for configuring shell script, so keep them meaningful. Please take a look at the [Example of metr_FA.csv](https://github.com/dyisaev/ENIGMA/blob/master/WorkingGroups/EffectSize_and_GLM/example_tutorial/data/metr_FA.csv).
 
 ### Step 3. Prepare your covariates CSV file.
 Create or copy your covariates file to `data` folder. For example:
@@ -86,19 +89,19 @@ SubjID | **ROI**\<ROI_Name1\> | **ROI**\<ROI_Name2\> | ... | **ROI**\<ROI_Name#N
 **SubjID** column name should not be changed. Columns corresponding to ROIs have to have prefix **ROI** and then real ROI name(same as in metrics and covariates CSV files) without any space.
 
 ### Step 5. Register your study in ENIGMA-Analysis Google Sheet (Should be done by Group Leader).
-Main configuration file is [ENIGMA Analysis Google Sheet](http://www.link/), that is shared by all group leaders, each of them owning one or several lines in the sheet.
+Main configuration file is [ENIGMA Analysis Google Sheet](https://docs.google.com/spreadsheets/d/142eQItt4C_EJQff56-cpwlUPK7QmPICOgSHfnhGWx-w), that is shared by all group leaders, each of them owning one or several lines in the sheet.
 #### ENIGMA Analysis Google Sheet structure
-[ENIGMA Analysis Google Sheet](http://www.link/) consists of the following columns:
+[ENIGMA Analysis Google Sheet](https://docs.google.com/spreadsheets/d/142eQItt4C_EJQff56-cpwlUPK7QmPICOgSHfnhGWx-w) consists of the following columns:
 
 1. **ID**. Unique ID of your study
 2. **AnalysisList_Path**. Link to Google Sheet with configuration of your Linear Models.
 3. **DemographicsList_Path**. Link to Google Sheet with configuration for descriptive statistics you want to gather from your sample (mean Age, amount of Men/Women, mean Age of Men/Women, etc.).
 4. **Type**. Can take either of two values: **raw**/**csv**. Use **raw** if your study is dealing with shape data. Use **csv** if you read average ROI metrics from .csv files.
 5. **Trait**. List metric names that correspond to names of your csv file name. If your metrics files are named `metr_FA.csv`, `metr_MD.csv`, `metr_AD.csv`, `metr_RD.csv` then your **Trait** field should be `FA; MD; AD; RD`. **Names should be separated with semicolon and a space**. 
-See [Example for ENIGMA Analysis Google Sheet](http://www.example-enigma-analysis/).
+See [Example for ENIGMA Analysis Google Sheet](https://docs.google.com/spreadsheets/d/142eQItt4C_EJQff56-cpwlUPK7QmPICOgSHfnhGWx-w) and checkout **ENIGMA_TUTORIAL** line.
 
 ### Step 6. Create Linear Model Google Sheet (AnalysisList_Path).
-Configuring the linear models Google Sheet. For example see [Example of Enigma Linear models Google sheet](https://docs.google.com/spreadsheets/d/1N98u4C_Tl2jaW_bFDtkdatOdfHNoR2NBAs60UWqL9YM)
+Configuring the linear models Google Sheet. For example see [Example of Enigma Linear models Google sheet](https://docs.google.com/spreadsheets/d/116R3FrZsfj842_DQkhbukXGWm9p1hdpddi3s3qvPucE)
 Overall you may do three different types of analysis with the package:
 
 - effect size analysis (Cohen's D). In that case you should have two-level diagnosis variable, for which the system will compute the size of effect.
@@ -232,7 +235,7 @@ Unmedicated females (assuming unmedicated patients are coded as “1”):
 
 	(__Sex__==2) & (__AP__==1)
 
-See example [Example DempographicsList Google Sheet](http://dem_config.csv) file for more filters.
+See example [Example DempographicsList Google Sheet](https://docs.google.com/spreadsheets/d/10YFVkYhKgDBsAnvkmCx7e_Iff2dmLJ0wyrsAbt82Cak) file for more filters.
 The working group leader in this case can intuitively name the ‘StatsNames’ column.
 
 ‘Active’ columns can be left as “1” for active or “0” for inactive.
