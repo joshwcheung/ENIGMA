@@ -50,7 +50,7 @@ then
 fi
 
 
-OUT=$scriptDir/log.txt
+OUT=$logDir/log_concat.txt
 touch $OUT
 cmd="${Rbin} --no-save --slave --args\
 		${RUN_ID}\
