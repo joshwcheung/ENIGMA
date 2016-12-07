@@ -763,10 +763,12 @@ for (cur_sm in METRICS){    #for each metric
               
   
             #create matrix for the effect size for each vertex
-            effectSize=c(r.cort[cur_vertInd],d.cort[cur_vertInd],se.cort[cur_vertInd],low.ci.cort[cur_vertInd],up.ci.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd],n.overall[cur_vertInd],pval[cur_vertInd])
+              effectSize=c(pvalOfInt[cur_vertInd],r.cort[cur_vertInd],d.cort[cur_vertInd],se.cort[cur_vertInd],low.ci.cort[cur_vertInd],up.ci.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd],n.overall[cur_vertInd],pval[cur_vertInd])
             
-            names(effectSize)<-c(paste('r_',cur_sm,'_vs_',factorName,sep=''),paste('d_',factorName,sep=''),paste('st_err(d)_',factorName,sep=''),paste('low.ci(d)_',factorName,sep=''),paste('up.ci(d)_',factorName,sep=''),'n.controls','n.patients','n.overall',pvalname)
-            resRow<-c(metaData,coeffs,stes,effectSize)
+            names(effectSize)<-c(pvalOfIntName,paste('r_',cur_sm,'_vs_',factorName,sep=''),paste('d_',factorName,sep=''),paste('st_err(d)_',factorName,sep=''),paste('low.ci(d)_',factorName,sep=''),paste('up.ci(d)_',factorName,sep=''),'n.controls','n.patients','n.overall',pvalname)
+
+
+           resRow<-c(metaData,coeffs,stes,effectSize)
             if(!resMatr_created){
               resMatr<-matrix(resRow,nrow=1,ncol=length(resRow),dimnames=list(c(),names(resRow)))
               resMatr_created=TRUE
