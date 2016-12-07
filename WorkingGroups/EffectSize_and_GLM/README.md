@@ -314,12 +314,23 @@ We are working on creating more extended FAQ for troubleshooting models.
 If you opted to save linear models (Save\_LM set to 1), then for each metric/ROI/LM you will have a file \_LM.RData. Usually they are outputted, and there's no problems with them.
 also, for each ROI you will have METRIC/COV/NUM.RData. For COV and NUM that's redundant, but unfortunately that's how it works now.
 
-
 ### Step 12. Concatenating results for subsequent meta-analysis.
  After running the script you may want to concatenate .CSV files from each ROI.
 For this you should use the script `concat_mass_uv_regr_csv.sh` which calls `concat_mass_uv_regr.R`
-Configuring `concat_mass_uv_regr_csv.sh` script:
-##### 12.2 Section 1:
+
+##### 12.1 Create roi_list.txt
+You will need a separate file with all ROI names that you used on the previous step to run the script.
+It should be a text file `/<path-to-your-folder>/ENIGMA/scripts/roi_list.txt`, and should have one line, containing ROI names, in quotes, separated by commas.
+so, if your variable `ROI_LIST` in `mass_uv_regr_csv.sh` looks like this:
+
+	ROI_LIST=("AF_L" "AF_R" "AF" "IFOF_L" "IFOF_R" "IFOF")
+	
+then your single line in roi_list.txt should look like this:
+
+	"AF_L","AF_R","AF","IFOF_L","IFOF_R","IFOF"
+
+After you created this file, you should configure `concat_mass_uv_regr_csv.sh` script.
+##### 12.2 Configuring `concat_mass_uv_regr_csv.sh` script. Section 1:
 
 	scriptDir,
 	resDir,
@@ -331,8 +342,14 @@ Configuring `concat_mass_uv_regr_csv.sh` script:
 	CONFIG_PATH,
 	SITE,
 \-same as in mass_uv_regr.sh, see **Step 8.2**
-\-ROI_LIST - DO NOT CHANGE
+\- `ROI_LIST_TXT="$scriptDir/roi_list.txt"`
 ##### 12.3 Running the script:
 	sh  concat_mass_uv_regr_csv.sh
-Results: files {GROUP_ID}_{METRICS}_ALL_{MODEL_ID}_{SitePostfix}.csv - all ROI for the same model and same trait concatenated in one file.
 
+### Step 13. Checking that concatenation worked fine
+If everything went well, there should be a number of new **.csv** files in `results` folder.
+Naming convention is {GROUP_ID}_{METRICS}_ALL_{MODEL_ID}_{SitePostfix}.csv - all ROI for the same model and same trait concatenated in one file.
+
+So there should be N(Linear models)\*N(metrics) total files.
+
+In case something went wrong, you may check `/<path-to-your-folder>/ENIGMA/logs/log_concat.txt`
