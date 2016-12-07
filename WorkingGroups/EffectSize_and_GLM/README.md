@@ -285,6 +285,35 @@ Another option is to set the number of nodes (**Nnodes** variable) to 1 and run 
 `sh mass_uv_regr_csv.sh`
 
 ### Step 11. Analyzing results.
+To check that scripts worked correctly, one should go 'logs' and 'results' directories.
+#### 11.1 Controlling the number of resulting .csv files
+Main result of the script is **.csv** file for each metrics, linear model and ROI. So if script worked correctly, you at least should have N(metr)\*N(LM)\*N(ROI) **.csv** files.
+To check that, you can `cd` to your `results` folder and do `wc -l` command:
+
+	cd /<path-to-your-folder>/ENIGMA/results
+	ls *.csv | wc -l
+
+if the number does not match with your expected amount, it means that something went wrong, and you need to figure out why.
+Usually, if something goes wrong - it goes wrong for some particular linear model, not for particular ROI or metrics.
+#### 11.2 Checking logs for errors
+To figure out what's going on you need to go to `logs` folder and open in text editor any **.log** file.
+In the editor search for the line:
+
+	`error_occ:1`
+
+after each model computed the script outputs `error_occ:0` if everything went well, or `error_occ:1` if something went wrong (*'error_occ'* stands for *'error_occured'*).
+If you find the line with *'error_occ:1'* you may scroll several lines up - you should find there `ERROR` (in capital letters), explainig very technically what has happened. 
+**Most common problems are:**
+
+- variable set as 'factor' has only one level, due to filtering
+- several variables in the model are collinear
+
+these usualy have to deal with phrases like `error in contrast(...)`.
+We are working on creating more extended FAQ for troubleshooting models.
+#### 11.3 Other checks
+If you opted to save linear models (Save\_LM set to 1), then for each metric/ROI/LM you will have a file \_LM.RData. Usually they are outputted, and there's no problems with them.
+also, for each ROI you will have METRIC/COV/NUM.RData. For COV and NUM that's redundant, but unfortunately that's how it works now.
+
 
 ### Step 12. Concatenating results for subsequent meta-analysis.
  After running the script you may want to concatenate .CSV files from each ROI.
