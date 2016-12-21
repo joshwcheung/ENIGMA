@@ -22,6 +22,17 @@ Open file ```meta_mass_uv_regr_parallel.sh``` in text editor and perform the cha
 - `scriptDir="/<path-to-your-folder>/ENIGMA/scripts"`
 - `resDir="/<path-to-your-folder>/ENIGMA/META/results"`
 - `logDir="/<path-to-your-folder>/ENIGMA/META/logs"`
-#### Section 2. Site list.
-Create a file named ```site_list.txt```` in your ```scriptDir```
-Enter the site names (as they are named in your first-level shell script in **SITE** variable), in quotes and separated with cmman
+#### Section 2. RUN_ID,CONFIG_PATH,ROI_LIST
+- Set ```RUN_ID``` to the same Study ID you used in ```mass_uv_regr_csv.sh```.
+- Set ```CONFIG_PATH``` to the same Config Path you used in ```mass_uv_regr_csv.sh```.
+These two variables allow script to identify the set of models it is dealing with.
+- Set ```ROI_LIST``` to the same value you used in ```mass_uv_regr_csv.sh```
+#### Section 3. Site list.
+Create a file named ```site_list.txt``` in your ```scriptDir```
+Enter the site names (as they are named in your first-level shell script in **SITE** variable), in quotes and separated with commas. See [site_list.txt](http://site_list.txt) for an example.
+#### Section 4. Other variables. 
+If you want to run script locally, set ```Nnodes=1```. Otherwise, set ```Nnodes=${#ROI_LIST[@]}```, or to how many nodes you want to use. (just uncomment previous line, and comment line ```Nnodes=1```.
+```NVERTEX="1" ``` - **this should be always the case when analyzing csv data**.
+### Step 4. Running the script.
+If you chose **Nnodes=1**, run ```sh meta_mass_uv_regr_parallel.sh```, otherwise run ```qsub -t 1-\#Nnodes meta_mass_uv_regr_parallel.sh```
+
