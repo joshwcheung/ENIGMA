@@ -49,5 +49,5 @@ If you chose **Nnodes=1**, run
 
 otherwise run 
 
-    qsub -t 1-\#Nnodes meta_mass_uv_regr_parallel.sh
+    qsub -t 1-#Nnodes meta_mass_uv_regr_parallel.sh
 
