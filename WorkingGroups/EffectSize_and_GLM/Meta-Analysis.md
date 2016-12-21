@@ -38,15 +38,16 @@ Enter the site names (as they are named in your first-level shell script in **SI
 #### Section 4. Other variables. 
 
 If you want to run script locally, set ```Nnodes=1```. Otherwise, set ```Nnodes=${#ROI_LIST[@]}```, or to how many nodes you want to use. (just uncomment previous line, and comment line ```Nnodes=1```.
+
 ```NVERTEX="1" ``` - **this should be always the case when analyzing csv data**.
 
 ### Step 4. Running the script.
 
 If you chose **Nnodes=1**, run 
     
-    ```sh meta_mass_uv_regr_parallel.sh```, 
+    sh meta_mass_uv_regr_parallel.sh 
 
 otherwise run 
 
-    ```qsub -t 1-\#Nnodes meta_mass_uv_regr_parallel.sh```
+    qsub -t 1-\#Nnodes meta_mass_uv_regr_parallel.sh
 
