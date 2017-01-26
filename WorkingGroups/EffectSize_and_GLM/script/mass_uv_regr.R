@@ -604,8 +604,12 @@ for (cur_sm in METRICS){    #for each metric
           arrCovSplitted<-strsplit(strCovariates,';')[[1]]
           arrCovText<-gsub("__(.*?)__","dsMetricsFiltered$\\1",arrCovSplitted)
           for (cur_covText in arrCovText){
-
+            cur_nCol=ncol(dsMetricsFiltered)
             eval(parse(text=cur_covText))
+
+            if(cur_nCol==ncol(dsMetricsFiltered)) # if a new statement didn't create a new regressor.    
+                next    
+
             #put the new column into the beginning
             cNames<-colnames(dsMetricsFiltered)
             cNamesNew<-c(cNames[length(cNames)],cNames[1:length(cNames)-1])
