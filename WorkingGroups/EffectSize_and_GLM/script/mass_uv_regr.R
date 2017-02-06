@@ -657,7 +657,11 @@ for (cur_sm in METRICS){    #for each metric
           for (cur_vert in (nCovariates+1):ncol(dsMetricsFiltered_CurrentLM)) { #beginning from 1st metrics column
             #cur_vertInd=cur_vert-ncol(dsSubjectsCov)
 	    cur_vertInd=cur_vert-nCovariates
-            res<-dsMetricsFiltered_CurrentLM[,cur_vert]
+	    #R version 3.0.2 - does not throw an error if there is no data - GitHub issue #16
+            err_noData<-simpleError("no data lines for the model after filtering")
+	    if (nrow(dsMetricsFiltered_CurrentLM)==0) stop(err_noData)
+	    
+	    res<-dsMetricsFiltered_CurrentLM[,cur_vert]
             lmFullText<-paste('lmfit<-lm(res','~',lmText,')',sep='')
             eval(parse(text=lmFullText))
             
