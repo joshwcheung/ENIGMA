@@ -5,6 +5,8 @@ The script is intended at batch processing of multiple linear models, and the re
 Each working group may configure its own set of linear models, depending on imaging metrics and covariates data it has.
 Imaging metrics could be: **average ROI values (FA, MD, etc.)** or **shape vertexwise values**.
 Configuring script for average ROI values and shape vertexwise data is in a big way different, so below it is explained in 2 different paragraphs.
+### System requirements
+You need **R version 3.1.3** for running these scripts. Please install it yourself or ask administrator of your system to install it, before you start configuring and testing scripts.
 
 ### Contents of the package
 In order to run the package, the following data should be present:
