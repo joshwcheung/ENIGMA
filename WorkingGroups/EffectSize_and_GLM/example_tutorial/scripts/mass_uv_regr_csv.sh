@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -S /bin/bash
- 
+#$ -o /ifshome/disaev/ENIGMA_TUTORIAL/log/main_log.log 
 
 #----Wrapper for csv version of mass_uv_regr.R script.
 #----See readme to change the parameters for your data
@@ -15,25 +15,25 @@
 #-----------------------------------------------
 
 #---Section 1. Script directories
-scriptDir=/ENIGMA_Regressions/mass_uv_regr_test/scripts/ ## where you have downloaded the ENIGMA Regression R scripts!
-resDir=/ENIGMA_Regressions/mass_uv_regr_test/results/   ## directory to be created for your results!
-logDir=/ENIGMA_Regressions/mass_uv_regr_test/log/        ## directory to be created to output the log files
+scriptDir="/ifshome/disaev/ENIGMA_TUTORIAL/scripts/" ## where you have downloaded the ENIGMA Regression R scripts!
+resDir="/ifshome/disaev/ENIGMA_TUTORIAL/results/"   ## directory to be created for your results!
+logDir="/ifshome/disaev/ENIGMA_TUTORIAL/log/"        ## directory to be created to output the log files
 
 #---Section 2. Configuration variables-----
 ## Get the following from your working group leader ## 
-RUN_ID="Ask your working group leader!"
+RUN_ID="ENIGMA_TUTORIAL"
 CONFIG_PATH="https://docs.google.com/spreadsheets/d/142eQItt4C_EJQff56-cpwlUPK7QmPICOgSHfnhGWx-w"
-ROI_LIST=("ACR" "ACR_L" "ACR_R" "ALIC" "ALIC_L" "ALIC_R") 
+ROI_LIST=("AverageFA" "GCC" "BCC" "SCC" "FX" "CST_R" "CST_L" "ALIC_R" "ALIC_L" "PLIC_R" "PLIC_L" "RLIC_R" "RLIC_L" "ACR_R" "ACR_L" "SCR_R" "SCR_L" "PCR_R" "PCR_L" "PTR_R" "PTR_L" "SS_R" "SS_L" "EC_R" "EC_L" "CGC_R" "CGC_L" "CGH_R" "CGH_L" "FX_ST_R" "FX_ST_L" "SLF_R" "SLF_L" "SFO_R" "SFO_L" "IFO_R" "IFO_L" "UNC_R" "UNC_L" "IC_R" "IC_L" "ALIC" "PLIC" "RLIC" "IC" "CR_R" "CC" "CR_L" "ACR" "SCR" "PCR" "CR" "CST" "PTR" "SS" "EC" "CGC" "CGH" "SLF" "SFO" "IFO" "FXST" "UNC")
 ############
 
 ## These are all you -- enter your site ID and paths to your files
-SITE="YOUR_site_ID_here"
-DATADIR="Full path to your data files"
-SUBJECTS_COV="/full_path_to_your_covariates_files/cov.csv"
+SITE="MDR"
+DATADIR="/ifshome/disaev/ENIGMA_TUTORIAL/data"
+SUBJECTS_COV="/ifshome/disaev/ENIGMA_TUTORIAL/data/covariates.csv"
 
 ## how are you running this?? Command-line or on Q-SUB
-#Nnodes=${#ROI_LIST[@]} 	# ***uncomment this if using a SGE or PBS cluster *** Set number of nodes to the length of ROI list
-Nnodes=1		# *** otherwise we're going to set the number of nodes to 1 and assume you are running locally
+Nnodes=${#ROI_LIST[@]} 	# ***uncomment this if using a SGE or PBS cluster *** Set number of nodes to the length of ROI list
+#Nnodes=1		# *** otherwise we're going to set the number of nodes to 1 and assume you are running locally
 
 #---Set the full path to your R binary
 Rbin=/usr/local/R-3.1.3/bin/R

@@ -604,12 +604,8 @@ for (cur_sm in METRICS){    #for each metric
           arrCovSplitted<-strsplit(strCovariates,';')[[1]]
           arrCovText<-gsub("__(.*?)__","dsMetricsFiltered$\\1",arrCovSplitted)
           for (cur_covText in arrCovText){
-            cur_nCol=ncol(dsMetricsFiltered)
+
             eval(parse(text=cur_covText))
-
-            if(cur_nCol==ncol(dsMetricsFiltered)) # if a new statement didn't create a new regressor.    
-                next    
-
             #put the new column into the beginning
             cNames<-colnames(dsMetricsFiltered)
             cNamesNew<-c(cNames[length(cNames)],cNames[1:length(cNames)-1])
@@ -657,11 +653,7 @@ for (cur_sm in METRICS){    #for each metric
           for (cur_vert in (nCovariates+1):ncol(dsMetricsFiltered_CurrentLM)) { #beginning from 1st metrics column
             #cur_vertInd=cur_vert-ncol(dsSubjectsCov)
 	    cur_vertInd=cur_vert-nCovariates
-	    #R version 3.0.2 - does not throw an error if there is no data - GitHub issue #16
-            err_noData<-simpleError("no data lines for the model after filtering")
-	    if (nrow(dsMetricsFiltered_CurrentLM)==0) stop(err_noData)
-	    
-	    res<-dsMetricsFiltered_CurrentLM[,cur_vert]
+            res<-dsMetricsFiltered_CurrentLM[,cur_vert]
             lmFullText<-paste('lmfit<-lm(res','~',lmText,')',sep='')
             eval(parse(text=lmFullText))
             
@@ -769,14 +761,15 @@ for (cur_sm in METRICS){    #for each metric
 	      }              
             }
               
-  
-            #create matrix for the effect size for each vertex
               effectSize=c(pvalOfInt[cur_vertInd],r.cort[cur_vertInd],d.cort[cur_vertInd],se.cort[cur_vertInd],low.ci.cort[cur_vertInd],up.ci.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd],n.overall[cur_vertInd],pval[cur_vertInd])
             
             names(effectSize)<-c(pvalOfIntName,paste('r_',cur_sm,'_vs_',factorName,sep=''),paste('d_',factorName,sep=''),paste('st_err(d)_',factorName,sep=''),paste('low.ci(d)_',factorName,sep=''),paste('up.ci(d)_',factorName,sep=''),'n.controls','n.patients','n.overall',pvalname)
 
-
-           resRow<-c(metaData,coeffs,stes,effectSize)
+            #create matrix for the effect size for each vertex
+#            effectSize=c(r.cort[cur_vertInd],d.cort[cur_vertInd],se.cort[cur_vertInd],low.ci.cort[cur_vertInd],up.ci.cort[cur_vertInd],n.controls[cur_vertInd],n.patients[cur_vertInd],n.overall[cur_vertInd],pval[cur_vertInd])
+            
+ #           names(effectSize)<-c(paste('r_',cur_sm,'_vs_',factorName,sep=''),paste('d_',factorName,sep=''),paste('st_err(d)_',factorName,sep=''),paste('low.ci(d)_',factorName,sep=''),paste('up.ci(d)_',factorName,sep=''),'n.controls','n.patients','n.overall',pvalname)
+            resRow<-c(metaData,coeffs,stes,effectSize)
             if(!resMatr_created){
               resMatr<-matrix(resRow,nrow=1,ncol=length(resRow),dimnames=list(c(),names(resRow)))
               resMatr_created=TRUE

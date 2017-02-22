@@ -15,15 +15,15 @@
 #-----------------------------------------------
 
 #---Section 1. Script directories
-scriptDir=/ENIGMA_Regressions/mass_uv_regr_test/scripts/ # directory where you have downloaded the ENIGMA R scripts
-resDir=/ENIGMA_Regressions/mass_uv_regr_test/results/  # directory where your results have been saved
-logDir=/ENIGMA_Regressions/mass_uv_regr_test/log/  # directory where your log files are
+scriptDir="/ifshome/disaev/ENIGMA_TUTORIAL/scripts/" ## where you have downloaded the ENIGMA Regression R scripts!
+resDir="/ifshome/disaev/ENIGMA_TUTORIAL/results/"   ## directory to be created for your results!
+logDir="/ifshome/disaev/ENIGMA_TUTORIAL/log/"        ## directory to be created to output the log files
+
 
 #---Section 2. Configuration variables-----
-
-RUN_ID="Ask your Working Group Leader!"
+RUN_ID="ENIGMA_TUTORIAL"
 CONFIG_PATH="https://docs.google.com/spreadsheets/d/142eQItt4C_EJQff56-cpwlUPK7QmPICOgSHfnhGWx-w"
-SITE="YourSiteID_here"
+SITE="MDR"
 ROI_LIST_TXT="$scriptDir/roi_list.txt"
 
 #---Section 5. R binary -- CHANGE this to reflect the full path or your R binary
