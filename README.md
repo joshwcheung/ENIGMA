@@ -20,4 +20,10 @@ The ENIGMA Network has several goals:
 *   to facilitate training, including workshops and conferences on key methods 
     and emerging directions in imaging genetics.
 
-Read more about Enigma [here](http://enigma.ini.usc.edu/)
+The ENIGMA Working Groups repository is being updated 
+[here](https://github.com/ENIGMA-git/ENGIMADiseaseWorkingGroupStats).
+
+The ENGIMA GCLUST repository is being updated 
+[here](https://github.com/ENIGMA-git/GCLUST).
+
+Read more about Enigma [here](http://enigma.ini.usc.edu/).
